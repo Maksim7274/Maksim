@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>SCP FOUNDATION</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #0a0a0f;
+  color: #e0e0e0;
+}
+
+header {
+  background: #0f0f18;
+  padding: 25px;
+  text-align: center;
+  font-size: 30px;
+  letter-spacing: 3px;
+  border-bottom: 2px solid crimson;
+}
+
+nav {
+  display: flex;
+  justify-content: center;
+  background: #141420;
+}
+
+nav button {
+  background: none;
+  border: none;
+  color: #aaa;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+nav button:hover {
+  color: white;
+  background: #222235;
+}
+
+.content {
+  max-width: 1100px;
+  margin: auto;
+  padding: 30px;
+}
+
+.section {
+  display: none;
+  animation: fade 0.4s;
+}
+
+.section.active {
+  display: block;
+}
+
+@keyframes fade {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+/* SCP cards */
+.scp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.scp-card {
+  background: #151525;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 15px #000;
+}
+
+.scp-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+}
+
+.scp-card .info {
+  padding: 15px;
+}
+
+.secret {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: crimson;
+  color: white;
+  padding: 5px 10px;
+  font-size: 12px;
+  border-radius: 5px;
+  cursor: help;
+}
+
+.secret:hover::after {
+  content: "Секретная информация SCP-объекта";
+  position: absolute;
+  top: 30px;
+  right: 0;
+  background: black;
+  padding: 8px;
+  font-size: 11px;
+  border: 1px solid crimson;
+  width: 180px;
+  z-index: 10;
+}
+
+footer {
+  text-align: center;
+  padding: 15px;
+  color: #666;
+  background: #0f0f18;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+SCP FOUNDATION — SECURE. CONTAIN. PROTECT.
+</header>
+
+<nav>
+  <button onclick="show('history')">Предыстория</button>
+  <button onclick="show('classes')">Классы SCP</button>
+  <button onclick="show('dclass')">Класс D</button>
+  <button onclick="show('jobs')">Работы</button>
+  <button onclick="show('objects')">SCP-Объекты</button>
+</nav>
+
+<div class="content">
+
+<!-- HISTORY -->
+<div id="history" class="section active">
+<h2>📜 Предыстория Фонда SCP</h2>
+<p>
+Фонд SCP был создан в начале XX века как тайная организация,
+объединившая учёных, военных и политиков для контроля аномалий,
+которые не поддаются объяснению современной наукой.
+</p>
+<p>
+Любая информация о существовании Фонда строго засекречена.
+Мир не должен знать, какие ужасы скрываются за кулисами реальности.
+</p>
+</div>
+
+<!-- CLASSES -->
+<div id="classes" class="section">
+<h2>📂 Классы SCP-объектов</h2>
+<ul>
+<li><b>Safe</b> — объект безопасен при соблюдении условий</li>
+<li><b>Euclid</b> — поведение непредсказуемо</li>
+<li><b>Keter</b> — чрезвычайно опасен</li>
+<li><b>Thaumiel</b> — используется Фондом</li>
+<li><b>Apollyon</b> — невозможно удержать</li>
+</ul>
+</div>
+
+<!-- D CLASS -->
+<div id="dclass" class="section">
+<h2>👤 Персонал класса D</h2>
+<p>
+Класс D — это заключённые, приговорённые к смертной казни или пожизненному сроку.
+Им предоставляется выбор: служба Фонду или немедленная казнь.
+</p>
+<p>
+<b>Что делает класс D:</b>
+</p>
+<ul>
+<li>Тестирование SCP-объектов</li>
+<li>Контакт с опасными аномалиями</li>
+<li>Испытания новых условий содержания</li>
+<li>Расходный персонал</li>
+</ul>
+<p>
+Выживаемость крайне низкая.
+</p>
+</div>
+
+<!-- JOBS -->
+<div id="jobs" class="section">
+<h2>🛠 Другие работы в Фонде SCP</h2>
+<ul>
+<li><b>Научный персонал</b> — исследования SCP</li>
+<li><b>Служба безопасности</b> — охрана комплексов</li>
+<li><b>МОГ</b> — мобильные оперативные группы</li>
+<li><b>Инженеры</b> — системы содержания</li>
+<li><b>Медперсонал</b> — лечение и эвтаназия</li>
+<li><b>Совет O5</b> — высшее руководство</li>
+</ul>
+</div>
+
+<!-- OBJECTS -->
+<div id="objects" class="section">
+<h2>☣ SCP-Объекты</h2>
+
+<div class="scp-grid">
+
+<div class="scp-card">
+<div class="secret">ЗАСЕКРЕЧЕНО</div>
+<img src="https://i.imgur.com/8Qf8N8U.jpg">
+<div class="info">
+<b>SCP-173</b><br>
+Скульптура, движется при отсутствии наблюдения
+</div>
+</div>
+
+<div class="scp-card">
+<div class="secret">ЗАСЕКРЕЧЕНО</div>
+<img src="https://i.imgur.com/4y0pN9v.jpg">
+<div class="info">
+<b>SCP-096</b><br>
+Агрессивная сущность, реагирует на взгляд
+</div>
+</div>
+
+<div class="scp-card">
+<div class="secret">ЗАСЕКРЕЧЕНО</div>
+<img src="https://i.imgur.com/4x6Z9bZ.jpg">
+<div class="info">
+<b>SCP-049</b><br>
+Чумной доктор, проводит смертельные "лечения"
+</div>
+</div>
+
+<div class="scp-card">
+<div class="secret">ЗАСЕКРЕЧЕНО</div>
+<img src="https://i.imgur.com/j0N4n5M.jpg">
+<div class="info">
+<b>SCP-035</b><br>
+Разумная маска с высоким интеллектом
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<footer>
+Доступ ограничен • Уровень допуска 3 • SCP Foundation
+</footer>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s =>
+    s.classList.remove('active')
+  );
+  document.getElementById(id).classList.add('active');
+}
+</script>
+
+</body>
+</html>
