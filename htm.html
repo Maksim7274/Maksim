@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POWERPC — премиальные игровые компьютеры</title>
+    <!-- Шрифты и иконки -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0c0f17;
+            color: #f0f4fc;
+            line-height: 1.5;
+        }
+
+        /* Премиальная эстетика HYPERPC — темный фон, оранжевый акцент, строгие линии */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        /* Градиентный текст как в оригинале */
+        .grad-text {
+            background: linear-gradient(135deg, #f47b20, #ff9f4b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #f47b20, #e06d10);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 14px 38px;
+            border-radius: 60px;
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 25px -5px #f47b20;
+            border: 1px solid rgba(255,255,255,0.1);
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 35px -5px #f47b20;
+            background: linear-gradient(135deg, #ff8b30, #f47b20);
+        }
+
+        /* Шапка как в HYPERPC — темная, с логотипом */
+        header {
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(244,123,32,0.2);
+            background: rgba(12,15,23,0.95);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        .logo span {
+            color: #f47b20;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+        }
+        .nav-links a {
+            color: #ccd9f0;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-links a:hover {
+            color: #f47b20;
+        }
+
+        .contact-header {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+        .phone {
+            font-weight: 600;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        .phone i {
+            color: #f47b20;
+            margin-right: 8px;
+        }
+
+        /* Герой (первый экран) — вдохновлен стилем HYPERPC */
+        .hero {
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, #f47b2015, transparent 70%);
+            top: -200px;
+            right: -100px;
+            border-radius: 50%;
+            z-index: 0;
+        }
+        .hero .container {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            position: relative;
+            z-index: 2;
+        }
+        .hero-text {
+            flex: 1;
+        }
+        .hero-text h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 20px;
+        }
+        .hero-text p {
+            font-size: 1.2rem;
+            color: #a5b9d9;
+            margin-bottom: 40px;
+            max-width: 550px;
+        }
+        .hero-stats {
+            display: flex;
+            gap: 50px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #f47b20, #ffae6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-desc {
+            font-size: 0.9rem;
+            color: #8fa3c2;
+            text-transform: uppercase;
+        }
+        .hero-image {
+            flex: 1;
+            background: linear-gradient(145deg, #161f2f, #0e1525);
+            border-radius: 60px;
+            padding: 40px;
+            border: 1px solid #f47b2040;
+            box-shadow: 0 40px 70px #00000080;
+            text-align: center;
+        }
+        .hero-image i {
+            font-size: 10rem;
+            color: #f47b20;
+            filter: drop-shadow(0 0 25px #f47b20);
+        }
+        .hero-image p {
+            margin-top: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        /* Секция "Почему мы" — как у HYPERPC: акцент на материалы и качество */
+        .features {
+            padding: 90px 0;
+            background: #0a111f;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 60px;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        .feature-card {
+            background: #121e30;
+            border: 1px solid #2a3a5a;
+            border-radius: 50px;
+            padding: 40px 30px;
+            transition: 0.3s;
+            text-align: left;
+        }
+        .feature-card:hover {
+            border-color: #f47b20;
+            transform: translateY(-8px);
+            box-shadow: 0 25px 45px #00000080;
+        }
+        .feature-icon {
+            font-size: 2.8rem;
+            margin-bottom: 25px;
+            color: #f47b20;
+        }
+        .feature-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .feature-card p {
+            color: #a0b7db;
+        }
+
+        /* Кастомные сборки (как CONCEPT и DESK у HYPERPC) */
+        .builds {
+            padding: 100px 0;
+        }
+        .builds-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+        .build-card {
+            background: #121e30;
+            border-radius: 60px;
+            border: 1px solid #2f3e60;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+        .build-card:hover {
+            border-color: #f47b20;
+            box-shadow: 0 0 30px #f47b2040;
+        }
+        .build-header {
+            background: linear-gradient(135deg, #1c2a42, #0e1727);
+            padding: 35px 30px 25px;
+            border-bottom: 2px solid #f47b20;
+        }
+        .build-name {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .build-price {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: #f47b20;
+        }
+        .build-specs {
+            padding: 30px;
+        }
+        .spec-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 18px;
+            color: #b5caf0;
+        }
+        .spec-item i {
+            color: #f47b20;
+            width: 24px;
+            font-size: 1.3rem;
+        }
+        .badge {
+            background: #f47b2020;
+            border: 1px solid #f47b20;
+            color: #f47b20;
+            padding: 4px 15px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Этапы заказа (как на официальном сайте HYPERPC) */
+        .process {
+            background: #0a111f;
+            padding: 100px 0;
+        }
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        .step {
+            text-align: center;
+            background: #121e30;
+            border-radius: 70px;
+            padding: 40px 25px;
+            border: 1px solid #2a3a5a;
+        }
+        .step-num {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #f47b20;
+            opacity: 0.3;
+            line-height: 1;
+        }
+        .step h3 {
+            font-size: 1.6rem;
+            margin: 20px 0 15px;
+        }
+
+        /* Конфигуратор (как у HYPERPC — 3 шага) */
+        .configurator-preview {
+            background: #0c1422;
+            border-radius: 100px;
+            padding: 70px;
+            margin: 80px 0;
+            border: 1px solid #f47b20;
+            box-shadow: 0 40px 80px #000;
+        }
+        .config-grid {
+            display: flex;
+            gap: 50px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .config-info {
+            flex: 1;
+        }
+        .config-info h3 {
+            font-size: 2.4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        .config-steps {
+            margin-top: 30px;
+        }
+        .config-step {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+        }
+        .config-step .step-icon {
+            background: #f47b20;
+            width: 50px;
+            height: 50px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.5rem;
+            color: #0c1422;
+        }
+        .config-step p {
+            font-size: 1.2rem;
+        }
+
+        /* Отзывы (социальное доказательство) */
+        .testimonials {
+            padding: 80px 0;
+        }
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .testimonial-card {
+            background: #121e30;
+            border-radius: 50px;
+            padding: 40px 30px;
+            border-left: 5px solid #f47b20;
+        }
+        .stars {
+            color: #f47b20;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+        }
+        .testimonial-card p {
+            font-style: italic;
+            margin: 20px 0;
+            color: #b5caf0;
+        }
+        .client-name {
+            font-weight: 700;
+            color: #f47b20;
+        }
+        .client-role {
+            font-size: 0.9rem;
+            color: #7a92b5;
+        }
+
+        /* Форма захвата лидов (как в оригинале) */
+        .lead-form {
+            background: linear-gradient(145deg, #121e30, #0a1320);
+            border-radius: 100px;
+            padding: 80px;
+            margin: 60px 0;
+            border: 1px solid #f47b20;
+        }
+        .form-grid {
+            display: flex;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+        .form-info {
+            flex: 1;
+        }
+        .form-info h3 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+        .form-info ul {
+            list-style: none;
+        }
+        .form-info li {
+            margin: 20px 0;
+            font-size: 1.2rem;
+        }
+        .form-info i {
+            color: #f47b20;
+            margin-right: 12px;
+        }
+        .form-fields {
+            flex: 1;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 16px 24px;
+            background: #1e2e4a;
+            border: 2px solid #2a3a5a;
+            border-radius: 60px;
+            font-size: 1rem;
+            color: white;
+            outline: none;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #f47b20;
+        }
+
+        /* Футер */
+        footer {
+            background: #070c15;
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid #f47b2020;
+            color: #7f95bb;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1000px) {
+            .hero .container { flex-direction: column; }
+            .header-inner { flex-direction: column; gap: 15px; }
+            .hero-text h1 { font-size: 2.8rem; }
+            .configurator-preview { padding: 40px; border-radius: 60px; }
+            .lead-form { padding: 40px; border-radius: 60px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-inner">
+            <div class="logo">⚡POWER<span>PC</span></div>
+            <div class="nav-links">
+                <a href="#">Главная</a>
+                <a href="#">Сборки</a>
+                <a href="#">Конфигуратор</a>
+                <a href="#">Проекты</a>
+                <a href="#">Контакты</a>
+            </div>
+            <div class="contact-header">
+                <span class="phone"><i class="fas fa-phone-alt"></i> 8 (800) 555-35-35</span>
+                <a href="#" class="btn" style="padding: 12px 28px;">КОНСУЛЬТАЦИЯ</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Герой (как у HYPERPC — премиум, статус) -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-text">
+                    <h1>Игровые компьютеры <span class="grad-text">премиум-класса</span></h1>
+                    <p>Собственное производство в Москве. Ручная сборка, кастомное водяное охлаждение, индивидуальный дизайн. Более 15 лет создаем легендарные ПК.</p>
+                    <div class="hero-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">15+</div>
+                            <div class="stat-desc">лет опыта</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">50k</div>
+                            <div class="stat-desc">собранных ПК</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">100+</div>
+                            <div class="stat-desc">топ-блогеров</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <i class="fas fa-microchip"></i>
+                    <p>RTX 5090 · Ryzen 9 9950X3D<br> <span style="color: #f47b20;">Эксклюзивные материалы</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Преимущества (материалы, кастомизация, как в HYPERPC CONCEPT) -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Архитектура <span class="grad-text">превосходства</span></h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-gem"></i></div>
+                        <h3>Эксклюзивные материалы</h3>
+                        <p>Натуральное дерево, премиальная кожа, алюминий, мрамор. Открытая архитектура open-air, созданная вручную.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-paint-brush"></i></div>
+                        <h3>Индивидуальная кастомизация</h3>
+                        <p>Любой цвет, гравировка, кастомная сетка, оплетка кабелей, аэрография — ваш ПК станет произведением искусства.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                        <h3>Технологии будущего</h3>
+                        <p>Только актуальное железо: RTX 50xx, Ryzen 9000, DDR5, Gen5 SSD. Мощность для 8K-гейминга и профессиональных задач.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"><i class="fas fa-tint"></i></div>
+                        <h3>Кастомное СЖО</h3>
+                        <p>Два независимых контура, жесткие трубки, цветная жидкость, бесшумные вентиляторы — искусство охлаждения.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Избранные сборки (как CONCEPT и DESK) -->
+        <section class="builds">
+            <div class="container">
+                <h2 class="section-title">Легендарные <span class="grad-text">проекты</span></h2>
+                <div class="builds-grid">
+                    <div class="build-card">
+                        <div class="build-header">
+                            <div class="build-name">CONCEPT <span class="badge">open-air</span></div>
+                            <div class="build-price">от 950 000 ₽</div>
+                        </div>
+                        <div class="build-specs">
+                            <div class="spec-item"><i class="fas fa-microchip"></i> AMD Ryzen 9 9950X3D (16 ядер, 5.7 ГГц)</div>
+                            <div class="spec-item"><i class="fas fa-tv"></i> ASUS RTX 5090 ROG Astral [32GB]</div>
+                            <div class="spec-item"><i class="fas fa-memory"></i> 96GB DDR5 G.SKILL 6400MHz</div>
+                            <div class="spec-item"><i class="fas fa-thermometer-half"></i> Кастомное СЖО, 2×480mm, EK-CryoFuel</div>
+                            <div class="spec-item"><i class="fas fa-tree"></i> Алюминий + мореный дуб + кожа</div>
+                        </div>
+                        <div style="padding: 0 30px 30px;">
+                            <a href="#" class="btn-small" style="background: transparent; border: 2px solid #f47b20; color: white; padding: 14px; width: 100%; display: block; text-align: center; border-radius: 60px; text-decoration: none;">Хочу такой же</a>
+                        </div>
+                    </div>
+                    <div class="build-card">
+                        <div class="build-header">
+                            <div class="build-name">DESK <span class="badge">компьютер в столе</span></div>
+                            <div class="build-price">от 1 250 000 ₽</div>
+                        </div>
+                        <div class="build-specs">
+                            <div class="spec-item"><i class="fas fa-microchip"></i> Intel Core i9-14900K (24 ядра, до 6.0 ГГц)</div>
+                            <div class="spec-item"><i class="fas fa-tv"></i> 2× MSI RTX 4090 SUPRIM [24GB]</div>
+                            <div class="spec-item"><i class="fas fa-memory"></i> 64GB DDR5 Kingston Fury 5600MHz</div>
+                            <div class="spec-item"><i class="fas fa-thermometer-half"></i> Два независимых контура, 2×360мм</div>
+                            <div class="spec-item"><i class="fas fa-gem"></i> Столешница из мрамора/дерева на заказ</div>
+                        </div>
+                        <div style="padding: 0 30px 30px;">
+                            <a href="#" class="btn-small" style="background: transparent; border: 2px solid #f47b20; color: white; padding: 14px; width: 100%; display: block; text-align: center; border-radius: 60px; text-decoration: none;">Выбрать материал</a>
+                        </div>
+                    </div>
+                    <div class="build-card">
+                        <div class="build-header">
+                            <div class="build-name">WALL <span class="badge">настенный</span></div>
+                            <div class="build-price">от 790 000 ₽</div>
+                        </div>
+                        <div class="build-specs">
+                            <div class="spec-item"><i class="fas fa-microchip"></i> AMD Ryzen 9 9900X</div>
+                            <div class="spec-item"><i class="fas fa-tv"></i> RTX 5080 16GB</div>
+                            <div class="spec-item"><i class="fas fa-memory"></i> 64GB DDR5 6000MHz</div>
+                            <div class="spec-item"><i class="fas fa-thermometer-half"></i> Открытая архитектура, вертикальный монтаж</div>
+                            <div class="spec-item"><i class="fas fa-paint-brush"></i> Индивидуальная покраска, гравировка</div>
+                        </div>
+                        <div style="padding: 0 30px 30px;">
+                            <a href="#" class="btn-small" style="background: transparent; border: 2px solid #f47b20; color: white; padding: 14px; width: 100%; display: block; text-align: center; border-radius: 60px; text-decoration: none;">Заказать дизайн</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Этапы заказа (как на сайте HYPERPC) -->
+        <section class="process">
+            <div class="container">
+                <h2 class="section-title">Как мы создаем <span class="grad-text">ваш шедевр</span></h2>
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-num">01</div>
+                        <h3>Консультация</h3>
+                        <p>Обсуждаем задачи, бюджет, любимые игры, материалы и дизайн.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">02</div>
+                        <h3>Проектирование</h3>
+                        <p>3D-модель, чертежи, выбор всех цветов, оплетки и жидкости.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">03</div>
+                        <h3>Ручное производство</h3>
+                        <p>Лазерная резка, гибка, покраска, пайка трубок. Вы получаете фотоотчеты.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">04</div>
+                        <h3>Тестирование</h3>
+                        <p>Стресс-тесты в Cyberpunk, проверка всех систем, настройка BIOS.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-num">05</div>
+                        <h3>Доставка</h3>
+                        <p>Деревянная обрешетка, личный эксперт с подключением в Москве.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Конфигуратор (3 шага, как в HYPERPC) -->
+        <div class="container">
+            <div class="configurator-preview">
+                <div class="config-grid">
+                    <div class="config-info">
+                        <h3>Собери свой <span class="grad-text">POWERPC</span></h3>
+                        <p style="color: #a5b9d9; font-size: 1.2rem; margin-bottom: 30px;">Умный конфигуратор проверит совместимость и покажет цену в реальном времени.</p>
+                        <div class="config-steps">
+                            <div class="config-step">
+                                <div class="step-icon">1</div>
+                                <p><strong>Цели и пожелания</strong> — игры, стриминг, работа, дизайн</p>
+                            </div>
+                            <div class="config-step">
+                                <div class="step-icon">2</div>
+                                <p><strong>Сроки и бюджет</strong> — от 3 дней до индивидуального</p>
+                            </div>
+                            <div class="config-step">
+                                <div class="step-icon">3</div>
+                                <p><strong>Контакты</strong> — менеджер закрепит цену и запустит производство</p>
+                            </div>
+                        </div>
+                        <a href="#" class="btn" style="margin-top: 30px;">Запустить конфигуратор →</a>
+                    </div>
+                    <div style="flex: 1; text-align: center;">
+                        <i class="fas fa-sliders-h" style="font-size: 8rem; color: #f47b20; opacity: 0.5;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Отзывы (топ-блогеры, как у HYPERPC) -->
+        <section class="testimonials">
+            <div class="container">
+                <h2 class="section-title">Нас выбирают <span class="grad-text">легенды</span></h2>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>«POWERPC сделали для меня монстра на RTX 5090. Дизайн в стиле киберпанк, кастомная сетка, гравировка — это просто космос. Игры летают в 8K.»</p>
+                        <div class="client-name">Wylsacom</div>
+                        <div class="client-role">техно-блогер, 10 млн подписчиков</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>«Заказывал компьютер в стол из мрамора. Три месяца разработки, но оно того стоило. Теперь мой стрим выглядит дороже, чем у любого западного коллеги.»</p>
+                        <div class="client-name">Куплинов</div>
+                        <div class="client-role">летсплейщик, 8 млн подписчиков</div>
+                    </div>
+                    <div class="testimonial-card">
+                        <div class="stars">★★★★★</div>
+                        <p>«Искали ПК для монтажа видео в 4K. Ребята предложили рабочую станцию на базе Ryzen и RTX 5090 с водяным охлаждением. Тихий, мощный, стильный.»</p>
+                        <div class="client-name">Дубровский</div>
+                        <div class="client-role">видеорежиссер</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Форма для лидов (как на сайте — захват контактов) -->
+        <div class="container">
+            <div class="lead-form">
+                <div class="form-grid">
+                    <div class="form-info">
+                        <h3>Получите <span class="grad-text">индивидуальную консультацию</span></h3>
+                        <p style="color: #b5caf0; font-size: 1.1rem; margin-bottom: 30px;">Инженер перезвонит в течение 15 минут и поможет подобрать идеальную конфигурацию под ваш бюджет.</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle"></i> Помощь с выбором комплектующих</li>
+                            <li><i class="fas fa-check-circle"></i> 3D-визуализация будущего ПК</li>
+                            <li><i class="fas fa-check-circle"></i> Фиксация цены без изменений</li>
+                            <li><i class="fas fa-check-circle"></i> Фотоотчеты со сборки</li>
+                        </ul>
+                    </div>
+                    <div class="form-fields">
+                        <form>
+                            <div class="form-group">
+                                <input type="text" placeholder="Ваше имя" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" placeholder="Телефон" required>
+                            </div>
+                            <div class="form-group">
+                                <select>
+                                    <option>Бюджет: до 200 000 ₽</option>
+                                    <option>Бюджет: 200-400 тыс. ₽</option>
+                                    <option>Бюджет: 400-700 тыс. ₽</option>
+                                    <option>Бюджет: от 700 тыс. ₽</option>
+                                    <option>Индивидуальный проект</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <textarea placeholder="Ваши пожелания (игры, задачи, дизайн...)" rows="3"></textarea>
+                            </div>
+                            <button type="submit" class="btn" style="width: 100%;">Отправить заявку</button>
+                            <p style="font-size: 0.8rem; color: #6a85a5; margin-top: 15px;">Нажимая кнопку, вы соглашаетесь на обработку персональных данных</p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; margin-bottom: 40px;">
+                <div style="text-align: left;">
+                    <div class="logo" style="margin-bottom: 15px;">⚡POWER<span>PC</span></div>
+                    <p style="color: #8fa3c2;">Москва, ул. Складочная 1с10<br>Ежедневно 10:00–00:00</p>
+                </div>
+                <div style="display: flex; gap: 60px; flex-wrap: wrap;">
+                    <div>
+                        <h4 style="color: white; margin-bottom: 15px;">Каталог</h4>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Игровые ПК</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Рабочие станции</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Компьютеры в стол</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Кастомные проекты</a></p>
+                    </div>
+                    <div>
+                        <h4 style="color: white; margin-bottom: 15px;">Клиентам</h4>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Как заказать</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Доставка</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Гарантия</a></p>
+                        <p><a href="#" style="color: #8fa3c2; text-decoration: none;">Контакты</a></p>
