@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Titanfall 2 — всё о легендарном шутере</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background: #0b0f15;
+            color: #e0e5ec;
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* цвета и градиенты */
+        :root {
+            --primary: #f47b20;
+            --primary-dark: #c45c10;
+            --bg-dark: #0f141c;
+            --card-bg: #1a212b;
+            --text-light: #f0f4fa;
+            --text-muted: #a0aaba;
+            --border-glow: rgba(244, 123, 32, 0.3);
+        }
+
+        /* навигация */
+        header {
+            background: #0a0e14;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #f47b20, #ffb347);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            display: inline-block;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* общий контейнер */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* секции */
+        section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 80px;
+        }
+
+        h2 {
+            font-size: 2.4rem;
+            margin-bottom: 2rem;
+            position: relative;
+            display: inline-block;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -8px;
+            width: 60%;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+
+        /* карточки */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 1.8rem;
+            border: 1px solid #2f3a48;
+            box-shadow: 0 12px 30px -8px rgba(0,0,0,0.8);
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .card:hover {
+            border-color: var(--primary);
+            transform: translateY(-6px);
+            box-shadow: 0 20px 30px -6px var(--border-glow);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            font-size: 1.7rem;
+            margin-bottom: 1rem;
+        }
+
+        /* галерея (карусель) */
+        .carousel-container {
+            position: relative;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 25px 40px -10px black;
+            border: 1px solid #3a4555;
+        }
+
+        .carousel-slide {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            flex-shrink: 0;
+            object-fit: cover;
+            height: 500px;
+            display: block;
+            background: #2a3440;
+            /* если картинка не загрузится — цвет фона и иконка */
+        }
+
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10, 14, 20, 0.8);
+            border: 2px solid var(--primary);
+            color: white;
+            font-size: 2.5rem;
+            width: 60px;
+            height: 60px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            z-index: 5;
+            backdrop-filter: blur(4px);
+        }
+        .carousel-btn:hover {
+            background: var(--primary);
+            border-color: white;
+            color: black;
+        }
+        .prev { left: 20px; }
+        .next { right: 20px; }
+
+        .carousel-dots {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 5;
+        }
+        .dot {
+            width: 14px;
+            height: 14px;
+            background: #8f9bb3;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .dot.active {
+            background: var(--primary);
+            border-color: white;
+            transform: scale(1.2);
+        }
+
+        /* кнопка показать ещё — демо js */
+        .read-more-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 0.8rem 2rem;
+            font-weight: bold;
+            border-radius: 40px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            margin: 1rem 0;
+            transition: 0.2s;
+        }
+        .read-more-btn:hover {
+            background: var(--primary);
+            color: #0f141c;
+        }
+
+        .extra-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            background: #131b24;
+            border-radius: 20px;
+            margin-top: 1rem;
+            padding: 0 1rem;
+        }
+        .extra-content.show {
+            max-height: 500px; /* хватит для текста */
+            padding: 1rem;
+        }
+
+        /* список титанов */
+        .titans-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        .titan-tag {
+            background: #1e2a36;
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-weight: 600;
+            border-left: 4px solid var(--primary);
+        }
+
+        /* footer */
+        footer {
+            background: #070a0f;
+            border-top: 1px solid #2a3340;
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* адаптация */
+        @media (max-width: 700px) {
+            .logo { font-size: 1.6rem; }
+            nav { flex-direction: column; }
+            .carousel-slide img { height: 280px; }
+            .carousel-btn { width: 40px; height: 40px; font-size: 1.6rem; }
+            h2 { font-size: 2rem; }
+        }
+
+        /* подложка для сломанных картинок */
+        img {
+            background: #2f3a48;
+            min-height: 100px;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <span class="logo">TITANFALL 2</span>
+            <div class="nav-links">
+                <a href="#about">Об игре</a>
+                <a href="#gameplay">Геймплей</a>
+                <a href="#titans">Титаны</a>
+                <a href="#gallery">Галерея</a>
+                <a href="#reviews">Отзывы</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- ГЛАВНЫЙ ЭКРАН (hero) -->
+        <section style="text-align: center; margin-bottom: 4rem; border-bottom: 1px dashed #3f4a5a; padding-bottom: 2rem;">
+            <h1 style="font-size: 3.5rem; background: linear-gradient(145deg, #f47b20, #ff8c42); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">TITANFALL 2</h1>
+            <p style="font-size: 1.4rem; color: #b0c0d0;">Пилот и титан — неразлучны. Узнай всё о легендарной игре.</p>
+        </section>
+
+        <!-- Секция ОБ ИГРЕ -->
+        <section id="about">
+            <h2>Об игре</h2>
+            <div class="card" style="padding: 2rem;">
+                <p style="font-size: 1.2rem;"><strong>Titanfall 2</strong> — шутер от первого лица, разработанный Respawn Entertainment и изданный Electronic Arts. Релиз состоялся 28 октября 2016 года для PlayStation 4, Xbox One и Windows. Игра получила признание за захватывающую однопользовательскую кампанию и динамичный мультиплеер.</p>
+                <br>
+                <p><span style="color: var(--primary);">■</span> Разработчик: Respawn Entertainment<br>
+                <span style="color: var(--primary);">■</span> Платформы: PC, PS4, Xbox One (обратная совместимость на PS5, Xbox Series)<br>
+                <span style="color: var(--primary);">■</span> Жанр: FPS, меха<br>
+                <span style="color: var(--primary);">■</span> Движок: Source (сильно модифицированный)</p>
+                <!-- Демо js: кнопка подробнее -->
+                <button class="read-more-btn" id="aboutMoreBtn">Подробнее об истории</button>
+                <div id="extraAbout" class="extra-content">
+                    <p>Кампания Titanfall 2 рассказывает историю стрелка Джека Купера, который неожиданно становится пилотом титана класса «БТ-7274». Вместе они пытаются остановить агрессивную корпорацию IMC. Игра славится уровнем «Эффект протея» с уникальной механикой переключения времени.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ГЕЙМПЛЕЙ -->
+        <section id="gameplay">
+            <h2>Геймплей</h2>
+            <div class="info-grid">
+                <div class="card">
+                    <h3>Пилот</h3>
+                    <p>Пилоты используют тактический прыжковый ранец для бега по стенам, двойных прыжков и скоростного паркура. Арсенал включает разнообразное оружие, гранаты и уникальные тактические способности (невидимость, стимулятор и др.).</p>
+                </div>
+                <div class="card">
+                    <h3>Титан</h3>
+                    <p>Призвав титана, вы получаете огромную мощь. Каждый титан имеет класс, особое оружие и способности. Титаны могут временно оставаться без пилота в режиме охраны или следования.</p>
+                </div>
+                <div class="card">
+                    <h3>Режимы</h3>
+                    <p>Классический «бой пилотов», «захват флага», «уничтожение титанов» и совместный режим «Защита границы» (Co-op).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ТИТАНЫ (классы) -->
+        <section id="titans">
+            <h2>Титаны (классы)</h2>
+            <div class="card">
+                <div class="titans-list">
+                    <span class="titan-tag">Ion</span>
+                    <span class="titan-tag">Scorch</span>
+                    <span class="titan-tag">Northstar</span>
+                    <span class="titan-tag">Ronin</span>
+                    <span class="titan-tag">Tone</span>
+                    <span class="titan-tag">Legion</span>
+                    <span class="titan-tag">Monarch</span>
+                </div>
+                <p>Каждый титан обладает уникальным вооружением и «кор-способностью» — ультимейтом. Например, <strong>Scorch</strong> использует зажигательные боеприпасы, а <strong>Ronin</strong> — меч и дробовик для ближнего боя.</p>
+            </div>
+        </section>
+
+        <!-- ГАЛЕРЕЯ / КАРУСЕЛЬ -->
+        <section id="gallery">
+            <h2>Галерея</h2>
+            <div class="carousel-container">
+                <div class="carousel-slide" id="carouselSlide">
+                    <!-- картинки с подписями в alt, но нам нужны просто img -->
+                    <img src="https://media.contentapi.ea.com/content/dam/eacom/titanfall-2/common/tf2-keyart.jpg" alt="Titanfall 2 Key Art" onerror="this.src='https://placehold.co/1200x500/1a212b/f47b20?text=Titanfall+2+Key+Art'">
+                    <img src="https://media.contentapi.ea.com/content/dam/eacom/titanfall-2/images/2016/08/titanfall-2-feature-image-01.jpg" alt="Gameplay action" onerror="this.src='https://placehold.co/1200x500/1a212b/f47b20?text=Gameplay+Screenshot'">
+                    <img src="https://media.contentapi.ea.com/content/dam/eacom/titanfall-2/images/2016/08/titanfall-2-feature-image-02.jpg" alt="Titan BT" onerror="this.src='https://placehold.co/1200x500/1a212b/f47b20?text=Titan+BT-7274'">
+                    <img src="https://media.contentapi.ea.com/content/dam/eacom/titanfall-2/images/2016/08/titanfall-2-feature-image-03.jpg" alt="Pilot action" onerror="this.src='https://placehold.co/1200x500/1a212b/f47b20?text=Pilot+in+action'">
+                </div>
+                <button class="carousel-btn prev" id="prevBtn">‹</button>
+                <button class="carousel-btn next" id="nextBtn">›</button>
+                <div class="carousel-dots" id="carouselDots"></div>
+            </div>
+            <p style="text-align: center; margin-top: 0.5rem;">Нажми на стрелки или точки — JavaScript работает!</p>
+        </section>
+
+        <!-- ОТЗЫВЫ И КРИТИКА -->
+        <section id="reviews">
+            <h2>Отзывы</h2>
+            <div class="info-grid">
+                <div class="card">
+                    <h3>Metacritic</h3>
+                    <p style="font-size: 2rem; color: var(--primary);">89/100</p>
+                    <p>«Одна из лучших однопользовательских кампаний в жанре FPS за последние годы».</p>
+                </div>
+                <div class="card">
+                    <h3>IGN</h3>
+                    <p style="font-size: 2rem; color: var(--primary);">9/10</p>
+                    <p>«Потрясающий мультиплеер и гениальная кампания — обязательно к прохождению».</p>
+                </div>
+                <div class="card">
+                    <h3>PC Gamer</h3>
+                    <p style="font-size: 2rem; color: var(--primary);">91/100</p>
+                    <p>«Лучший шутер 2016 года. Титаны и пилоты созданы друг для друга».</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 фан-сайт Titanfall 2. Все материалы используются в некоммерческих целях.</p>
+        <p style="margin-top: 0.5rem;">#Titanfall2 #RespawnEntertainment #BT7274</p>
+    </footer>
+
+    <!-- СКРИПТ (JavaScript) — карусель и кнопка подробнее -->
+    <script>
+        (function() {
+            // ========== КАРУСЕЛЬ ==========
+            const slideContainer = document.getElementById('carouselSlide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            if (slideContainer && prevBtn && nextBtn && dotsContainer) {
+                const slides = Array.from(slideContainer.children); // все img
+                const totalSlides = slides.length;
+                let currentIndex = 0;
+
+                // Создать точки
+                slides.forEach((_, idx) => {
+                    const dot = document.createElement('span');
+                    dot.classList.add('dot');
+                    if (idx === 0) dot.classList.add('active');
+                    dot.dataset.index = idx;
+                    dot.addEventListener('click', () => goToSlide(idx));
+                    dotsContainer.appendChild(dot);
+                });
+
+                const dots = Array.from(document.querySelectorAll('.dot'));
+
+                // Обновление активной точки и положения
+                function updateCarousel() {
+                    // сдвиг
+                    slideContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
+                    // обновить точки
+                    dots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === currentIndex);
+                    });
+                }
+
+                function goToSlide(index) {
+                    if (index < 0) index = totalSlides - 1;
+                    if (index >= totalSlides) index = 0;
+                    currentIndex = index;
+                    updateCarousel();
+                }
+
+                prevBtn.addEventListener('click', () => {
+                    goToSlide(currentIndex - 1);
+                });
+
+                nextBtn.addEventListener('click', () => {
+                    goToSlide(currentIndex + 1);
+                });
+
+                // авто-перелистывание каждые 5 секунд (опционально)
+                let autoPlay = setInterval(() => goToSlide(currentIndex + 1), 6000);
+
+                // остановка автопрокрутки при наведении
+                const carousel = document.querySelector('.carousel-container');
+                carousel.addEventListener('mouseenter', () => clearInterval(autoPlay));
+                carousel.addEventListener('mouseleave', () => {
+                    autoPlay = setInterval(() => goToSlide(currentIndex + 1), 6000);
+                });
+
+                // начальная установка
+                updateCarousel();
+
+                // поддержка адаптивности — пересчёт не нужен, так как transform % работает всегда
+            }
+
+            // ========== КНОПКА "ПОДРОБНЕЕ" ==========
+            const aboutBtn = document.getElementById('aboutMoreBtn');
+            const extraBlock = document.getElementById('extraAbout');
+            if (aboutBtn && extraBlock) {
+                aboutBtn.addEventListener('click', function() {
+                    extraBlock.classList.toggle('show');
+                    this.textContent = extraBlock.classList.contains('show') ? 'Скрыть подробности' : 'Подробнее об истории';
+                });
+            }
+
+            // ========== ДОПОЛНИТЕЛЬНЫЙ "РАБОЧИЙ" ЭФФЕКТ ==========
+            // Например, меняем цвет фона у каждой второй карточки при клике (демо интерактива)
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.addEventListener('click', function(e) {
+                    // чтобы не срабатывало при клике на кнопку внутри карточки
+                    if (e.target.tagName === 'BUTTON') return;
+                    this.style.backgroundColor = '#253545';
+                    setTimeout(() => this.style.backgroundColor = '', 200);
+                });
+            });
+
+            // фон для карточек титанов (при наведении)
+            console.log('Сайт Titanfall 2 полностью функционирует!');
+        })();
+    </script>
+</body>
+</html>
