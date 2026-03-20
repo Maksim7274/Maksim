@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>PC Builder Pro | Обучение сборке ПК</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0c10;
+            color: #eef2ff;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        /* custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e1f2c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b3f5c;
+            border-radius: 10px;
+        }
+
+        /* modern glassmorphism elements */
+        .glass-card {
+            background: rgba(18, 22, 35, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(72, 187, 255, 0.2);
+            border-radius: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: #2b6ef0;
+            box-shadow: 0 12px 28px -8px rgba(0, 100, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        .btn-glow {
+            background: linear-gradient(95deg, #1e2a5e, #0f172a);
+            border: 1px solid #2e4eb0;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 40px;
+            font-weight: 600;
+            transition: 0.2s;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+        }
+
+        .btn-glow:hover {
+            background: linear-gradient(95deg, #2b3c7a, #1a2345);
+            border-color: #4c7cff;
+            box-shadow: 0 0 12px rgba(76, 124, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #2b6ef0, #1a4bc0);
+            border: none;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 14px 0 rgba(43, 110, 240, 0.3);
+        }
+
+        .section-title {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(120deg, #ffffff, #9bbdff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .step-number {
+            background: #1f2b4e;
+            width: 48px;
+            height: 48px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #7aa9ff;
+            border: 1px solid #2f4172;
+        }
+
+        .component-badge {
+            background: #0f1422;
+            border-radius: 2rem;
+            padding: 8px 18px;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #b9d0ff;
+            border-left: 3px solid #3b82f6;
+        }
+
+        footer {
+            border-top: 1px solid #1e293b;
+            background: #05070c;
+        }
+
+        /* interactive guide panel */
+        .guide-panel {
+            background: #0c0f17e0;
+            backdrop-filter: blur(16px);
+            border-radius: 2rem;
+            border: 1px solid #2a3a66;
+        }
+
+        .progress-step {
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .progress-step.active {
+            background: #1e3a8a;
+            border-left: 4px solid #3b82f6;
+            color: white;
+            font-weight: 600;
+        }
+
+        /* tooltip / helper */
+        .tooltip-custom {
+            position: relative;
+            border-bottom: 1px dashed #4c7cff;
+            cursor: help;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 2rem;
+            }
+            .glass-card {
+                padding: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero / Navigation -->
+    <nav class="fixed top-0 left-0 w-full z-50 bg-[#0a0c10]/80 backdrop-blur-md border-b border-white/10 py-4 px-6 md:px-12 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-microchip text-2xl text-blue-400"></i>
+            <span class="font-bold text-xl tracking-tight">PC<span class="text-blue-400">Builder</span>Pro</span>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium">
+            <a href="#about" class="hover:text-blue-400 transition">О курсе</a>
+            <a href="#steps" class="hover:text-blue-400 transition">Этапы сборки</a>
+            <a href="#guide" class="hover:text-blue-400 transition">Интерактив</a>
+            <a href="#builder" class="hover:text-blue-400 transition">Конфигуратор</a>
+        </div>
+        <button class="btn-glow text-sm py-2 px-5">
+            <i class="fas fa-tools"></i> Начать сборку
+        </button>
+    </nav>
+
+    <main class="pt-24 px-6 md:px-12 max-w-7xl mx-auto">
+        <!-- hero -->
+        <section class="text-center mb-20 animate-fade" id="about">
+            <div class="inline-block bg-blue-900/30 rounded-full px-4 py-1 text-sm border border-blue-500/40 mb-4">
+                <i class="fas fa-cpu mr-1"></i> Пошаговое обучение
+            </div>
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight">Собери свой ПК<br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-300 to-indigo-400">как профессиональный инженер</span></h1>
+            <p class="text-gray-300 max-w-2xl mx-auto mt-6 text-lg">Интерактивные уроки, 3D-визуализация сборки, подбор компонентов и советы мастеров. От новичка до эксперта за 6 простых шагов.</p>
+            <div class="flex flex-wrap justify-center gap-5 mt-10">
+                <button class="btn-glow btn-primary" id="scrollToGuideBtn"><i class="fas fa-play-circle"></i> Запустить гид</button>
+                <button class="btn-glow" id="randomConfigBtn"><i class="fas fa-dice-d6"></i> Случайная сборка</button>
+            </div>
+        </section>
+
+        <!-- 6 Steps -->
+        <section id="steps" class="mb-28">
+            <div class="text-center mb-12">
+                <h2 class="section-title">📐 6 этапов сборки ПК</h2>
+                <p class="text-gray-400 mt-3">Каждый шаг с детальными инструкциями и видео-подсказками</p>
+            </div>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- step cards -->
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">1</div>
+                    <div><h3 class="text-xl font-bold">Подготовка & инструменты</h3><p class="text-gray-300 text-sm mt-1">Антистатический браслет, крестовая отвертка, термопаста, зип-пакеты.</p></div>
+                </div>
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">2</div>
+                    <div><h3 class="text-xl font-bold">Установка CPU</h3><p class="text-gray-300 text-sm mt-1">Открываем сокет, аккуратно ставим процессор, ровно закрываем крышку.</p></div>
+                </div>
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">3</div>
+                    <div><h3 class="text-xl font-bold">ОЗУ & M.2 накопитель</h3><p class="text-gray-300 text-sm mt-1">Фиксация до щелчка, слота 2 и 4 для двухканального режима.</p></div>
+                </div>
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">4</div>
+                    <div><h3 class="text-xl font-bold">Материнская плата в корпус</h3><p class="text-gray-300 text-sm mt-1">Установка I/O shield, фиксация на стойки, подключение передней панели.</p></div>
+                </div>
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">5</div>
+                    <div><h3 class="text-xl font-bold">Блок питания & кабели</h3><p class="text-gray-300 text-sm mt-1">ATX 24pin, EPS12V, PCIe для видеокарты, кабель-менеджмент.</p></div>
+                </div>
+                <div class="glass-card p-6 flex gap-4 items-start">
+                    <div class="step-number">6</div>
+                    <div><h3 class="text-xl font-bold">Видеокарта & первый запуск</h3><p class="text-gray-300 text-sm mt-1">Фиксация в PCIe x16, подключение монитора, POST-тест.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Guide (advanced walkthrough) -->
+        <section id="guide" class="mb-28">
+            <div class="text-center mb-10">
+                <h2 class="section-title"><i class="fas fa-hands-helping mr-2"></i> Интерактивный обучающий гид</h2>
+                <p class="text-gray-400">Выберите этап — получите расширенную инструкцию и чек-лист</p>
+            </div>
+            <div class="guide-panel p-6 md:p-8 flex flex-col md:flex-row gap-8">
+                <div class="md:w-1/3 space-y-3">
+                    <div class="progress-step p-4 rounded-xl transition active" data-step="0">
+                        <div class="flex items-center gap-3"><i class="fas fa-tools text-blue-400"></i><span class="font-semibold">⚙️ Шаг 0: Подготовка</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Статическое электричество, инструменты</p>
+                    </div>
+                    <div class="progress-step p-4 rounded-xl transition" data-step="1">
+                        <div class="flex items-center gap-3"><i class="fas fa-microchip text-blue-400"></i><span class="font-semibold">🧠 Шаг 1: Процессор</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Установка CPU, термопаста, кулер</p>
+                    </div>
+                    <div class="progress-step p-4 rounded-xl transition" data-step="2">
+                        <div class="flex items-center gap-3"><i class="fas fa-memory text-blue-400"></i><span class="font-semibold">💾 Шаг 2: Оперативная память и SSD</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Правильные слоты, M.2 установка</p>
+                    </div>
+                    <div class="progress-step p-4 rounded-xl transition" data-step="3">
+                        <div class="flex items-center gap-3"><i class="fas fa-plug text-blue-400"></i><span class="font-semibold">🔌 Шаг 3: Монтаж платы и кабели</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Подключение передней панели, USB, аудио</p>
+                    </div>
+                    <div class="progress-step p-4 rounded-xl transition" data-step="4">
+                        <div class="flex items-center gap-3"><i class="fas fa-bolt text-blue-400"></i><span class="font-semibold">⚡ Шаг 4: Блок питания и кабель-менеджмент</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Модульные кабели, прокладка за поддоном</p>
+                    </div>
+                    <div class="progress-step p-4 rounded-xl transition" data-step="5">
+                        <div class="flex items-center gap-3"><i class="fas fa-tv text-blue-400"></i><span class="font-semibold">🎮 Шаг 5: Видеокарта и POST</span></div>
+                        <p class="text-xs text-gray-400 mt-1">Фиксация, дополнительное питание, первый запуск</p>
+                    </div>
+                </div>
+                <div class="md:w-2/3 bg-black/30 rounded-2xl p-6 border border-white/10" id="guideContent">
+                    <div class="flex flex-col h-full">
+                        <div class="flex items-center gap-2 text-blue-300 mb-3"><i class="fas fa-info-circle"></i><span class="text-sm uppercase tracking-wider">Текущая инструкция</span></div>
+                        <h3 class="text-2xl font-bold mb-3" id="guideTitle">Подготовка рабочего места</h3>
+                        <div class="text-gray-200 leading-relaxed space-y-4" id="guideDescription">
+                            <p>✅ Застелите стол, приготовьте крестовую отвертку PH2, антистатический браслет или периодически касайтесь корпуса блока питания.</p>
+                            <p>✅ Убедитесь, что все компоненты совместимы: сокет материнской платы, форм-фактор корпуса, мощность БП.</p>
+                            <p>✅ Распакуйте комплектующие на чистых картонных коробках, не кладите на ворсистые поверхности.</p>
+                            <div class="bg-blue-950/40 p-4 rounded-xl border-l-4 border-blue-500 text-sm">
+                                <i class="fas fa-lightbulb text-yellow-400 mr-2"></i> Профессиональный совет: перед сборкой подключите БП к розетке (в выключенном состоянии) и коснитесь его корпуса — снимите статику.
+                            </div>
+                        </div>
+                        <div class="mt-6 flex justify-between">
+                            <button id="prevGuideBtn" class="bg-gray-800 px-5 py-2 rounded-full disabled:opacity-40"><i class="fas fa-arrow-left"></i> Пред.</button>
+                            <button id="nextGuideBtn" class="bg-blue-700 px-5 py-2 rounded-full hover:bg-blue-600">След. шаг <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Builder configurator (advanced component picker) -->
+        <section id="builder" class="mb-28">
+            <div class="text-center mb-10">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> Конфигуратор сборки</h2>
+                <p class="text-gray-400">Выбери компоненты и узнай итоговую мощность / бюджет</p>
+            </div>
+            <div class="glass-card p-6 md:p-8">
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-5">
+                        <div><label class="block text-sm font-semibold mb-2">Процессор</label><select id="cpuSelect" class="w-full bg-black/60 border border-gray-700 rounded-xl p-3 text-white"><option value="intel_i5">Intel Core i5-13400F (6 ядер, 170W)</option><option value="ryzen_5">AMD Ryzen 5 7600X (105W, AM5)</option><option value="ryzen_7">AMD Ryzen 7 7800X3D (120W, игровой)</option><option value="intel_i7">Intel Core i7-13700K (125W/253W)</option></select></div>
+                        <div><label class="block text-sm font-semibold mb-2">Видеокарта</label><select id="gpuSelect" class="w-full bg-black/60 border border-gray-700 rounded-xl p-3 text-white"><option value="rtx4060">NVIDIA RTX 4060 (115W)</option><option value="rtx4070">RTX 4070 Super (220W)</option><option value="rx7800xt">AMD RX 7800 XT (263W)</option><option value="rtx4090">RTX 4090 (450W) — энтузиаст</option></select></div>
+                        <div><label class="block text-sm font-semibold mb-2">Оперативная память</label><select id="ramSelect" class="w-full bg-black/60 border border-gray-700 rounded-xl p-3 text-white"><option value="16gb">16GB DDR5 (2x8)</option><option value="32gb">32GB DDR5 (2x16)</option><option value="64gb">64GB DDR5 (2x32) для стриминга</option></select></div>
+                        <div><label class="block text-sm font-semibold mb-2">Система охлаждения</label><select id="coolerSelect" class="w-full bg-black/60 border border-gray-700 rounded-xl p-3 text-white"><option value="air">Башня воздушное (150W TDP)</option><option value="aio">240mm AIO жидкостное</option><option value="premium">360mm AIO флагман</option></select></div>
+                    </div>
+                    <div class="bg-black/40 rounded-2xl p-5 border border-white/10 flex flex-col justify-between">
+                        <div><h3 class="text-xl font-bold mb-3"><i class="fas fa-charging-station text-green-400"></i> Сводка по сборке</h3>
+                            <div class="space-y-2 text-sm"><p><span class="text-gray-400">Примерная TDP (потребление):</span> <strong id="tdpValue">315</strong> <span class="text-blue-300">Вт</span></p>
+                            <p><span class="text-gray-400">Рекомендуемый БП:</span> <strong id="psuRec">650W</strong> <span class="text-gray-400">80+ Bronze/Gold</span></p>
+                            <div class="h-px bg-gray-700 my-3"></div>
+                            <p><span class="text-gray-400">Совместимость:</span> <span id="compatStatus" class="text-green-400"><i class="fas fa-check-circle"></i> Отлично, компоненты сбалансированы</span></p>
+                            <p><span class="text-gray-400">Уровень сборки:</span> <span id="buildLevel" class="font-semibold">Средний/Продвинутый</span></p>
+                            </div>
+                        </div>
+                        <button id="applyConfigBtn" class="mt-5 btn-glow justify-center w-full"><i class="fas fa-check-double"></i> Применить конфигурацию</button>
+                    </div>
+                </div>
+                <div class="mt-8 bg-gradient-to-r from-blue-950/30 to-transparent p-4 rounded-xl text-center text-sm text-gray-300">
+                    <i class="fas fa-microchip mr-2"></i> Профессиональная подсказка: всегда проверяйте, чтобы блок питания имел запас ~20% от суммарного TDP.
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ / tips -->
+        <section class="mb-20">
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-card p-6"><i class="fas fa-question-circle text-blue-400 text-2xl mb-3"></i><h3 class="font-bold text-xl">Как не повредить CPU?</h3><p class="text-gray-300 mt-2">Выравнивайте золотой треугольник с меткой на сокете, не прилагайте чрезмерных усилий.</p></div>
+                <div class="glass-card p-6"><i class="fas fa-cable-car text-blue-400 text-2xl mb-3"></i><h3 class="font-bold text-xl">Кабель-менеджмент важен?</h3><p class="text-gray-300 mt-2">Да, улучшает воздушный поток, снижает температуру на 5–8°C и облегчает апгрейд.</p></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="py-10 text-center text-gray-400 text-sm">
+        <p>© 2025 PCBuilderPro — Обучение сборке компьютеров с нуля. Интерактивный гид нового поколения.</p>
+        <p class="mt-2"><i class="fas fa-database"></i> Все рекомендации основаны на опыте энтузиастов и инженеров.</p>
+    </footer>
+
+    <script>
+        // ------------------- INTERACTIVE GUIDE LOGIC -------------------
+        const stepsData = [
+            {
+                title: "⚙️ Подготовка и инструменты",
+                desc: "<p>✅ Инструменты: крестовая отвертка PH2, пинцет для джамперов, пластиковые стяжки, термопаста (если кулер без пред. нанесения).</p><p>✅ Антистатический браслет или работа на антистатическом коврике. Разложите все компоненты на картоне.</p><div class='bg-black/40 p-3 rounded-lg mt-2'><i class='fas fa-video mr-1'></i> Видео-совет: перед началом соберите систему вне корпуса (Open Bench Test) для проверки работоспособности.</div>"
+            },
+            {
+                title: "🧠 Установка процессора и кулера",
+                desc: "<p>🔹 Поднимите рычаг сокета, совместите метку на процессоре с треугольником. Осторожно опустите процессор, не двигайте его.</p><p>🔹 Нанесите термопасту размером с горошину, закрепите кулер крест-накрест. Подключите вентилятор к CPU_FAN.</p><p class='text-blue-300 mt-2'>💡 Совет: для AMD AM5 используйте стандартные защелки, для LGA1700 — равномерное давление.</p>"
+            },
+            {
+                title: "💾 ОЗУ и SSD (M.2)",
+                desc: "<p>🔸 Сначала установите оперативную память: откройте защелки, совместите вырез, нажмите до щелчка. Для двухканального режима используйте слоты A2 и B2 (2 и 4).</p><p>🔸 M.2 SSD: вставьте под углом 30°, прижмите и зафиксируйте винтом. При наличии радиатора снимите защитную пленку.</p>"
+            },
+            {
+                title: "🔌 Монтаж материнской платы в корпус",
+                desc: "<p>🔹 Установите I/O shield (защитную панель) в корпус. Аккуратно положите плату, совместите с отверстиями стоек. Закрутите винты через изолирующие шайбы.</p><p>🔹 Подключите провода передней панели: Power SW, Reset SW, HDD LED, а также USB 3.0 и Audio по схеме материнской платы.</p>"
+            },
+            {
+                title: "⚡ Блок питания и кабель-менеджмент",
+                desc: "<p>🔸 Установите БП в отсек, закрепите 4 винтами. Подключите 24-pin материнской платы, 8-pin CPU (EPS12V) и PCIe кабели.</p><p>🔸 Пропустите кабели через вырезы за поддоном, зафиксируйте стяжками. Это улучшит циркуляцию воздуха.</p><div class='border-l-4 border-yellow-500 pl-3 mt-2'>Внимание: не перепутайте кабель PCIe и EPS — они имеют разную форму ключа.</div>"
+            },
+            {
+                title: "🎮 Установка видеокарты и первый запуск",
+                desc: "<p>🔹 Снимите заглушки на задней стенке корпуса, откиньте защелку PCIe слота. Аккуратно вставьте видеокарту до характерного щелчка.</p><p>🔹 Подключите дополнительные разъемы питания (6+2 pin). Подсоедините монитор, клавиатуру, включите БП и нажмите кнопку Power.</p><p>✅ Если система загрузилась в BIOS — вы успешно собрали ПК!</p>"
+            }
+        ];
+
+        let activeStep = 0;
+
+        function updateGuideUI(stepIndex) {
+            const step = stepsData[stepIndex];
+            document.getElementById('guideTitle').innerHTML = step.title;
+            document.getElementById('guideDescription').innerHTML = step.desc;
+            // update active class in progress steps
+            document.querySelectorAll('.progress-step').forEach((el, idx) => {
+                if (idx == stepIndex) el.classList.add('active');
+                else el.classList.remove('active');
+            });
+        }
+
+        function setActiveStep(index) {
+            activeStep = Math.min(Math.max(index, 0), stepsData.length-1);
+            updateGuideUI(activeStep);
+        }
+
+        document.querySelectorAll('.progress-step').forEach((el, idx) => {
+            el.addEventListener('click', () => setActiveStep(idx));
+        });
+        document.getElementById('prevGuideBtn').addEventListener('click', () => setActiveStep(activeStep-1));
+        document.getElementById('nextGuideBtn').addEventListener('click', () => setActiveStep(activeStep+1));
+        document.getElementById('scrollToGuideBtn').addEventListener('click', () => {
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+        });
+        // initial guide load
+        updateGuideUI(0);
+
+        // ------------------- CONFIGURATOR + POWER CALC -------------------
+        const powerMap = {
+            cpu: { intel_i5: 125, ryzen_5: 105, ryzen_7: 120, intel_i7: 220 },
+            gpu: { rtx4060: 115, rtx4070: 200, rx7800xt: 263, rtx4090: 450 },
+            ram: { "16gb": 10, "32gb": 18, "64gb": 28 },
+            cooler: { air: 5, aio: 8, premium: 12 }
+        };
+        function calcTotalPower() {
+            const cpu = document.getElementById('cpuSelect').value;
+            const gpu = document.getElementById('gpuSelect').value;
+            const ram = document.getElementById('ramSelect').value;
+            const cooler = document.getElementById('coolerSelect').value;
+            let total = (powerMap.cpu[cpu] || 100) + (powerMap.gpu[gpu] || 150) + (powerMap.ram[ram] || 10) + (powerMap.cooler[cooler] || 5);
+            return total;
+        }
+        function recommendPSU(totalW) {
+            if (totalW <= 350) return "450W";
+            if (totalW <= 500) return "550W";
+            if (totalW <= 650) return "650W";
+            if (totalW <= 800) return "750W";
+            if (totalW <= 950) return "850W";
+            return "1000W+";
+        }
+        function getBuildLevel(total, cpuVal, gpuVal) {
+            if (total > 600) return "Экстремальный / энтузиаст";
+            if (total > 350) return "Продвинутый игровой";
+            return "Начальный / средний";
+        }
+        function updateConfiguratorStats() {
+            const total = calcTotalPower();
+            const psuRec = recommendPSU(total);
+            document.getElementById('tdpValue').innerText = total;
+            document.getElementById('psuRec').innerText = psuRec;
+            const cpu = document.getElementById('cpuSelect').value;
+            const gpu = document.getElementById('gpuSelect').value;
+            const level = getBuildLevel(total, cpu, gpu);
+            document.getElementById('buildLevel').innerText = level;
+            let compatMsg = "";
+            let isGood = true;
+            if ((cpu.includes("i7") || cpu.includes("ryzen_7")) && document.getElementById('gpuSelect').value === "rtx4060") {
+                compatMsg = "⚠️ Мощный процессор, но видеокарта слабее — возможен узкое место в играх.";
+                isGood = false;
+            } else if (total > 750 && !document.getElementById('coolerSelect').value.includes("360")) {
+                compatMsg = "💧 Для высоких нагрузок рекомендуется мощное жидкостное охлаждение.";
+                isGood = false;
+            } else {
+                compatMsg = "✅ Отлично, компоненты сбалансированы";
+            }
+            if(!isGood) document.getElementById('compatStatus').innerHTML = `<i class="fas fa-exclamation-triangle text-yellow-400"></i> ${compatMsg}`;
+            else document.getElementById('compatStatus').innerHTML = `<i class="fas fa-check-circle text-green-400"></i> ${compatMsg}`;
+        }
+        document.getElementById('applyConfigBtn').addEventListener('click', () => {
+            updateConfiguratorStats();
+            const total = calcTotalPower();
+            const psu = recommendPSU(total);
+            alert(`Конфигурация сохранена! 💡 Суммарное энергопотребление ≈ ${total} Вт. Рекомендуемый БП: ${psu}. Не забудьте про достаточный воздушный поток в корпусе.`);
+        });
+        document.getElementById('randomConfigBtn').addEventListener('click', () => {
+            const cpus = ['intel_i5', 'ryzen_5', 'ryzen_7', 'intel_i7'];
+            const gpus = ['rtx4060', 'rtx4070', 'rx7800xt', 'rtx4090'];
+            const rams = ['16gb', '32gb', '64gb'];
+            const coolers = ['air', 'aio', 'premium'];
+            document.getElementById('cpuSelect').value = cpus[Math.floor(Math.random()*cpus.length)];
+            document.getElementById('gpuSelect').value = gpus[Math.floor(Math.random()*gpus.length)];
+            document.getElementById('ramSelect').value = rams[Math.floor(Math.random()*rams.length)];
+            document.getElementById('coolerSelect').value = coolers[Math.floor(Math.random()*coolers.length)];
+            updateConfiguratorStats();
+        });
+        updateConfiguratorStats();
+    </script>
+</body>
+</html>
