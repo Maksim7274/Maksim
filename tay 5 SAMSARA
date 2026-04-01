@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>SCP Foundation | МОГ Тау-5 «Самсара» | Терминал доступа</title>
+    <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #010001;
+            color: #d0d0e8;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* Сканирующая линия */
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background: linear-gradient(to bottom, transparent 0%, rgba(100, 50, 150, 0.03) 50%, transparent 100%);
+            animation: scanMove 8s linear infinite;
+        }
+
+        @keyframes scanMove {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Биомеханический фон с параллаксом */
+        .bio-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: radial-gradient(circle at 30% 40%, #0a0518 0%, #020005 100%);
+        }
+        
+        .parallax-layer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 110%;
+            height: 110%;
+            z-index: -1;
+            pointer-events: none;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800"><path fill="none" stroke="rgba(120,60,180,0.15)" stroke-width="1" d="M100,100 L700,100 M100,200 L700,200 M100,300 L700,300 M100,400 L700,400 M100,500 L700,500 M100,600 L700,600 M100,700 L700,700 M200,100 L200,700 M300,100 L300,700 M400,100 L400,700 M500,100 L500,700 M600,100 L600,700 M700,100 L700,700"/><circle cx="400" cy="400" r="50" fill="none" stroke="rgba(150,80,200,0.1)" stroke-width="1"/><circle cx="400" cy="400" r="100" fill="none" stroke="rgba(150,80,200,0.05)"/></svg>');
+            background-repeat: repeat;
+            background-size: 80px;
+            opacity: 0.4;
+            transition: transform 0.1s ease-out;
+        }
+
+        /* Глитч-эффект */
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0.02em 0 0 rgba(150,0,255,0.5), -0.02em 0 0 rgba(0,255,255,0.5); }
+            25% { text-shadow: -0.02em 0 0 rgba(150,0,255,0.7), 0.02em 0 0 rgba(0,255,255,0.7); }
+            50% { text-shadow: 0.03em 0 0 rgba(150,0,255,0.4), -0.03em 0 0 rgba(0,255,255,0.4); }
+            75% { text-shadow: -0.01em 0 0 rgba(150,0,255,0.8), 0.01em 0 0 rgba(0,255,255,0.8); }
+        }
+
+        /* Карточки с hover-эффектами */
+        .tau-card {
+            background: linear-gradient(135deg, rgba(20, 8, 40, 0.85), rgba(8, 3, 20, 0.95));
+            border: 1px solid #5a2c8a;
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+        }
+        
+        .tau-card:hover {
+            border-color: #b87cff;
+            box-shadow: 0 0 30px rgba(120, 60, 180, 0.4), inset 0 0 20px rgba(120, 60, 180, 0.1);
+            transform: translateY(-8px) scale(1.02);
+        }
+        
+        /* Системный интерфейс */
+        .terminal-header {
+            background: rgba(0, 0, 0, 0.7);
+            border-bottom: 1px solid #6a3c9a;
+            font-family: 'Courier Prime', monospace;
+        }
+        
+        .status-led {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #6eff8e;
+            box-shadow: 0 0 5px #6eff8e;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(0.8); }
+        }
+        
+        /* Модальное окно с анимацией */
+        .tau-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.96);
+            backdrop-filter: blur(12px);
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; backdrop-filter: blur(0); }
+            to { opacity: 1; backdrop-filter: blur(12px); }
+        }
+        
+        .modal-container {
+            max-width: 550px;
+            width: 90%;
+            background: linear-gradient(135deg, #0c0518, #050210);
+            border: 1px solid #aa44ff;
+            border-radius: 24px;
+            padding: 2rem;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 0 50px rgba(170, 68, 255, 0.2);
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            font-size: 32px;
+            cursor: pointer;
+            color: #aa44ff;
+            transition: 0.2s;
+        }
+        
+        .close-modal:hover {
+            color: #ff88ff;
+            transform: scale(1.1);
+        }
+        
+        /* Анимация появления элементов */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Технические бейджи */
+        .tech-badge {
+            font-family: 'Courier Prime', monospace;
+            background: #2a1a3a;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            color: #b87cff;
+            border: 1px solid #6a4c8a;
+        }
+        
+        .blood-code {
+            font-family: 'Courier Prime', monospace;
+            background: #1a0a2a;
+            padding: 1rem;
+            border-radius: 12px;
+            color: #cc88ff;
+            font-size: 0.8rem;
+        }
+        
+        .btn-tau {
+            background: transparent;
+            border: 1px solid #aa44ff;
+            color: #c98cff;
+            padding: 8px 28px;
+            border-radius: 40px;
+            transition: 0.2s;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-tau:hover {
+            background: #aa44ff;
+            color: black;
+            box-shadow: 0 0 20px #aa44ff;
+            transform: scale(1.02);
+        }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0515; }
+        ::-webkit-scrollbar-thumb { background: #aa44ff; border-radius: 10px; }
+        
+        @media (max-width: 768px) {
+            .tau-card { padding: 1rem; }
+        }
+        
+        /* Эффект загрузки */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 20000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s;
+        }
+        
+        .loader-text {
+            font-family: 'Courier Prime', monospace;
+            color: #aa44ff;
+            font-size: 1.2rem;
+            letter-spacing: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="loader-overlay" id="loader">
+    <div class="loader-text">
+        <i class="fas fa-infinity"></i> ЗАГРУЗКА ТЕРМИНАЛА <span id="loaderDots">...</span>
+    </div>
+</div>
+
+<div class="scan-line"></div>
+<div class="bio-bg"></div>
+<div class="parallax-layer" id="parallaxLayer"></div>
+
+<!-- Модальное окно -->
+<div id="infoModal" class="tau-modal">
+    <div class="modal-container">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div id="modalContent"></div>
+    </div>
+</div>
+
+<!-- Навигация -->
+<nav class="terminal-header fixed top-0 w-full z-50 px-5 md:px-12 py-3 flex justify-between items-center">
+    <div class="flex items-center gap-3">
+        <div class="status-led"></div>
+        <span class="font-mono font-bold tracking-wider text-sm">МОГ:<span class="text-purple-400">ТАУ-5</span></span>
+        <span class="hidden md:inline text-xs text-purple-600 ml-2">[САМСАРА · АКТИВНА]</span>
+    </div>
+    <div class="hidden md:flex gap-6 text-xs font-mono">
+        <a href="#about" class="hover:text-purple-400 transition">СУЩНОСТЬ</a>
+        <a href="#members" class="hover:text-purple-400 transition">СОСТАВ</a>
+        <a href="#protocols" class="hover:text-purple-400 transition">ПРОТОКОЛЫ</a>
+        <a href="#operations" class="hover:text-purple-400 transition">ОПЕРАЦИИ</a>
+        <a href="#tech" class="hover:text-purple-400 transition">ТЕХНОЛОГИИ</a>
+    </div>
+    <button class="btn-tau text-xs py-1.5 px-4" onclick="playHoverSound(); document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+        <i class="fas fa-dharmachakra"></i> САМСАРА
+    </button>
+</nav>
+
+<main class="pt-28 px-5 md:px-12 max-w-7xl mx-auto">
+    <!-- HERO с глитч-эффектом -->
+    <section id="about" class="mb-20 fade-up">
+        <div class="text-center">
+            <div class="tech-badge mb-4" id="accessBadge">[ УРОВЕНЬ ДОСТУПА: 5/TAU-5 ]</div>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter glitch-text">
+                <span class="text-purple-400">МОГ ТАУ-5</span><br>
+                <span class="text-white">«САМСАРА»</span>
+            </h1>
+            <p class="text-gray-400 max-w-2xl mx-auto mt-5 text-lg font-mono">"Мы уже мертвы. Смерть — это просто перезагрузка."</p>
+            <div class="blood-code max-w-2xl mx-auto mt-8 text-center">
+                <i class="fas fa-dna text-purple-400 mr-2"></i> ИЗ ПЛОТИ МЁРТВОГО БОГА — БЕССМЕРТНЫЕ КЛОНЫ-КИБОРГИ
+                <div class="text-xs mt-2 text-purple-300">ЦИКЛОВ ПЕРЕРОЖДЕНИЯ: <span id="reincarnationCount">247</span>+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Сущность -->
+    <section class="mb-20 fade-up">
+        <div class="tau-card" onclick="playCardSound()">
+            <div class="flex items-center gap-3 mb-4">
+                <i class="fas fa-skull text-3xl text-purple-400"></i>
+                <h2 class="text-2xl font-bold">[ СУЩНОСТЬ ПОДРАЗДЕЛЕНИЯ ]</h2>
+            </div>
+            <p class="text-gray-300 leading-relaxed mb-4"><span class="text-purple-400 font-bold">Мобильная оперативная группа Тау-5 «Самсара»</span> — одно из самых засекреченных подразделений Фонда. Создана из <span class="text-purple-400">плоти мёртвого бога</span>, чья природа неизвестна даже Совету О5. Каждый оперативник — биомеханический клон-киборг, обладающий способностью к регенерации и воскрешению.</p>
+            <p class="text-gray-300 leading-relaxed">Название «Самсара» отсылает к циклу перерождений — оперативники умирают и возрождаются снова, сохраняя память и опыт предыдущих воплощений. Их тела — совершенный синтез органической ткани божественного происхождения и передовых технологий Фонда.</p>
+        </div>
+    </section>
+
+    <!-- Состав -->
+    <section id="members" class="mb-20 fade-up">
+        <h2 class="text-2xl font-bold mb-5 flex items-center gap-2"><i class="fas fa-users text-purple-400"></i> [ СОСТАВ МОГ ТАУ-5 ]</h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4" id="membersGrid"></div>
+    </section>
+
+    <!-- Протоколы -->
+    <section id="protocols" class="mb-20 fade-up">
+        <h2 class="text-2xl font-bold mb-5 flex items-center gap-2"><i class="fas fa-scroll text-purple-400"></i> [ ПРОТОКОЛЫ АКТИВАЦИИ ]</h2>
+        <div class="space-y-4" id="protocolsGrid"></div>
+    </section>
+
+    <!-- Операции -->
+    <section id="operations" class="mb-20 fade-up">
+        <h2 class="text-2xl font-bold mb-5 flex items-center gap-2"><i class="fas fa-history text-purple-400"></i> [ ЗАДОКУМЕНТИРОВАННЫЕ ОПЕРАЦИИ ]</h2>
+        <div class="grid md:grid-cols-2 gap-5" id="operationsGrid"></div>
+    </section>
+
+    <!-- Технологии -->
+    <section id="tech" class="mb-20 fade-up">
+        <div class="tau-card">
+            <h2 class="text-xl font-bold mb-3 flex items-center gap-2"><i class="fas fa-chart-line text-purple-400"></i> [ ТЕХНИЧЕСКИЕ ХАРАКТЕРИСТИКИ ]</h2>
+            <div class="grid md:grid-cols-2 gap-4 text-sm" id="techSpecs"></div>
+        </div>
+    </section>
+
+    <footer class="border-t border-purple-900/40 py-6 text-center text-gray-500 text-xs font-mono">
+        <p>SCP FOUNDATION | МОГ ТАУ-5 «САМСАРА» | ТЕРМИНАЛ ДОСТУПА v.2.7.4</p>
+        <p class="mt-1"><i class="fas fa-infinity"></i> "Смерть — это не конец. Смерть — это перезагрузка."</p>
+        <p class="mt-2 text-purple-800">[ ДОКУМЕНТ УРОВНЯ ДОСТУПА 5/TAU-5 ]</p>
+    </footer>
+</main>
+
+<script>
+    // ============= АТМОСФЕРНЫЙ ЗВУК =============
+    let audioContext = null;
+    let hasUserInteracted = false;
+    
+    function initAudio() {
+        if (audioContext) return;
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    
+    function playAtmosphericSound() {
+        if (!audioContext) initAudio();
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 80;
+        gain.gain.value = 0.15;
+        oscillator.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 1.2);
+        oscillator.stop(audioContext.currentTime + 1.2);
+    }
+    
+    function playHoverSound() {
+        if (!hasUserInteracted) return;
+        if (!audioContext) initAudio();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.type = 'sine';
+        oscillator.frequency.value = 440;
+        gain.gain.value = 0.05;
+        oscillator.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.3);
+        oscillator.stop(audioContext.currentTime + 0.3);
+    }
+    
+    function playCardSound() {
+        if (!hasUserInteracted) return;
+        if (!audioContext) initAudio();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.type = 'triangle';
+        oscillator.frequency.value = 220;
+        gain.gain.value = 0.08;
+        oscillator.start();
+        gain.gain.exponentialRampToValueAtTime(0.00001, audioContext.currentTime + 0.2);
+        oscillator.stop(audioContext.currentTime + 0.2);
+    }
+    
+    document.body.addEventListener('click', function firstInteraction() {
+        if (!hasUserInteracted) {
+            hasUserInteracted = true;
+            initAudio();
+            playAtmosphericSound();
+        }
+    }, { once: true });
+    
+    // ============= ДАННЫЕ =============
+    const members = [
+        { name: "Агент Иркалла", role: "Командир", cycles: 47, bio: "Специализация: тактическое командование, тауматургия высшего порядка. Первый оперативник, созданный в рамках проекта «Самсара». Несёт память о 47 смертях и возрождениях." },
+        { name: "Агент Налли", role: "Ближний бой", cycles: 31, bio: "Эксперт по эзотерическому оружию. Владеет техниками боя, утерянными тысячелетия назад. Прошёл 31 цикл реинкарнации." },
+        { name: "Агент Уртан", role: "Снайпер", cycles: 23, bio: "Интегрированная оптическая система позволяет видеть в любом спектре. Рекорд по дальности поражения цели — 3.7 км с учётом аномальных искажений." },
+        { name: "Агент Савитр", role: "Техник", cycles: 19, bio: "Отвечает за поддержание биомеханических систем. Способен проводить полевой ремонт собственного и чужого корпуса в боевых условиях." }
+    ];
+    
+    const protocols = [
+        { name: "САМСАРА-1", title: "Полная регенерация", desc: "Активируется при гибели оперативника. Процесс включает извлечение эфирного ядра, передачу квантового слепка сознания, выращивание нового тела (4-12 часов), реинтеграцию памяти и калибровку кибернетических систем." },
+        { name: "САМСАРА-2", title: "Боевая трансформация", desc: "Переход в боевой режим: активация экзоскелета (усиление силы в 8 раз), разблокировка тауматургических фокусировщиков, нейросетевое ускорение (реакция 0.02 сек), ускоренная регенерация. Продолжительность: до 72 часов." },
+        { name: "САМСАРА-3", title: "Эфирный сдвиг", desc: "Переход в нематериальное состояние. Оперативник становится неосязаемым, проходя сквозь физические препятствия. Длительность: ограничена 15 минутами. После использования требуется 24 часа на восстановление." },
+        { name: "САМСАРА-4", title: "Коллективный разум", desc: "Синхронизация сознаний всех активных оперативников. Позволяет координировать действия с точностью до миллисекунды, разделять сенсорную информацию." },
+        { name: "САМСАРА-5", title: "Финал (уровень О5)", desc: "Активируется только при угрозе уничтожения всех эфирных ядер. Оперативники используют всю доступную эзотерическую энергию для создания локального сдвига реальности." }
+    ];
+    
+    const operations = [
+        { name: "Операция «Аватара»", year: "2016", obj: "SCP-1730", desc: "Участие в ликвидации угрозы в Зоне 13. Группа провела рейд в искажённое пространство. Потери: 3 временные смерти." },
+        { name: "Операция «Смертовосприятие»", year: "2018", obj: "SCP-3780", desc: "Зачистка объекта. Столкновение с сущностью, манипулирующей восприятием смерти. 2 регенерации." },
+        { name: "Операция «Deus Vulture»", year: "2019", obj: "Зона 44", desc: "Подавление тауматургического восстания. Применён протокол Самсара-2. Полная регенерация всех оперативников." },
+        { name: "Операция «Тонкая опасная грань»", year: "2020", obj: "Меметический агент", desc: "Совместная операция с МОГ Омега-0. Успешная локализация источника заражения." }
+    ];
+    
+    const techSpecs = [
+        "▸ Регенерация: 4-72 часа (в зависимости от повреждений)",
+        "▸ Пиковая сила: до 8000 кг (протокол Самсара-2)",
+        "▸ Макс. скорость: 65 км/ч (боевой режим)",
+        "▸ Рабочая автономия: 72 часа без подзарядки",
+        "▸ Эфирное ядро: устойчивость к меметическим агентам 94%",
+        "▸ Вооружение: тауматургические фокусировщики, плазменное оружие"
+    ];
+    
+    // ============= РЕНДЕРИНГ =============
+    function renderMembers() {
+        const container = document.getElementById('membersGrid');
+        container.innerHTML = members.map(m => `
+            <div class="member-card" style="background: rgba(0,0,0,0.5); border:1px solid #4a2a6a; border-radius:16px; padding:1rem; text-align:center; cursor:pointer; transition:0.2s;" onclick="showMember('${m.name}', '${m.role}', '${m.bio}', ${m.cycles})">
+                <i class="fas fa-user-astronaut text-3xl text-purple-400 mb-2"></i>
+                <h3 class="font-bold">${m.name}</h3>
+                <p class="text-xs text-purple-300">${m.role}</p>
+                <p class="text-xs text-gray-500 mt-1">${m.cycles} циклов</p>
+            </div>
+        `).join('');
+    }
+    
+    function renderProtocols() {
+        const container = document.getElementById('protocolsGrid');
+        container.innerHTML = protocols.map(p => `
+            <div class="protocol-card" style="background:rgba(15,5,25,0.8); border-left:4px solid #aa44ff; border-radius:12px; padding:1rem; cursor:pointer;" onclick="showProtocol('${p.name}', '${p.title}', '${p.desc}')">
+                <i class="fas fa-scroll text-purple-400 mr-2"></i>
+                <strong>ПРОТОКОЛ ${p.name}</strong> — ${p.title}
+                <i class="fas fa-chevron-right text-xs ml-2 text-purple-400"></i>
+            </div>
+        `).join('');
+    }
+    
+    function renderOperations() {
+        const container = document.getElementById('operationsGrid');
+        container.innerHTML = operations.map(op => `
+            <div class="tau-card" style="cursor:pointer;" onclick="showOperation('${op.name}', '${op.year}', '${op.obj}', '${op.desc}')">
+                <i class="fas fa-dragon text-purple-400 text-xl"></i>
+                <h3 class="font-bold mt-1">${op.name}</h3>
+                <p class="text-xs text-gray-400 mt-1">${op.obj} · ${op.year}</p>
+                <p class="text-sm text-gray-300 mt-2">${op.desc.substring(0, 80)}...</p>
+                <span class="text-purple-400 text-xs">подробнее →</span>
+            </div>
+        `).join('');
+    }
+    
+    function renderTechSpecs() {
+        const container = document.getElementById('techSpecs');
+        container.innerHTML = techSpecs.map(s => `<div class="text-sm">${s}</div>`).join('');
+    }
+    
+    // ============= МОДАЛЬНЫЕ ОКНА =============
+    window.showMember = function(name, role, bio, cycles) {
+        const modal = document.getElementById('infoModal');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <div class="border-b border-purple-800 pb-3 mb-3">
+                <i class="fas fa-user-astronaut text-3xl text-purple-400 mb-2"></i>
+                <h2 class="text-2xl font-bold">${name}</h2>
+                <span class="tech-badge">${role}</span>
+            </div>
+            <p class="text-gray-300 leading-relaxed">${bio}</p>
+            <div class="blood-code mt-4 text-xs">
+                <i class="fas fa-dharmachakra"></i> Статус: АКТИВЕН<br>
+                <i class="fas fa-sync-alt"></i> Циклов перерождения: ${cycles}<br>
+                <i class="fas fa-shield-alt"></i> Боевая готовность: 100%
+            </div>
+        `;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        playCardSound();
+    };
+    
+    window.showProtocol = function(code, title, desc) {
+        const modal = document.getElementById('infoModal');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <div class="border-b border-purple-800 pb-3 mb-3">
+                <i class="fas fa-scroll text-3xl text-purple-400 mb-2"></i>
+                <h2 class="text-xl font-bold">ПРОТОКОЛ ${code}</h2>
+                <span class="tech-badge">${title}</span>
+            </div>
+            <div class="blood-code whitespace-pre-line text-sm">${desc}</div>
+            <div class="mt-4 text-xs text-purple-400 text-center">[ АВТОРИЗОВАНО: СОВЕТ О5 ]</div>
+        `;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        playCardSound();
+    };
+    
+    window.showOperation = function(name, year, obj, desc) {
+        const modal = document.getElementById('infoModal');
+        const content = document.getElementById('modalContent');
+        content.innerHTML = `
+            <div class="border-b border-purple-800 pb-3 mb-3">
+                <i class="fas fa-skull text-3xl text-purple-400 mb-2"></i>
+                <h2 class="text-xl font-bold">${name}</h2>
+                <span class="tech-badge">${obj} · ${year}</span>
+            </div>
+            <p class="text-gray-300 leading-relaxed">${desc}</p>
+            <div class="mt-4 p-3 bg-black/40 rounded-lg text-xs font-mono">
+                <i class="fas fa-chart-line"></i> Эффективность: 94.7%<br>
+                <i class="fas fa-heartbeat"></i> Потери: временные (восстановлены)
+            </div>
+        `;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        playCardSound();
+    };
+    
+    window.closeModal = function() {
+        document.getElementById('infoModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    };
+    
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeModal();
+    });
+    
+    // ============= ПАРАЛЛАКС =============
+    document.addEventListener('mousemove', function(e) {
+        const layer = document.getElementById('parallaxLayer');
+        const x = (e.clientX / window.innerWidth - 0.5) * 20;
+        const y = (e.clientY / window.innerHeight - 0.5) * 20;
+        layer.style.transform = `translate(${x}px, ${y}px)`;
+    });
+    
+    // ============= АНИМАЦИИ ПОЯВЛЕНИЯ =============
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    
+    // ============= ЗАГРУЗОЧНЫЙ ЭКРАН =============
+    let dotCount = 0;
+    const loaderInterval = setInterval(() => {
+        dotCount = (dotCount + 1) % 4;
+        const dots = '.'.repeat(dotCount);
+        const loaderDots = document.getElementById('loaderDots');
+        if (loaderDots) loaderDots.textContent = dots;
+    }, 300);
+    
+    window.addEventListener('load', function() {
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if (loader) {
+                loader.style.opacity = '0';
+                setTimeout(() => {
+                    loader.style.display = 'none';
+                    clearInterval(loaderInterval);
+                }, 1000);
+            }
+        }, 1500);
+        
+        // Активировать звук при первом клике
+        setTimeout(() => {
+            const badge = document.getElementById('accessBadge');
+            if (badge) {
+                badge.style.animation = 'glitch 0.5s infinite';
+                setTimeout(() => badge.style.animation = '', 2000);
+            }
+        }, 2000);
+    });
+    
+    // ============= ИНИЦИАЛИЗАЦИЯ =============
+    renderMembers();
+    renderProtocols();
+    renderOperations();
+    renderTechSpecs();
+    
+    // Счетчик реинкарнаций с анимацией
+    let count = 247;
+    const counterInterval = setInterval(() => {
+        count++;
+        const el = document.getElementById('reincarnationCount');
+        if (el) el.textContent = count;
+        if (count > 289) clearInterval(counterInterval);
+    }, 30000);
+    
+    console.log("%c⚠️ ТЕРМИНАЛ МОГ ТАУ-5 «САМСАРА» АКТИВИРОВАН ⚠️", "color: #aa44ff; font-size: 14px; font-family: monospace");
+    console.log("%cБессмертные воины из плоти мёртвого бога. Смерть — временное состояние.", "color: #b87cff; font-size: 12px");
+</script>
+</body>
+</html>
+<script>// ===== УЛУЧШЕНИЕ АНИМАЦИЙ =====
+document.querySelectorAll('.tau-card, .protocol-card, .member-card').forEach(el => {
+    el.style.transition = "all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1)";
+});
+
+// ===== ДОП ПАРАЛЛАКС (УСИЛЕНИЕ) =====
+document.addEventListener("mousemove", (e) => {
+    const bg = document.querySelector(".bio-bg");
+    let x = (e.clientX / window.innerWidth) * 15;
+    let y = (e.clientY / window.innerHeight) * 15;
+    bg.style.transform = `translate(-${x}px, -${y}px)`;
+});
+
+// ===== ГЛИТЧ ДЛЯ ЗАГОЛОВКА (БЕЗ КОНФЛИКТА) =====
+const glitchTitle = document.querySelector(".glitch-text");
+if (glitchTitle) {
+    setInterval(() => {
+        glitchTitle.style.textShadow = `
+            ${Math.random()*4}px 0px #ff00ff,
+            ${-Math.random()*4}px 0px #00ffff
+        `;
+    }, 150);
+}
+
+// ===== ДОП ЗВУК (НЕ ЛОМАЕТ ТВОЙ) =====
+const clickSound2 = new Audio("https://assets.mixkit.co/sfx/preview/mixkit-interface-click-1126.mp3");
+
+function playExtraSound() {
+    clickSound2.currentTime = 0;
+    clickSound2.volume = 0.3;
+    clickSound2.play();
+}
+
+// Добавим звук на карточки
+document.querySelectorAll('.tau-card, .protocol-card, .member-card').forEach(card => {
+    card.addEventListener('click', () => {
+        playExtraSound();
+    });
+});
+
+// ===== УЛУЧШЕННЫЕ МОДАЛКИ (АНИМАЦИЯ) =====
+const modal = document.getElementById('infoModal');
+
+if (modal) {
+    const observerModal = new MutationObserver(() => {
+        if (modal.style.display === 'flex') {
+            modal.style.opacity = 0;
+            setTimeout(() => {
+                modal.style.transition = "opacity 0.3s ease";
+                modal.style.opacity = 1;
+            }, 10);
+        }
+    });
+
+    observerModal.observe(modal, { attributes: true, attributeFilter: ['style'] });
+}
+
+// ===== ВТОРАЯ СКАН ЛИНИЯ (ЭФФЕКТ) =====
+const scan2 = document.createElement("div");
+scan2.style.position = "fixed";
+scan2.style.top = 0;
+scan2.style.left = 0;
+scan2.style.width = "100%";
+scan2.style.height = "1px";
+scan2.style.background = "rgba(255,0,255,0.3)";
+scan2.style.zIndex = "9998";
+scan2.style.animation = "scanAnim2 6s linear infinite";
+
+document.body.appendChild(scan2);
+
+const style2 = document.createElement("style");
+style2.innerHTML = `
+@keyframes scanAnim2 {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100vh); }
+}`;
+document.head.appendChild(style2);
+
+// ===== 3D ЭФФЕКТ (УЛУЧШЕННЫЙ) =====
+document.querySelectorAll('.member-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+        let x = e.offsetX / card.clientWidth - 0.5;
+        let y = e.offsetY / card.clientHeight - 0.5;
+        card.style.transform = `rotateX(${y*12}deg) rotateY(${x*12}deg) scale(1.03)`;
+    });
+
+    card.addEventListener('mouseleave', () => {
+        card.style.transform = "rotateX(0) rotateY(0) scale(1)";
+    });
+});
+
+// ===== SCP КОНСОЛЬ УСИЛЕННАЯ =====
+console.log("%c[ACCESS LEVEL 5 CONFIRMED]", "color:#aa44ff; font-size:16px;");
+console.log("%cTAU-5 SAMSARA SYSTEM LOADED", "color:#b87cff;");
+console.log("%cWARNING: YOU ARE NOT AUTHORIZED", "color:red;");</script>
