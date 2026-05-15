@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNDERTALE // ПОДЗЕМЕЛЬЕ // СЕКРЕТНЫЙ АРХИВ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0508;
+            color: #ecd6b0;
+            font-family: 'Courier New', Courier, 'Monaco', monospace;
+            line-height: 1.5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" opacity="0.08"><path fill="none" stroke="%238b5a2b" stroke-width="0.6" d="M10 10 L190 10 M10 20 L190 20 M10 30 L190 30 M10 40 L190 40 M10 50 L190 50 M10 60 L190 60 M10 70 L190 70 M10 80 L190 80 M10 90 L190 90 M10 100 L190 100 M10 110 L190 110 M10 120 L190 120 M10 130 L190 130 M10 140 L190 140 M10 150 L190 150 M10 160 L190 160 M10 170 L190 170 M10 180 L190 180 M10 190 L190 190 M20 10 L20 190 M30 10 L30 190 M40 10 L40 190 M50 10 L50 190 M60 10 L60 190 M70 10 L70 190 M80 10 L80 190 M90 10 L90 190 M100 10 L100 190 M110 10 L110 190 M120 10 L120 190 M130 10 L130 190 M140 10 L140 190 M150 10 L150 190 M160 10 L160 190 M170 10 L170 190 M180 10 L180 190 M190 10 L190 190"/></svg>');
+            background-repeat: repeat;
+            background-size: 30px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .terminal {
+            max-width: 1200px;
+            width: 100%;
+            background: #0f0b07;
+            border: 1px solid #a57c4c;
+            border-radius: 28px;
+            padding: 25px 30px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,215,150,0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid #8b5a2b;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            cursor: pointer;
+            transition: text-shadow 0.1s;
+        }
+        .header:hover {
+            text-shadow: 0 0 4px #ffa559;
+        }
+        .glitch {
+            font-size: 3rem;
+            letter-spacing: 5px;
+            color: #ffd48a;
+            text-shadow: 0 0 4px #c27e3a, 0 0 8px #6b2e1a;
+        }
+        .sub {
+            font-size: 0.8rem;
+            color: #bd9a6b;
+            margin-top: 8px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #6b4a2a;
+            padding-bottom: 12px;
+        }
+        .tab-btn {
+            background: #1e160e;
+            border: 1px solid #a57c4c;
+            color: #ecd6b0;
+            padding: 8px 20px;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border-radius: 40px;
+        }
+        .tab-btn:hover {
+            background: #3a2a1a;
+            border-color: #e0b070;
+            color: #ffeaaf;
+            box-shadow: 0 0 6px #bd7a3a;
+        }
+        .tab-btn.active {
+            background: #5a3a1a;
+            color: #ffe0aa;
+            border-color: #e0a060;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.3), 0 0 8px #c2823a;
+        }
+
+        .content {
+            min-height: 400px;
+        }
+        .tab-pane {
+            display: none;
+            animation: gentleFade 0.2s ease-out;
+        }
+        .tab-pane.active-pane {
+            display: block;
+        }
+        @keyframes gentleFade {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 18px;
+        }
+        .card {
+            background: #181008;
+            border-left: 4px solid #b87c3a;
+            padding: 15px;
+            border-radius: 12px;
+            transition: 0.1s linear;
+            cursor: pointer;
+        }
+        .card:hover {
+            background: #2a1e12;
+            transform: translateX(5px);
+            border-left-color: #e0a050;
+        }
+        .card h3 {
+            margin-bottom: 8px;
+            color: #ffcf8a;
+        }
+        .card p {
+            font-size: 0.85rem;
+            color: #cbaa7a;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+            font-size: 1.7rem;
+            border-left: 4px solid #b87c3a;
+            padding-left: 15px;
+            color: #ffdc9a;
+        }
+        p, li {
+            font-size: 1rem;
+            margin-bottom: 10px;
+        }
+        ul {
+            margin-left: 25px;
+            margin-bottom: 18px;
+        }
+        .secret-text {
+            color: #eecd9e;
+            background: #1f170c;
+            padding: 12px;
+            border-radius: 14px;
+            margin-top: 15px;
+            border: 1px dashed #b87c3a;
+        }
+
+        .music-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #1a1208;
+            border: 1px solid #b87c3a;
+            border-radius: 40px;
+            padding: 8px 18px;
+            cursor: pointer;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #ecd6b0;
+            transition: 0.2s;
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .music-btn:hover {
+            background: #3a2a1a;
+            border-color: #e0a060;
+            color: #fff0c0;
+        }
+        .volume-slider {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            width: 150px;
+            z-index: 200;
+            background: #0f0b07cc;
+            border-radius: 20px;
+            padding: 6px 12px;
+            border: 1px solid #a57c4c;
+        }
+        input[type=range] {
+            width: 100%;
+            background: #b87c3a;
+            height: 3px;
+            -webkit-appearance: none;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #e0a060;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .footer-status {
+            margin-top: 30px;
+            border-top: 1px solid #6b4a2a;
+            padding-top: 15px;
+            font-size: 0.7rem;
+            text-align: center;
+            color: #aa8a5a;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .footer-status:hover {
+            color: #eec97a;
+        }
+        @media (max-width: 700px) {
+            .terminal { padding: 15px; }
+            .glitch { font-size: 2rem; }
+            .tab-btn { padding: 5px 12px; font-size: 0.8rem; }
+            .grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="terminal">
+    <div class="header" id="secretHeader">
+        <div class="glitch">⚙️ UNDERGROUND TERMINAL ⚙️</div>
+        <div class="sub">[ АРХИВ ПОДЗЕМЕЛЬЯ | НАЖМИ НА ЭТОТ ТЕКСТ ]</div>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="about">О ИГРЕ</button>
+        <button class="tab-btn" data-tab="characters">ПЕРСОНАЖИ</button>
+        <button class="tab-btn" data-tab="locations">ЛОКАЦИИ</button>
+        <button class="tab-btn" data-tab="endings">КОНЦОВКИ</button>
+        <button class="tab-btn" data-tab="secrets">СЕКРЕТЫ</button>
+        <button class="tab-btn" data-tab="history">ИСТОРИЯ / МУЗЫКА</button>
+        <button class="tab-btn" data-tab="theories">ТЕОРИИ</button>
+    </div>
+
+    <div class="content">
+        <div class="tab-pane active-pane" id="about">
+            <h2>▸ О КОНЦЕПЦИИ</h2>
+            <p><strong>UNDERTALE</strong> — инди-RPG, где можно никого не убивать. Выбор формирует путь.</p>
+            <div class="secret-text">🔻 ОЦЕНКИ: Metacritic 92/100 | 10+ млн копий</div>
+        </div>
+
+        <div class="tab-pane" id="characters">
+            <h2>▸ ЖИТЕЛИ ПОДЗЕМЕЛЬЯ (нажми на карточку)</h2>
+            <div class="grid">
+                <div class="card"><h3>🔺 Фриск</h3><p>Человеческий ребёнок, упавший в Подземелье.</p></div>
+                <div class="card"><h3>🌼 Флауи / Азриэль</h3><p>Цветок, который помнит прошлое.</p></div>
+                <div class="card"><h3>🦴 Санс</h3><p>Ленивый скелет, знающий о временных петлях.</p></div>
+                <div class="card"><h3>🦴 Папирус</h3><p>Весёлый брат Санса, мечтает о славе.</p></div>
+                <div class="card"><h3>🐟 Андайн</h3><p>Капитан гвардии, героиня.</p></div>
+                <div class="card"><h3>🐙 Альфис</h3><p>Застенчивый учёный-ботаник.</p></div>
+                <div class="card"><h3>🤖 Меттатон</h3><p>Робот-звезда с гигантским эго.</p></div>
+                <div class="card"><h3>🐐 Ториэль</h3><p>Бывшая королева, заботливая мать.</p></div>
+                <div class="card"><h3>👑 Азгор</h3><p>Король монстров, сломленный утратой.</p></div>
+                <div class="card"><h3>❓ Гастер</h3><p>Таинственный учёный из фрагментов кода.</p></div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="locations">
+            <h2>▸ ЛОКАЦИИ (нажми, чтобы узнать тайну)</h2>
+            <div class="grid">
+                <div class="card"><h3>🏚️ РУИНЫ</h3><p>Место пробуждения Фриска.</p></div>
+                <div class="card"><h3>❄️ СНОУДЕН</h3><p>Снежный городок скелетов.</p></div>
+                <div class="card"><h3>🔥 ГОРЯЧАЯ ЗЕМЛЯ</h3><p>Лаборатория Альфис и арена Меттатона.</p></div>
+                <div class="card"><h3>🧠 ЯДРО</h3><p>Энергетическое сердце Подземелья.</p></div>
+                <div class="card"><h3>🏰 ЗАМОК АЗГОРА</h3><p>Тронный зал, где хранятся души.</p></div>
+                <div class="card"><h3>🧪 ИСТИННАЯ ЛАБОРАТОРИЯ</h3><p>Секретная зона с правдой об амальгамах.</p></div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="endings">
+            <h2>▸ ФИНАЛЫ (нажми, чтобы узнать последствия)</h2>
+            <div class="grid">
+                <div class="card"><h3>💚 ПАЦИФИСТ</h3><p>Мирное освобождение монстров.</p></div>
+                <div class="card"><h3>❤️ НЕЙТРАЛ</h3><p>Смешанные действия — разные концовки.</p></div>
+                <div class="card"><h3>🩸 ГЕНОЦИД</h3><p>Тьма и пустота.</p></div>
+            </div>
+        </div>
+
+        <div class="tab-pane" id="secrets">
+            <h2>▸ ПАСХАЛКИ И ФАКТЫ</h2>
+            <ul>
+                <li>📁 Комната 66 — скрытое место с намёками на Гастера.</li>
+                <li>📁 FUN-значения 66, 81, 92 открывают редкие события.</li>
+                <li>📁 Истинная лаборатория содержит намёки на Lost Souls.</li>
+            </ul>
+            <div class="secret-text" id="secretMessage">🔎 *Нажми на этот текст...*</div>
+        </div>
+
+        <div class="tab-pane" id="history">
+            <h2>▸ РАЗРАБОТКА И МУЗЫКА</h2>
+            <p>Тоби Фокс написал все 101 трек. «Megalovania» изначально создавалась для EarthBound Halloween Hack.</p>
+            <div class="secret-text">🎵 Саундтрек содержит скрытые сообщения при обратном воспроизведении.</div>
+        </div>
+
+        <div class="tab-pane" id="theories">
+            <h2>▸ ТЕОРИИ ФАНАТОВ</h2>
+            <p>🔸 Гастер — «разобранный» учёный, скрытый между кадрами.<br>
+            🔸 Санс знает о временных петлях из-за связи с Гастером.<br>
+            🔸 Чара — истинный рассказчик во время пути геноцида.<br>
+            🔸 DELTARUNE — альтернативная вселенная после истинного финала.</p>
+        </div>
+    </div>
+
+    <div class="footer-status" id="secretFooter">
+        [ ДОСТУП К ПОДЗЕМЕЛЬЮ | СТАБИЛЬНОСТЬ 100% ]
+    </div>
+</div>
+
+<div class="music-btn" id="musicToggleBtn">🎵 <span id="musicStatusText">ВКЛЮЧИТЬ МУЗЫКУ</span></div>
+<div class="volume-slider"><input type="range" id="volumeControl" min="0" max="1" step="0.01" value="0.25"></div>
+<audio id="bgMusic" loop preload="auto"><source src="./Toby_Fox_-_Finale_64962839.mp3" type="audio/mpeg"></audio>
+
+<script>
+    (function(){
+        // ----- ВКЛАДКИ -----
+        const tabs = document.querySelectorAll('.tab-btn');
+        const panes = document.querySelectorAll('.tab-pane');
+        function activateTab(tabId) {
+            panes.forEach(p => p.classList.remove('active-pane'));
+            const target = document.getElementById(tabId);
+            if(target) target.classList.add('active-pane');
+            tabs.forEach(btn => btn.classList.remove('active'));
+            const activeBtn = Array.from(tabs).find(btn => btn.getAttribute('data-tab') === tabId);
+            if(activeBtn) activeBtn.classList.add('active');
+        }
+        tabs.forEach(btn => btn.addEventListener('click', () => activateTab(btn.getAttribute('data-tab'))));
+
+        // ----- МУЗЫКА -----
+        const audio = document.getElementById('bgMusic');
+        const toggleBtn = document.getElementById('musicToggleBtn');
+        const musicSpan = document.getElementById('musicStatusText');
+        const volumeSlider = document.getElementById('volumeControl');
+        let musicEnabled = false;
+        if(audio) audio.volume = parseFloat(volumeSlider.value);
+        volumeSlider.addEventListener('input', () => { if(audio) audio.volume = parseFloat(volumeSlider.value); });
+        function startMusic() { if(!musicEnabled && audio) { audio.play().then(() => { musicSpan.innerText = "ВЫКЛЮЧИТЬ МУЗЫКУ"; musicEnabled=true; }).catch(()=>{}); } }
+        function stopMusic() { if(musicEnabled && audio) { audio.pause(); musicSpan.innerText = "ВКЛЮЧИТЬ МУЗЫКУ"; musicEnabled=false; } }
+        toggleBtn.addEventListener('click', (e) => { e.stopPropagation(); if(musicEnabled) stopMusic(); else startMusic(); });
+        const autoStart = () => { if(!musicEnabled) startMusic(); document.removeEventListener('click', autoStart); document.removeEventListener('keydown', autoStart); };
+        document.addEventListener('click', autoStart);
+        document.addEventListener('keydown', autoStart);
+
+        // ----- УНИКАЛЬНЫЕ СООБЩЕНИЯ ДЛЯ КАРТОЧЕК (КАК ТЫ ПРОСИЛ) -----
+        const cardMessages = {
+            "Фриск": "💛 *Твоё имя — Фриск. Твоя решимость ведёт тебя. Береги её.*",
+            "Флауи / Азриэль": "🌼 *«Я слишком много раз умирал внутри. Теперь я просто цветок... но я помню всё.»*",
+            "Санс": "🦴 *«хе-хе... ты думаешь, я просто ленивый скелет? Ладно, может, так и есть. Но я знаю, что такое ВРЕМЯ.»*",
+            "Папирус": "🦴 *«НЬЕ-ХЕ-ХЕ! Я ВЕЛИКИЙ ПАПИРУС! Мои головоломки не разгадать никому!»*",
+            "Андайн": "🐟 *«Я капитан гвардии! И ни один человек не пройдёт мимо меня!... Если ты друг, я могу быть мягче.»*",
+            "Альфис": "🐙 *«П-п-привет... Я Альфис. Создатель М-м-меттатона и... экспериментальных ужасов, о которых я не хочу вспоминать.»*",
+            "Меттатон": "🤖 *«О, ЛЮДИ! Добро пожаловать на моё ШОУ! ЗВЁЗДЫ не ждут, а МЕТАТТОН готов блистать!»*",
+            "Ториэль": "🐐 *«Здравствуй, дитя... Я Ториэль. Пожалуйста, не покидай Руины. Здесь безопаснее.»*",
+            "Азгор": "👑 *«Я, король Азгор, хотел лишь свободы для своего народа... Но цена оказалась слишком высока.»*",
+            "Гастер": "❓ *[Файл повреждён. Фрагмент ID: 66. Голос из ниоткуда:] „Ты слышишь меня? Уровень FUN активирован.“*",
+            "РУИНЫ": "🏚️ *Разрушенный храм. Статуя с заплаканным лицом. Говорят, если дать ей воды, она заплачет сладкими слезами.*",
+            "СНОУДЕН": "❄️ *Снежный городок. Если позвонить в дом Санса, иногда можно услышать странный механический звук.*",
+            "ГОРЯЧАЯ ЗЕМЛЯ": "🔥 *Лаборатория Альфис. За одним из столов — фотография трёх учёных, но одно лицо стёрто.*",
+            "ЯДРО": "🧠 *Энергетический центр. Редкое значение FUN может показать тень, проходящую сквозь стены.*",
+            "ЗАМОК АЗГОРА": "🏰 *Тронный зал. В одной из версий игры здесь можно найти пустую комнату с инициалами «W.D.»*",
+            "ИСТИННАЯ ЛАБОРАТОРИЯ": "🧪 *Ошибка реальности. Эксперименты по слиянию душ. Альфис умоляла: „Прости меня...“*",
+            "ПАЦИФИСТ": "💚 *Финал, где все живы. Даже Флауи. Ты чувствуешь, как слёзы радости текут по щекам.*",
+            "НЕЙТРАЛ": "❤️ *Смесь решений. Иногда ты покидаешь Подземелье, оставляя монстров... а иногда остаёшься с ними.*",
+            "ГЕНОЦИД": "🩸 *Тьма заполняет экран. Санс ведёт последний разговор: „ты заплатишь за это. возможно, не сегодня, но однажды...“*"
+        };
+        const cards = document.querySelectorAll('.card');
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const titleElem = card.querySelector('h3');
+                if(titleElem) {
+                    let title = titleElem.innerText.trim();
+                    let message = cardMessages[title];
+                    if(!message) {
+                        for(let key in cardMessages) {
+                            if(title.includes(key)) { message = cardMessages[key]; break; }
+                        }
+                    }
+                    alert(message || "🔍 *Здесь скрыта тайна. Возможно, ты найдёшь её в другой раз.*");
+                }
+            });
+        });
+
+        // ----- ВСЕ СЕКРЕТЫ (как в оригинале Тоби Фокса) -----
+        // 1. Секретный заголовок
+        const header = document.getElementById('secretHeader');
+        let headerClicks = 0;
+        header.addEventListener('click', () => {
+            headerClicks++;
+            if(headerClicks === 1) console.log("%c[АРХИВ] Вы почувствовали странное присутствие...", "color:#ff9966");
+            if(headerClicks === 3) alert("🌌 *Кажется, кто-то наблюдает за тобой из-за пределов кода...*");
+            if(headerClicks === 5) {
+                alert("💀 Ты нашёл секретную команду. Введи 'determination()' в консоли.");
+                console.log("%cПасхалка: determination", "color:red; font-size:12px");
+            }
+        });
+
+        // 2. Секретный футер (случайная фраза)
+        const footer = document.getElementById('secretFooter');
+        const footerQuotes = [
+            "[ ЛЮБОВЬ ] всё ещё растёт...",
+            "Здесь нет ничего, кроме надежды.",
+            "Ты чувствуешь, что время идёт вспять.",
+            "Вспомни, кто ты.",
+            "Пыль... везде пыль.",
+            "НОМЕР СТРАНИЦЫ: 66"
+        ];
+        footer.addEventListener('click', () => {
+            const randomQuote = footerQuotes[Math.floor(Math.random() * footerQuotes.length)];
+            alert(`🌀 ${randomQuote}`);
+        });
+
+        // 3. Клик по секретному тексту во вкладке "Секреты"
+        const secretMsg = document.getElementById('secretMessage');
+        let msgExpanded = false;
+        secretMsg.addEventListener('click', () => {
+            if(!msgExpanded) {
+                secretMsg.innerHTML = "🔓 <strong>РАСШИФРОВАНО:</strong> G A S T E R  .  W D .  # 6 6  #  <span style='color:#ffaa66'>FUN = 66</span>";
+                secretMsg.style.background = "#2a1a0c";
+                msgExpanded = true;
+            } else {
+                secretMsg.innerHTML = "🔎 *Нажми на этот текст...*";
+                secretMsg.style.background = "#1f170c";
+                msgExpanded = false;
+            }
+        });
+
+        // 4. Комбинация клавиш MEGALOVANIA
+        let keyBuffer = "";
+        const secretCode = "megalovania";
+        document.addEventListener('keydown', (e) => {
+            keyBuffer += e.key.toLowerCase();
+            if(keyBuffer.length > secretCode.length) keyBuffer = keyBuffer.slice(-secretCode.length);
+            if(keyBuffer === secretCode) {
+                alert("⚡ МЕГАЛОВАНИЯ! ⚡\nТы вызвал тайную силу. Санс улыбается.");
+                console.log("%cУРОВЕНЬ ЗАПРЕЩЁН. SANS ВЫПОЛНЯЕТ СПЕЦ-АТАКУ.", "font-size:16px; background:#000; color:#ff6666");
+                document.body.style.transition = "0.1s";
+                document.body.style.backgroundColor = "#2a0000";
+                setTimeout(() => document.body.style.backgroundColor = "", 300);
+                keyBuffer = "";
+            }
+        });
+
+        // 5. Консольные команды
+        window.gaster = function() { alert("❓ WD GASTER: 'Ты меня слышишь? Уровень FUN активирован.'"); console.log("%cFUN VALUE: 66 // СЕКРЕТНЫЙ ФАЙЛ ОТКРЫТ", "color:#bb88ff"); };
+        window.determination = function() { alert("💪 Твоя решимость наполняет мир светом. Найди истинный пацифизм."); };
+        window.sans = function() { alert("🦴 '*хе-хе... ты зашёл слишком далеко. Начинается худшая часть.'"); };
+        console.log("%c💀 Введи 'gaster()' или 'determination()' в консоли, чтобы пробудить скрытые силы.", "color:#eca66c");
+        console.log("%cТайный номер 66 ждёт.", "font-size:10px");
+
+        // 6. Двойной клик по фону терминала
+        const terminalDiv = document.querySelector('.terminal');
+        terminalDiv.addEventListener('dblclick', (e) => {
+            if(e.target === terminalDiv || e.target.classList.contains('content')) {
+                alert("🔮 Ты попал в Лимбо. Здесь нет ни времени, ни звука... кроме шёпота Гастера.");
+            }
+        });
+
+        // 7. Меняющийся статус футера каждые 30 секунд
+        const statusMessages = [
+            "[ ДОСТУП К ПОДЗЕМЕЛЬЮ | СТАБИЛЬНОСТЬ 68% ]",
+            "[ ОБНАРУЖЕНА АНОМАЛИЯ FUN = 66 ]",
+            "[ СИСТЕМА ПЕРЕГРУЖЕНА... СБРОС ]",
+            "[ ЧАРА ? ]",
+            "[ T-012: ОШИБКА ПАМЯТИ ]"
+        ];
+        let msgIdx = 0;
+        setInterval(() => {
+            if(footer) {
+                msgIdx = (msgIdx + 1) % statusMessages.length;
+                footer.innerText = statusMessages[msgIdx];
+            }
+        }, 30000);
+    })();
+</script>
+</body>
+</html>
