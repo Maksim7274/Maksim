@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Fazbear Hunt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ЗАГРУЗОЧНЫЙ ЭКРАН */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 2rem;
+            transition: opacity 0.8s ease-out, visibility 0.8s ease-out;
+        }
+        .loader-logo {
+            font-size: 4rem;
+            font-weight: 900;
+            color: #ff3333;
+            text-shadow: 0 0 15px #ff0000, 0 0 30px #8b0000;
+            letter-spacing: 4px;
+            font-family: monospace;
+            animation: pulseGlow 1.2s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 5px #ff0000; opacity: 0.8; }
+            100% { text-shadow: 0 0 25px #ff0000, 0 0 35px #8b0000; opacity: 1; }
+        }
+        .loader-progress-container {
+            width: 280px;
+            background: #2a1a1a;
+            border-radius: 60px;
+            height: 6px;
+            overflow: hidden;
+            border: 1px solid #ff4d4d;
+        }
+        .loader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #ff4d4d, #ff9999);
+            border-radius: 60px;
+            transition: width 0.1s linear;
+        }
+        .loader-text {
+            color: #dd8888;
+            font-family: monospace;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        body {
+            background: #0a0a0a;
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            color: #f0f0f0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .bg-blood {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 40%, #2a0a0a, #030000);
+            z-index: -2;
+        }
+        .bg-blood::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(180, 40, 40, 0.05) 0px, rgba(180, 40, 40, 0.05) 2px, transparent 2px, transparent 12px);
+            pointer-events: none;
+        }
+
+        @keyframes glitchPulse {
+            0% { text-shadow: -2px 0 red, 2px 2px darkred; }
+            50% { text-shadow: 2px -2px crimson, -1px 1px #8b0000; }
+            100% { text-shadow: 1px -1px #990000, -1px 1px #ff4d4d; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 0 2rem;
+        }
+
+        .hero {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem 0;
+        }
+        .hero h1 {
+            font-size: 5.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff5f0, #ffaa99);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+            animation: glitchPulse 2.2s infinite;
+        }
+        .hero-tag {
+            font-family: monospace;
+            background: rgba(80, 20, 20, 0.6);
+            backdrop-filter: blur(5px);
+            border: 1px solid #ff4d4d;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            margin: 1.5rem 0 1rem 0;
+        }
+        .hero p {
+            max-width: 800px;
+            font-size: 1.2rem;
+            color: #dddddd;
+            text-shadow: 0 0 5px black;
+        }
+
+        .toolbar-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+            align-items: center;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 60px;
+            padding: 0.8rem 1.5rem;
+            margin-bottom: 2rem;
+            gap: 1rem;
+        }
+        .theme-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .theme-btn {
+            background: none;
+            border: 1px solid #ff5a4a;
+            padding: 6px 16px;
+            border-radius: 40px;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.8rem;
+        }
+        .theme-btn:hover {
+            background: rgba(255,80,70,0.3);
+            transform: scale(1.02);
+        }
+        .calendar-info {
+            font-family: monospace;
+            background: #00000066;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            border-left: 5px solid #e34234;
+            padding-left: 1.2rem;
+            margin: 3rem 0 2rem 0;
+            letter-spacing: -0.5px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(15, 10, 10, 0.8);
+            backdrop-filter: blur(6px);
+            border: 1px solid #4a2a2a;
+            border-radius: 28px;
+            padding: 1.4rem;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #d64545;
+            box-shadow: 0 15px 30px rgba(180, 40, 40, 0.3);
+            background: rgba(30, 15, 15, 0.85);
+        }
+        .card-icon {
+            font-size: 2.4rem;
+            margin-bottom: 0.8rem;
+        }
+        .card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #ffbd9b;
+        }
+        .card p {
+            color: #cfcfcf;
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
+        .badge-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        .badge {
+            background: #231010;
+            border: 1px solid #b34e4e;
+            border-radius: 60px;
+            padding: 4px 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #ffb7b0;
+        }
+
+        .anime-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1.2rem;
+        }
+        .anime-card {
+            background: #1e1111;
+            border-radius: 24px;
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid #8b3c3c;
+            transition: 0.2s;
+        }
+        .anime-card i {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            color: #ff9466;
+        }
+        .anime-card h4 {
+            font-size: 1.1rem;
+        }
+
+        .gift-section {
+            background: linear-gradient(135deg, #1c0f0f, #0a0505);
+            border-radius: 36px;
+            padding: 2rem;
+            margin: 2.5rem 0;
+            border: 1px solid #b34e4e;
+        }
+        .effect-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .effect-card {
+            background: #160b0b;
+            border-radius: 20px;
+            padding: 0.8rem;
+            border-left: 3px solid #ff6f61;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: #a77;
+            border-top: 1px solid #3a2020;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            .hero h1 { font-size: 2.8rem; }
+            .section-title { font-size: 1.8rem; }
+            .toolbar-panel { flex-direction: column; align-items: stretch; }
+            .calendar-info { text-align: center; }
+        }
+
+        .fade-up {
+            opacity: 0;
+            transform: translateY(35px);
+            transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.7s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        body.light {
+            background: #f5f2f0;
+            color: #1e1a17;
+        }
+        body.light .bg-blood {
+            background: radial-gradient(ellipse at 30% 40%, #f5e7e0, #fffaf5);
+        }
+        body.light .card, body.light .anime-card, body.light .effect-card, body.light .gift-section {
+            background: rgba(250, 245, 240, 0.85);
+            border-color: #c06d5e;
+            color: #2c241f;
+        }
+        body.light .card p, body.light .anime-card p, body.light .effect-card p {
+            color: #3a2e28;
+        }
+        body.light .card h3, body.light .anime-card h4 {
+            color: #b34e3a;
+        }
+        body.light .badge {
+            background: #f1ddd5;
+            color: #a1412c;
+            border-color: #d48c7a;
+        }
+        body.light .footer {
+            border-top-color: #cfb9af;
+            color: #8a6f64;
+        }
+        body.light .theme-btn {
+            color: #3a2e28;
+            border-color: #b7695a;
+        }
+
+        body.hacker {
+            background: #001000;
+            color: #00ffaa;
+        }
+        body.hacker .bg-blood {
+            background: radial-gradient(ellipse at 30% 40%, #002200, #000000);
+        }
+        body.hacker .card, body.hacker .anime-card, body.hacker .effect-card, body.hacker .gift-section {
+            background: rgba(0, 20, 0, 0.8);
+            border-color: #0f6e4a;
+        }
+        body.hacker .card h3, body.hacker .anime-card h4 {
+            color: #6effb0;
+        }
+        body.hacker .hero-tag {
+            border-color: #3a9e6c;
+            background: #0a2a1a;
+        }
+        body.hacker .theme-btn {
+            border-color: #29c27a;
+            color: #afffcf;
+        }
+
+        body.tech {
+            background: #0a0f1f;
+            color: #b8e2ff;
+        }
+        body.tech .bg-blood {
+            background: radial-gradient(ellipse at 30% 40%, #0f192e, #02050e);
+        }
+        body.tech .card, body.tech .anime-card, body.tech .effect-card, body.tech .gift-section {
+            background: rgba(10, 18, 35, 0.85);
+            border-color: #2c6c9e;
+        }
+        body.tech .card h3, body.tech .anime-card h4 {
+            color: #6eb0ff;
+        }
+        body.tech .hero-tag {
+            border-color: #2c9eff;
+        }
+        body.tech .theme-btn {
+            border-color: #2f8fcf;
+            color: #bdeeff;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ЗАГРУЗОЧНЫЙ ЭКРАН -->
+<div id="loader" class="loader-overlay">
+    <div class="loader-logo">FAZBEAR HUNT</div>
+    <div class="loader-progress-container">
+        <div class="loader-progress-bar" id="progressBar"></div>
+    </div>
+    <div class="loader-text" id="loaderText">Инициализация охоты...</div>
+</div>
+
+<div class="bg-blood"></div>
+
+<div class="container" id="mainContent" style="display: none;">
+    <section class="hero fade-up">
+        <div class="hero-tag"><i class="fas fa-skull"></i> GARRY'S MOD | HORROR SURVIVAL <i class="fas fa-dice-d6"></i></div>
+        <h1>FAZBEAR HUNT</h1>
+        <p>Асимметричный хоррор в стиле Dead by Daylight. Выживай, прячься, используй подарки и не дай аниматроникам поймать тебя.<br>
+        Создатель — <strong>Sergeant</strong>, идея воплощена 23 июня 2024 года. Данная страница — архив, последнее обновление 10 ноября 2025 года.</p>
+    </section>
+
+    <div class="toolbar-panel fade-up">
+        <div class="theme-buttons">
+            <button class="theme-btn" data-theme="default">🌑 Классическая</button>
+            <button class="theme-btn" data-theme="light">🌸 Светлая</button>
+            <button class="theme-btn" data-theme="hacker">💚 Хакерская</button>
+            <button class="theme-btn" data-theme="tech">🔷 Техно / Киберпанк</button>
+        </div>
+        <div class="calendar-info" id="dynamicDateDisplay">📅 Загрузка даты...</div>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-code-branch"></i> ВЕРСИИ РЕЖИМА</h2>
+    <div class="grid fade-up">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-crown"></i></div>
+            <h3>FAZBEAR HUNT OFFICIAL</h3>
+            <p><strong>Главная официальная версия</strong> от Sergant. Именно здесь появились подарки, новые механики, уникальные аниматроники, ивенты и большая часть лора. Режим постоянно обновлялся и стал основной версией Fazbear Hunt.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-seedling"></i></div>
+            <h3>FAZBEAR HUNT PLUS</h3>
+            <p>Более старая и классическая версия режима. Именно с неё многие игроки начали знакомство с Fazbear Hunt. Старые механики, атмосфера ужаса и легендарные карты.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-question-circle"></i></div>
+            <h3>FAZBEAR HUNT NOT OFFICIAL</h3>
+            <p>Неофициальная версия с изменёнными механиками, кастомными картами, секретами и утерянными файлами. Содержит необычные модификации и экспериментальный контент.</p>
+        </div>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-gift"></i> ПОДАРКИ</h2>
+    <div class="gift-section fade-up">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <i class="fas fa-gift" style="font-size: 2.5rem; color:#ff8c66;"></i>
+            <div><h3 style="margin:0;">Что такое подарки?</h3>
+            <p style="margin: 0;">Подарки — бонус, появляющийся каждые ~2 минуты на каждом выжившем сервера. У подарка есть хозяин (имя написано над коробкой). Если подарок подбирает другой игрок — 50% шанс получить негативный эффект. В остальных случаях — позитивный бонус. Появились в игре с Новогоднего обновления 30 ноября 2024 года.</p></div>
+        </div>
+    </div>
+
+    <h3 class="fade-up" style="font-size:1.8rem; margin-top:1rem;"><i class="fas fa-check-circle" style="color:#5cb85c;"></i> ПОЗИТИВНЫЕ ЭФФЕКТЫ</h3>
+    <div class="effect-grid fade-up">
+        <div class="effect-card"><strong>Аптечка</strong> – 50 HP, можно лечить себя и других (по 10 HP за клик).</div>
+        <div class="effect-card"><strong>Гравити Ган</strong> – выдает гравитационный пистолет.</div>
+        <div class="effect-card"><strong>Аниматроно-виденье</strong> – видеть аниматроников через стены.</div>
+        <div class="effect-card"><strong>Дефибриллятор</strong> – воскрешает одного игрока (расходуется).</div>
+        <div class="effect-card"><strong>Бананы</strong> – 5 бананов; наступивший улетает в случайную сторону.</div>
+        <div class="effect-card"><strong>Адреналин</strong> – +20% скорости (8 сек), лечение +15 брони.</div>
+        <div class="effect-card"><strong>Маска Бонни</strong> – невидимость 15 секунд.</div>
+        <div class="effect-card"><strong>Fazbear Фанта</strong> – двойной прыжок, лечение, +10 брони (12 сек).</div>
+        <div class="effect-card"><strong>Маска Убийцы</strong> (редкий) – топор, сопротивление урону, убийство аниматроников и выживших.</div>
+    </div>
+
+    <h3 class="fade-up" style="font-size:1.8rem; margin-top:2rem;"><i class="fas fa-times-circle" style="color:#d9534f;"></i> НЕГАТИВНЫЕ ЭФФЕКТЫ</h3>
+    <div class="effect-grid fade-up">
+        <div class="effect-card"><strong>Грузовик</strong> – спавнит грузовик над головой.</div>
+        <div class="effect-card"><strong>Палево</strong> – игрок светится для аниматроников.</div>
+        <div class="effect-card"><strong>Ступеньки</strong> – нельзя автоматически подниматься по ступеням.</div>
+        <div class="effect-card"><strong>Ограбление</strong> – отбирает всё оружие.</div>
+        <div class="effect-card"><strong>Зум</strong> – поле зрения уменьшено до 30.</div>
+        <div class="effect-card"><strong>Приглушение</strong> – игрок становится глухим на 30 сек.</div>
+        <div class="effect-card"><strong>Лоботомия</strong> – превращает в скелета-наблюдателя.</div>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-robot"></i> АНИМАТРОНИКИ</h2>
+    <div class="anime-grid fade-up">
+        <div class="anime-card"><i class="fas fa-bear"></i><h4>Freddy</h4><p>Главный аниматроник</p></div>
+        <div class="anime-card"><i class="fas fa-guitar"></i><h4>Bonnie</h4><p>Быстрый охотник</p></div>
+        <div class="anime-card"><i class="fas fa-drumstick-bite"></i><h4>Chica</h4><p>Неожиданные атаки</p></div>
+        <div class="anime-card"><i class="fas fa-fox"></i><h4>Foxy</h4><p>Самый быстрый</p></div>
+        <div class="anime-card"><i class="fas fa-cloud-moon"></i><h4>Shadow Freddy</h4><p>Таинственный</p></div>
+        <div class="anime-card"><i class="fas fa-bone"></i><h4>Эндоскелет</h4><p>Механический</p></div>
+        <div class="anime-card"><i class="fas fa-mask"></i><h4>Клоун</h4><p>Пугающий</p></div>
+        <div class="anime-card"><i class="fas fa-tree"></i><h4>Springtrap</h4><p>Очень страшный</p></div>
+        <div class="anime-card"><i class="fas fa-teddy-bear"></i><h4>Плюштрап</h4><p>Маленький, опасный</p></div>
+        <div class="anime-card"><i class="fas fa-crown"></i><h4>Golden Freddy</h4><p>Редкий</p></div>
+        <div class="anime-card"><i class="fas fa-spider"></i><h4>Mangle</h4><p>Хаотичный</p></div>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-scroll"></i> ЛОР</h2>
+    <div class="card fade-up">
+        <p>Лор Fazbear Hunt рассказывает историю заброшенных мест, таинственных экспериментов Fazbear Entertainment и появления аниматроников. Часть информации считается устаревшей, а некоторые файлы были утеряны после обновлений режима. Во вселенной существуют секретные комнаты, неиспользуемые карты и скрытые аудиозаписи. Некоторые игроки считают, что часть контента была намеренно удалена.</p>
+        <p>Согласно официальной хронологии, события режима разворачиваются после закрытия пиццерии Fazbear Entertainment, когда заброшенные аниматроники обрели сознание и начали охоту на всех, кто попадает на их территорию.</p>
+        <p><strong>Части лора:</strong> Часть I – VII и послесловие (доступны в архивах).</p>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-users"></i> СОЗДАТЕЛИ</h2>
+    <div class="grid fade-up">
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-code"></i></div>
+            <h3>Разработчики режима</h3>
+            <p><strong>Sergeant</strong> – создатель и главный кодер<br>
+            <strong>Muff</strong> – композитор<br>
+            <strong>Babysnail, Cekyndq, Markis</strong> – помощь в анимации и контенте.</p>
+        </div>
+        <div class="card">
+            <div class="card-icon"><i class="fas fa-pen-fancy"></i></div>
+            <h3>Создатели вики (архив)</h3>
+            <p>Главный разработчик википедии — <strong>GarryNotFound</strong><br>
+            Помощь с кодом: Zhapka, Тихий Мент Иоанн<br>
+            Иконки/рендеры: RUdY0n, Sergeant</p>
+        </div>
+    </div>
+
+    <h2 class="section-title fade-up"><i class="fas fa-map"></i> КАРТЫ</h2>
+    <div class="grid fade-up">
+        <div class="card"><h3>🏭 FH Dead Center</h3><p>Заброшенный торговый центр. Многоуровневая карта с эскалаторами, магазинами и тёмными подсобками. Идеально для засад.</p></div>
+        <div class="card"><h3>🅿️ FH Mallparking</h3><p>Открытая парковка с редкими укрытиями. Сложность для выживших — требуется быстрое перемещение.</p></div>
+        <div class="card"><h3>🏊 FH Pool</h3><p>Заброшенный аквапарк. Бассейны, раздевалки, влажный туман снижает видимость.</p></div>
+        <div class="card"><h3>🍝 FH Cantina</h3><p>Старая столовая с кухней и вентиляцией — классическая карта с множеством укромных мест.</p></div>
+        <div class="card"><h3>📦 FH Warehouse</h3><p>Складские помещения, где любят прятаться новички. Много контейнеров и тупиков.</p></div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-archive"></i> FAZBEAR HUNT | Архивная версия вики (актуально на <span id="footerDateSpan">10 ноября 2025</span>) <br>
+        Данная страница — фанатская работа, информация не будет обновляться. <br>
+        © Sergeant, Muff, Babysnail, команда разработчиков | Garry's Mod
+    </div>
+</div>
+
+<script>
+    // ========== ЗАГРУЗОЧНЫЙ ЭКРАН (имитация загрузки) ==========
+    let progress = 0;
+    const progressBar = document.getElementById('progressBar');
+    const loaderText = document.getElementById('loaderText');
+    const loaderOverlay = document.getElementById('loader');
+    const mainContent = document.getElementById('mainContent');
+
+    const loadingMessages = [
+        "Инициализация охоты...",
+        "Активация аниматроников...",
+        "Загрузка подарков...",
+        "Подготовка карт...",
+        "Страх нарастает...",
+        "Почти готово...",
+        "Добро пожаловать в Fazbear Hunt!"
+    ];
+    
+    let msgIndex = 0;
+    const interval = setInterval(() => {
+        progress += Math.random() * 10 + 5;
+        if (progress > 100) progress = 100;
+        progressBar.style.width = progress + '%';
+        
+        if (msgIndex < loadingMessages.length - 1) {
+            loaderText.innerText = loadingMessages[msgIndex];
+            msgIndex++;
+        } else if (progress >= 100) {
+            loaderText.innerText = loadingMessages[loadingMessages.length - 1];
+            clearInterval(interval);
+            setTimeout(() => {
+                loaderOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loaderOverlay.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    // Запускаем анимации появления
+                    const fades = document.querySelectorAll('.fade-up');
+                    fades.forEach(el => {
+                        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+                            el.classList.add('visible');
+                        }
+                    });
+                }, 800);
+            }, 600);
+        }
+    }, 180);
+    
+    // ========== ОСНОВНЫЕ СКРИПТЫ ==========
+    const fadeElements = document.querySelectorAll('.fade-up');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: "0px 0px -30px 0px" });
+    
+    // Отложенный запуск observer (после загрузки контента)
+    setTimeout(() => {
+        document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+    }, 1000);
+    
+    const themeBtns = document.querySelectorAll('.theme-btn');
+    function setTheme(themeName) {
+        document.body.classList.remove('light', 'hacker', 'tech');
+        if (themeName !== 'default') {
+            document.body.classList.add(themeName);
+        }
+        localStorage.setItem('fazbear_theme', themeName);
+    }
+    themeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const theme = btn.getAttribute('data-theme');
+            setTheme(theme);
+        });
+    });
+    const savedTheme = localStorage.getItem('fazbear_theme');
+    if (savedTheme && savedTheme !== 'default') setTheme(savedTheme);
+    else if (!savedTheme) setTheme('default');
+    
+    function getProgressiveDate() {
+        const startDate = new Date(2025, 10, 10);
+        const today = new Date();
+        const diffDays = Math.floor((today - startDate) / (1000 * 60 * 60 * 24));
+        let progressiveDate = new Date(startDate);
+        if (diffDays > 0) progressiveDate.setDate(startDate.getDate() + diffDays);
+        else progressiveDate = startDate;
+        const months = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+        const day = progressiveDate.getDate();
+        const month = months[progressiveDate.getMonth()];
+        const year = progressiveDate.getFullYear();
+        return { day, month, year };
+    }
+    
+    function updateDynamicDates() {
+        const { day, month, year } = getProgressiveDate();
+        const dateStr = `${day} ${month} ${year}`;
+        const dynamicSpan = document.getElementById('dynamicDateDisplay');
+        const footerSpan = document.getElementById('footerDateSpan');
+        if (dynamicSpan) dynamicSpan.innerHTML = `📅 ${dateStr} (динамический архив)`;
+        if (footerSpan) footerSpan.innerText = dateStr;
+    }
+    updateDynamicDates();
+    setInterval(updateDynamicDates, 60000);
+</script>
+</body>
+</html>
