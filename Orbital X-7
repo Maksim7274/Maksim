@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Orbital Station X-7 — Система управления</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+}
+
+body {
+    background: #030618;
+    font-family: 'Segoe UI', 'Orbitron', 'Arial', sans-serif;
+    color: #bbf0ff;
+    overflow-x: hidden;
+}
+
+/* Звёздный фон */
+.stars {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2;
+    background: radial-gradient(ellipse at 30% 40%, #0a1030, #02020c);
+}
+.stars::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(2px 2px at 20px 30px, #fff, rgba(0,0,0,0)),
+                      radial-gradient(1px 1px at 70px 150px, #ffd, rgba(0,0,0,0));
+    background-size: 200px 200px, 150px 150px;
+    background-repeat: repeat;
+    opacity: 0.5;
+    animation: starTwinkle 4s infinite alternate;
+}
+@keyframes starTwinkle {
+    0% { opacity: 0.3; }
+    100% { opacity: 0.8; }
+}
+
+/* Глитч-эффект для заголовка */
+@keyframes glitchPulse {
+    0% { text-shadow: -2px 0 cyan, 2px 2px #0066cc; opacity: 0.9; }
+    50% { text-shadow: 2px -2px #00ccff, -1px 1px #004466; }
+    100% { text-shadow: 1px -1px cyan, -1px 1px #0099ff; }
+}
+
+header {
+    text-align: center;
+    padding: 30px;
+    background: rgba(8, 18, 38, 0.7);
+    backdrop-filter: blur(12px);
+    border-bottom: 2px solid #0ff;
+    box-shadow: 0 0 30px rgba(0,255,255,0.2);
+}
+h1 {
+    font-size: 3rem;
+    letter-spacing: 4px;
+    color: cyan;
+    text-shadow: 0 0 12px cyan;
+    animation: glitchPulse 1.8s infinite;
+}
+.sub {
+    font-family: monospace;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    margin-top: 8px;
+}
+
+/* Сетка панелей */
+.dashboard {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 25px;
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+.card {
+    background: rgba(12, 25, 48, 0.65);
+    backdrop-filter: blur(8px);
+    border: 1px solid #0cf;
+    border-radius: 32px;
+    padding: 1.4rem;
+    transition: 0.25s;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+.card:hover {
+    transform: translateY(-5px);
+    border-color: #ff88cc;
+    box-shadow: 0 0 25px cyan;
+}
+.card h2 {
+    border-left: 4px solid cyan;
+    padding-left: 15px;
+    margin-bottom: 18px;
+    font-size: 1.6rem;
+}
+.bar {
+    background: #1e2a3a;
+    border-radius: 20px;
+    height: 18px;
+    width: 100%;
+    overflow: hidden;
+}
+.fill {
+    width: 87%;
+    height: 100%;
+    background: linear-gradient(90deg, cyan, #00aaff);
+    border-radius: 20px;
+    transition: 0.5s;
+}
+
+/* Датчики и показатели */
+.sensor-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+.sensor {
+    background: #07152a;
+    border-radius: 28px;
+    padding: 10px;
+    text-align: center;
+    flex: 1;
+}
+.sensor span {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: #88ffdd;
+}
+
+/* Кнопки и тумблеры */
+.switch-panel {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    justify-content: center;
+}
+.switch-btn {
+    background: #0a1a30;
+    border: 1px solid cyan;
+    padding: 8px 20px;
+    border-radius: 60px;
+    color: white;
+    cursor: pointer;
+    transition: 0.2s;
+    font-weight: bold;
+}
+.switch-btn.active {
+    background: cyan;
+    color: black;
+    box-shadow: 0 0 15px cyan;
+}
+.switch-btn.alert {
+    background: #cc3300;
+    border-color: #ff8844;
+}
+
+/* Список экипажа */
+.crew-list li {
+    list-style: none;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    border-left: 2px solid cyan;
+    padding-left: 12px;
+}
+
+/* Журнал */
+.log-entry {
+    background: #07152aa0;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 20px;
+    font-family: monospace;
+    font-size: 0.85rem;
+}
+
+/* Космический корабль */
+.ship-animation {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background: #00000033;
+    border-radius: 50px;
+    padding: 5px;
+}
+.ship-icon {
+    font-size: 2rem;
+    animation: flyX 8s infinite linear;
+    filter: drop-shadow(0 0 6px cyan);
+}
+@keyframes flyX {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(400%); }
+}
+
+/* Датчик астероидов */
+.alert-blink {
+    background: #ff3311;
+    box-shadow: 0 0 12px red;
+    animation: blinkRed 0.8s infinite;
+}
+@keyframes blinkRed {
+    0% { opacity: 0.6; }
+    100% { opacity: 1; }
+}
+
+footer {
+    text-align: center;
+    padding: 30px;
+    font-size: 0.7rem;
+    color: #88aacc;
+    border-top: 1px solid #2266aa;
+}
+
+@media (max-width: 700px) {
+    .dashboard { padding: 20px; gap: 15px; }
+    h1 { font-size: 2rem; }
+}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<header>
+    <h1>СТАНЦИЯ X-7</h1>
+    <div class="sub"><i class="fas fa-satellite-dish"></i> СИСТЕМА УПРАВЛЕНИЯ • v2.1 • РЕЖИМ: АВТОНОМНЫЙ</div>
+</header>
+
+<div class="dashboard">
+    <!-- РЕАКТОР (интерактивный слайдер) -->
+    <div class="card">
+        <h2>⚡ РЕАКТОР</h2>
+        <div class="bar"><div class="fill" id="reactorFill" style="width:87%"></div></div>
+        <p>Мощность: <span id="powerValue">87</span>%</p>
+        <input type="range" id="powerSlider" min="20" max="100" value="87" style="width:100%; background:cyan; margin-top:8px;">
+        <div style="margin-top:12px; font-size:0.8rem;">⚠️ <span id="warnText">В норме</span></div>
+    </div>
+
+    <!-- ЭКИПАЖ -->
+    <div class="card">
+        <h2>👥 ЭКИПАЖ</h2>
+        <ul class="crew-list">
+            <li>👨‍🚀 Капитан Айден Уэст – <span class="status online" style="color:#0f0;">онлайн</span></li>
+            <li>👩‍🔬 Инженер Лира Соларис – <span class="status online" style="color:#0f0;">онлайн</span></li>
+            <li>📡 Офицер связи Мико – <span class="status online" style="color:#0f0;">онлайн</span></li>
+            <li>🤖 ИИ «ЭХО» – <span class="status online" style="color:#0f0;">активен</span></li>
+        </ul>
+        <div class="switch-panel">
+            <div class="switch-btn" id="emergencyBtn">⚠️ АВАРИЙНЫЙ ПРОТОКОЛ</div>
+        </div>
+    </div>
+
+    <!-- ДАТЧИКИ СТАНЦИИ -->
+    <div class="card">
+        <h2>🛰️ ДАТЧИКИ</h2>
+        <div class="sensor-grid">
+            <div class="sensor"><span id="tempValue">-36</span>°C<br><small>Температура</small></div>
+            <div class="sensor"><span id="oxyValue">94</span>%<br><small>Кислород</small></div>
+            <div class="sensor"><span id="asteroidAlert">0</span><br><small>Астероиды рядом</small></div>
+        </div>
+        <div class="switch-panel" style="margin-top:12px;">
+            <div class="switch-btn" id="scanBtn">📡 СКАНИРОВАНИЕ</div>
+        </div>
+    </div>
+
+    <!-- ЖУРНАЛ МИССИЙ (динамический) -->
+    <div class="card">
+        <h2>📜 ЖУРНАЛ МИССИЙ</h2>
+        <div id="missionLog">
+            <div class="log-entry">✔ Исследована система TR-15</div>
+            <div class="log-entry">✔ Обнаружена новая планета (Class M)</div>
+            <div class="log-entry">✔ Завершена добыча ресурсов</div>
+            <div class="log-entry" style="color:#ffaa66;">🔔 Станция переведена в автономный режим</div>
+        </div>
+        <div class="switch-btn" id="addLogBtn" style="margin-top:10px; width:100%; text-align:center;">➕ Добавить запись</div>
+    </div>
+
+    <!-- Транспорт / челнок -->
+    <div class="card">
+        <h2>🚀 ЧЕЛНОК «ГЛОРИЯ»</h2>
+        <div class="ship-animation">
+            <div class="ship-icon">🛸</div>
+        </div>
+        <p style="margin-top:8px;">Состояние: <span id="shuttleStatus" style="color:#0f0;">готов к вылету</span></p>
+        <div class="switch-panel">
+            <div class="switch-btn" id="launchBtn">🟢 ЗАПУСК ШАТТЛА</div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    🛸 Орбитальная станция X-7 | КОД: X7-🛰️ | Системы стабильны | 2290 год
+</footer>
+
+<script>
+    // === ДИНАМИЧЕСКИЕ ЭЛЕМЕНТЫ ===
+    const powerSlider = document.getElementById('powerSlider');
+    const powerValueSpan = document.getElementById('powerValue');
+    const reactorFill = document.getElementById('reactorFill');
+    const warnText = document.getElementById('warnText');
+    
+    powerSlider.addEventListener('input', () => {
+        let val = powerSlider.value;
+        powerValueSpan.innerText = val;
+        reactorFill.style.width = val + '%';
+        if (val < 40) {
+            warnText.innerHTML = '⚠️ КРИТИЧЕСКИЙ УРОВЕНЬ! ТРЕБУЕТСЯ СТАБИЛИЗАЦИЯ';
+            warnText.style.color = '#ff4444';
+        } else if (val < 70) {
+            warnText.innerHTML = '⚠️ Пониженная мощность, рекомендуется ремонт';
+            warnText.style.color = '#ffaa44';
+        } else {
+            warnText.innerHTML = '✅ В норме';
+            warnText.style.color = '#88ffaa';
+        }
+    });
+    
+    // Сканирование астероидов + мигание
+    const scanBtn = document.getElementById('scanBtn');
+    const asteroidSpan = document.getElementById('asteroidAlert');
+    let asteroidCount = 0;
+    scanBtn.addEventListener('click', () => {
+        let detected = Math.floor(Math.random() * 5);
+        asteroidSpan.innerText = detected;
+        if (detected > 2) {
+            asteroidSpan.style.color = '#ff6666';
+            asteroidSpan.parentElement.parentElement.style.animation = 'blinkRed 0.5s 3';
+            setTimeout(() => { asteroidSpan.parentElement.parentElement.style.animation = ''; }, 1500);
+            const alertMsg = document.createElement('div');
+            alertMsg.className = 'log-entry';
+            alertMsg.style.background = '#441111';
+            alertMsg.innerHTML = `⚠️ ОБНАРУЖЕНО ${detected} АСТЕРОИДОВ В РАДИУСЕ 300 КМ`;
+            document.getElementById('missionLog').prepend(alertMsg);
+        } else if (detected === 0) {
+            asteroidSpan.style.color = '#88ff88';
+        } else {
+            asteroidSpan.style.color = '#ffcc88';
+        }
+        asteroidSpan.innerText = detected;
+    });
+    
+    // Добавление записи в лог
+    const addLogBtn = document.getElementById('addLogBtn');
+    const missionLogDiv = document.getElementById('missionLog');
+    const logEntries = [
+        "📡 Проведён обход реакторного отсека – без дефектов",
+        "🛸 Челнок «Глория» готов к вылету, дозаправка завершена",
+        "🔭 Зафиксирована вспышка сверхновой в секторе Q-7",
+        "🧪 Эксперимент по выращиванию кристаллов завершён успешно",
+        "🚨 Плановое тестирование систем жизнеобеспечения – пройдено",
+        "🛰️ Связь с земным центром: качество сигнала 92%"
+    ];
+    addLogBtn.addEventListener('click', () => {
+        const randomLog = logEntries[Math.floor(Math.random() * logEntries.length)];
+        const newEntry = document.createElement('div');
+        newEntry.className = 'log-entry';
+        newEntry.innerHTML = `🔹 ${randomLog}`;
+        missionLogDiv.prepend(newEntry);
+        if (missionLogDiv.children.length > 7) missionLogDiv.removeChild(missionLogDiv.lastChild);
+    });
+    
+    // Запуск шаттла
+    const launchBtn = document.getElementById('launchBtn');
+    const shuttleStatusSpan = document.getElementById('shuttleStatus');
+    launchBtn.addEventListener('click', () => {
+        shuttleStatusSpan.innerText = '🚀 ОТПРАВЛЕН';
+        shuttleStatusSpan.style.color = '#ffaa55';
+        const logLaunch = document.createElement('div');
+        logLaunch.className = 'log-entry';
+        logLaunch.innerHTML = '🚀 Шаттл «Глория» отправлен на орбиту, обратный отсчёт...';
+        missionLogDiv.prepend(logLaunch);
+        setTimeout(() => {
+            shuttleStatusSpan.innerText = 'возвращается через 14 мин';
+            shuttleStatusSpan.style.color = '#aaffaa';
+        }, 3000);
+        setTimeout(() => {
+            shuttleStatusSpan.innerText = 'готов к вылету';
+            shuttleStatusSpan.style.color = '#0f0';
+        }, 20000);
+    });
+    
+    // Аварийный протокол (красное мигание)
+    const emergencyBtn = document.getElementById('emergencyBtn');
+    let emergencyMode = false;
+    emergencyBtn.addEventListener('click', () => {
+        if (!emergencyMode) {
+            emergencyMode = true;
+            document.querySelectorAll('.card').forEach(c => {
+                c.style.borderColor = '#ff3366';
+                c.style.boxShadow = '0 0 15px #ff3366';
+            });
+            emergencyBtn.style.background = '#ff3366';
+            emergencyBtn.innerText = '⚠️ АКТИВИРОВАН';
+            const warnEntry = document.createElement('div');
+            warnEntry.className = 'log-entry';
+            warnEntry.style.background = '#330000';
+            warnEntry.innerHTML = '🔴 АВАРИЙНЫЙ ПРОТОКОЛ: ЭВАКУАЦИЯ! ПОВЫШЕННОЕ ИЗЛУЧЕНИЕ';
+            missionLogDiv.prepend(warnEntry);
+            const alarmSpan = document.getElementById('asteroidAlert');
+            alarmSpan.parentElement.parentElement.style.animation = 'blinkRed 0.5s infinite';
+        } else {
+            emergencyMode = false;
+            document.querySelectorAll('.card').forEach(c => {
+                c.style.borderColor = '#0cf';
+                c.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+            });
+            emergencyBtn.style.background = '#0a1a30';
+            emergencyBtn.innerText = '⚠️ АВАРИЙНЫЙ ПРОТОКОЛ';
+            const restoreEntry = document.createElement('div');
+            restoreEntry.className = 'log-entry';
+            restoreEntry.innerHTML = '✅ Режим тревоги отменён, системы стабилизированы';
+            missionLogDiv.prepend(restoreEntry);
+            const alarmSpan = document.getElementById('asteroidAlert');
+            alarmSpan.parentElement.parentElement.style.animation = '';
+        }
+    });
+    
+    // Симуляция изменения температуры и кислорода с течением времени
+    let temp = -36, oxy = 94;
+    setInterval(() => {
+        let deltaTemp = (Math.random() - 0.5) * 1.4;
+        let deltaOxy = (Math.random() - 0.5) * 0.7;
+        temp = Math.min(-20, Math.max(-52, temp + deltaTemp));
+        oxy = Math.min(100, Math.max(85, oxy + deltaOxy));
+        document.getElementById('tempValue').innerText = Math.floor(temp);
+        document.getElementById('oxyValue').innerText = Math.floor(oxy);
+        if(oxy < 90) document.getElementById('oxyValue').style.color = '#ffaa77';
+        else document.getElementById('oxyValue').style.color = '#88ffaa';
+    }, 8000);
+    
+    // Кнопка с эффектом звука / вибрации (просто консоль + тултип)
+    console.log("%c🚀 СТАНЦИЯ X-7 АКТИВИРОВАНА | ПОРТАЛЫ ИСКУССТВЕННОГО ИНТЕЛЛЕКТА", "color: #0ff; font-size: 12px;");
+</script>
+</body>
+</html>
