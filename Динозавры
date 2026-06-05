@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Динозавры | Эпоха гигантов</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a2a1a;
+            font-family: 'Segoe UI', system-ui, -apple-system, 'Roboto', sans-serif;
+            color: #f0f0e0;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Фон джунглей / доисторическая эпоха */
+        .prehistoric-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 40%, #2d4a2a, #0f2a0a);
+            z-index: -2;
+        }
+        .prehistoric-bg::before {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(80, 120, 40, 0.1) 0px, rgba(80, 120, 40, 0.1) 2px, transparent 2px, transparent 12px);
+            pointer-events: none;
+        }
+
+        /* Загрузочный экран */
+        .loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0a1a05;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 2rem;
+            transition: opacity 0.8s ease-out;
+        }
+        .loader-logo {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #9bcc6a;
+            text-shadow: 0 0 15px #6a9c3a;
+            letter-spacing: 4px;
+            font-family: monospace;
+            animation: pulseGlow 1.2s infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { text-shadow: 0 0 5px #8bc34a; opacity: 0.8; }
+            100% { text-shadow: 0 0 25px #cdff7a; opacity: 1; }
+        }
+        .loader-progress-container {
+            width: 280px;
+            background: #2a3a20;
+            border-radius: 60px;
+            height: 6px;
+            border: 1px solid #8bc34a;
+        }
+        .loader-progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #8bc34a, #cdff7a);
+            border-radius: 60px;
+            transition: width 0.1s linear;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 0 2rem;
+        }
+
+        .hero {
+            min-height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #cdff7a, #8bc34a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+        }
+        .hero-tag {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #8bc34a;
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        .nav-btn {
+            background: rgba(0,0,0,0.5);
+            border: 1px solid #8bc34a;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            color: #cdff7a;
+            cursor: pointer;
+            transition: 0.2s;
+            font-weight: bold;
+        }
+        .nav-btn:hover {
+            background: #8bc34a;
+            color: #1a2a1a;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            border-left: 5px solid #8bc34a;
+            padding-left: 1.2rem;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(20, 30, 15, 0.85);
+            backdrop-filter: blur(4px);
+            border: 1px solid #6a9c3a;
+            border-radius: 24px;
+            padding: 1.4rem;
+            transition: all 0.25s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: #cdff7a;
+        }
+        .card i {
+            font-size: 2rem;
+            color: #9bcc6a;
+            margin-bottom: 0.8rem;
+        }
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline {
+            background: rgba(0,0,0,0.4);
+            border-radius: 28px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            border-left: 2px solid #8bc34a;
+            padding-left: 1rem;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.8rem;
+            color: #8aaf6a;
+            border-top: 1px solid #6a9c3a;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .section-title { font-size: 1.6rem; }
+            .container { padding: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="loader" class="loader-overlay">
+    <div class="loader-logo">🦖 ДИНОЗАВРЫ 🦕</div>
+    <div class="loader-progress-container"><div class="loader-progress-bar" id="progressBar"></div></div>
+    <div class="loader-text" style="color:#cdff7a;">Раскапываем архив...</div>
+</div>
+
+<div class="prehistoric-bg"></div>
+<div class="container" id="mainContent" style="display: none;">
+    <div class="hero">
+        <h1>ЭПОХА ГИГАНТОВ</h1>
+        <div class="hero-tag"><i class="fas fa-paw"></i> Триас · Юра · Мел <i class="fas fa-leaf"></i></div>
+        <p style="margin-top:1rem; max-width:700px;">Путешествие в мир динозавров — от первых ящеров до великого вымирания. Узнай историю, виды и факты.</p>
+    </div>
+
+    <div class="nav-links">
+        <div class="nav-btn" data-section="periods">📅 Периоды</div>
+        <div class="nav-btn" data-section="dinosaurs">🦕 Знаменитые динозавры</div>
+        <div class="nav-btn" data-section="extinction">💥 Вымирание</div>
+        <div class="nav-btn" data-section="fossils">🔍 Окаменелости</div>
+        <div class="nav-btn" data-section="facts">📖 Факты</div>
+    </div>
+
+    <!-- Периоды -->
+    <div id="periods" class="section-content">
+        <h2 class="section-title"><i class="fas fa-clock"></i> Геологические периоды</h2>
+        <div class="grid">
+            <div class="card"><i class="fas fa-meteor"></i><h3>Триас (252–201 млн лет)</h3><p>Появление первых динозавров. Континент Пангея. Жаркий климат.</p></div>
+            <div class="card"><i class="fas fa-tree"></i><h3>Юра (201–145 млн лет)</h3><p>Расцвет гигантских зауроподов и появление первых птиц.</p></div>
+            <div class="card"><i class="fas fa-skull"></i><h3>Мел (145–66 млн лет)</h3><p>Цератопсы, тираннозавры и расцвет цветковых растений.</p></div>
+        </div>
+    </div>
+
+    <!-- Динозавры -->
+    <div id="dinosaurs" class="section-content" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-dragon"></i> Известные виды</h2>
+        <div class="grid">
+            <div class="card"><i class="fas fa-skull"></i><h3>Тираннозавр Рекс</h3><p>Один из самых крупных хищников. Длина до 12 м, вес до 8 тонн. Огромные челюсти.</p></div>
+            <div class="card"><i class="fas fa-feather-alt"></i><h3>Велоцираптор</h3><p>Небольшой пернатый хищник, известный по «Парку Юрского периода» (хотя в реальности был мельче).</p></div>
+            <div class="card"><i class="fas fa-long-arrow-alt-up"></i><h3>Брахиозавр</h3><p>Гигантский зауропод с длинной шеей, питался растительностью на высоте до 15 м.</p></div>
+            <div class="card"><i class="fas fa-shield-alt"></i><h3>Трицератопс</h3><p>Рогатый динозавр с мощным костяным воротником. Защищался от тираннозавров.</p></div>
+            <div class="card"><i class="fas fa-fighter-jet"></i><h3>Птеранодон</h3><p>Летающий ящер, размах крыльев до 7 метров. Не был динозавром, но жил в меловом периоде.</p></div>
+            <div class="card"><i class="fas fa-water"></i><h3>Ихтиозавр</h3><p>Морская рептилия, напоминающая дельфина. Охотилась на рыбу и аммонитов.</p></div>
+        </div>
+    </div>
+
+    <!-- Вымирание -->
+    <div id="extinction" class="section-content" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-burn"></i> Великое вымирание</h2>
+        <div class="timeline">
+            <div class="timeline-item"><strong>Астероид Чиксулуб</strong> — 66 млн лет назад удар астероида диаметром ~10 км вызвал цунами, пожары и «ядерную зиму».</div>
+            <div class="timeline-item"><strong>Иридиевый слой</strong> — по всему миру найден слой иридия — доказательство космического удара.</div>
+            <div class="timeline-item"><strong>Исчезновение</strong> — вымерли все нептичьи динозавры, птерозавры и морские рептилии. Выжили млекопитающие, птицы и крокодилы.</div>
+        </div>
+        <div class="card"><i class="fas fa-dove"></i> <strong>Наследие:</strong> Современные птицы — прямые потомки пернатых динозавров.</div>
+    </div>
+
+    <!-- Окаменелости -->
+    <div id="fossils" class="section-content" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-fossil"></i> Где находят динозавров?</h2>
+        <div class="grid">
+            <div class="card"><i class="fas fa-mountain"></i><h3>Формация Хелл-Крик (США)</h3><p>Тираннозавр, трицератопс, анкилозавр — одни из лучших образцов.</p></div>
+            <div class="card"><i class="fas fa-desert"></i><h3>Пустыня Гоби (Монголия)</h3><p>Протоцератопс, велоцираптор и первые находки яиц динозавров.</p></div>
+            <div class="card"><i class="fas fa-tachometer-alt"></i><h3>Германия (Триас)</h3><p>Платеозавр и ихтиозавры — европейские находки.</p></div>
+        </div>
+    </div>
+
+    <!-- Факты -->
+    <div id="facts" class="section-content" style="display:none;">
+        <h2 class="section-title"><i class="fas fa-lightbulb"></i> Интересные факты</h2>
+        <div class="grid">
+            <div class="card"><i class="fas fa-egg"></i><h3>Крупнейшие яйца</h3><p>Яйца зауроподов достигали размера футбольного мяча.</p></div>
+            <div class="card"><i class="fas fa-temperature-high"></i><h3>Теплокровность</h3><p>Некоторые динозавры могли быть теплокровными — быстрый рост, перья.</p></div>
+            <div class="card"><i class="fas fa-dog"></i><h3>Компсогнат</h3><p>Один из самых маленьких — размером с курицу.</p></div>
+            <div class="card"><i class="fas fa-dragon"></i><h3>Аргентинозавр</h3><p>Самый тяжёлый (до 100 тонн) — длиннее синего кита.</p></div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <i class="fas fa-dinosaur"></i> Палеонтологический архив | Данные основаны на современных исследованиях | Открыт для новых находок
+    </div>
+</div>
+
+<script>
+    // Загрузка
+    let progress = 0;
+    const progressBar = document.getElementById('progressBar');
+    const loaderOverlay = document.getElementById('loader');
+    const mainContent = document.getElementById('mainContent');
+    const interval = setInterval(() => {
+        progress += Math.random() * 12 + 6;
+        if (progress > 100) progress = 100;
+        progressBar.style.width = progress + '%';
+        if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => {
+                loaderOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loaderOverlay.style.display = 'none';
+                    mainContent.style.display = 'block';
+                }, 800);
+            }, 500);
+        }
+    }, 180);
+
+    // Навигация
+    const sections = ['periods', 'dinosaurs', 'extinction', 'fossils', 'facts'];
+    const navBtns = document.querySelectorAll('.nav-btn');
+    function showSection(sectionId) {
+        sections.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.style.display = 'none';
+        });
+        const active = document.getElementById(sectionId);
+        if (active) active.style.display = 'block';
+        localStorage.setItem('dino_last_section', sectionId);
+    }
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-section');
+            showSection(target);
+        });
+    });
+    const last = localStorage.getItem('dino_last_section');
+    showSection(last && sections.includes(last) ? last : 'periods');
+</script>
+</body>
+</html>
