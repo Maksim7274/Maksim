@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Garry's Mod — История и наследие</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0c0c10;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', 'Roboto', system-ui, sans-serif;
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        /* Фон с лёгкой текстурой */
+        .bg-dark {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 40%, #1a1a2a, #08080c);
+            z-index: -2;
+        }
+
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            text-align: center;
+            padding: 4rem 1rem;
+            border-bottom: 1px solid #ffaa33;
+            margin-bottom: 2rem;
+        }
+        h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #ffaa33, #ffdd88);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+        }
+        .sub {
+            font-size: 1.2rem;
+            color: #ccaa77;
+            margin-top: 0.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            border-left: 5px solid #ffaa33;
+            padding-left: 1.2rem;
+            margin: 2.5rem 0 1.5rem 0;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.8rem;
+            margin-bottom: 2rem;
+        }
+        .card {
+            background: rgba(25, 25, 40, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 28px;
+            padding: 1.5rem;
+            border: 1px solid #ffaa3340;
+            transition: 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #ffaa33;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        .card i {
+            font-size: 2.2rem;
+            color: #ffaa33;
+            margin-bottom: 1rem;
+        }
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.7rem;
+            color: #ffcc77;
+        }
+
+        .quote {
+            background: #1e1e2a;
+            border-left: 4px solid #ffaa33;
+            padding: 1.5rem;
+            border-radius: 24px;
+            margin: 2rem 0;
+            font-style: italic;
+        }
+
+        .timeline {
+            background: rgba(0,0,0,0.3);
+            border-radius: 32px;
+            padding: 1.5rem;
+        }
+        .timeline-item {
+            border-left: 2px solid #ffaa33;
+            padding-left: 1.2rem;
+            margin-bottom: 1.2rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            border-top: 1px solid #ffaa3340;
+            margin-top: 3rem;
+            color: #aaa;
+        }
+
+        @media (max-width: 700px) {
+            h1 { font-size: 2.5rem; }
+            .container { padding: 1rem; }
+            .section-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="bg-dark"></div>
+
+<div class="container">
+    <header>
+        <h1>GARRY'S MOD</h1>
+        <div class="sub">Игра, перевернувшая представление о творчестве в игровой индустрии</div>
+    </header>
+
+    <!-- Кто создал -->
+    <h2 class="section-title">🧑‍💻 СОЗДАТЕЛЬ</h2>
+    <div class="grid">
+        <div class="card">
+            <i class="fas fa-user-astronaut"></i>
+            <h3>Гарри Ньюман (Garry Newman)</h3>
+            <p>Разработчик из Великобритании, основатель студии Facepunch Studios. Изначально Garry's Mod был его любительским проектом, который он создал как модификацию для Half-Life 2. Выпустил игру в 2004 году, а в 2006 — в Steam.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-lightbulb"></i>
+            <h3>Идея создания</h3>
+            <p>Ньюман хотел дать игрокам инструменты для свободного творчества, физических экспериментов и создания собственных сценариев. Изначально это был просто «режим песочницы» без целей, но сообщество превратило его в культовую платформу.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Путь к успеху</h3>
+            <p>В 2005 году Garry's Mod стал одной из первых игр, использующих Steam Workshop. Благодаря поддержке модов и пользовательского контента игра продалась тиражом более 20 миллионов копий.</p>
+        </div>
+    </div>
+
+    <!-- История разработки -->
+    <h2 class="section-title">📜 ИСТОРИЯ РАЗРАБОТКИ</h2>
+    <div class="timeline">
+        <div class="timeline-item"><strong>2004</strong> — Первая публичная версия GMod 6. Гарри выложил мод на форумах.</div>
+        <div class="timeline-item"><strong>2005</strong> — Версия 8: добавлены карты, инструменты и поддержка Source Engine.</div>
+        <div class="timeline-item"><strong>2006</strong> — Релиз в Steam (GMod 9). Игра стала коммерческой.</div>
+        <div class="timeline-item"><strong>2012</strong> — GMod 11 (последняя крупная версия): полностью переработанный интерфейс, улучшенная физика, поддержка многопользовательских серверов.</div>
+        <div class="timeline-item"><strong>2016–2024</strong> — Постоянные обновления, интеграция с Workshop, добавление анимированных инструментов.</div>
+        <div class="timeline-item"><strong>2024–2026</strong> — Разработчик анонсирует продолжение на движке Source 2 (S&box), но оригинальный GMod остаётся живым благодаря сообществу.</div>
+    </div>
+
+    <!-- Особенности геймплея -->
+    <h2 class="section-title">🎮 ОСОБЕННОСТИ ГЕЙМПЛЕЯ</h2>
+    <div class="grid">
+        <div class="card"><i class="fas fa-cogs"></i><h3>Физическая песочница</h3><p>Спавн объектов, соединение их с помощью шарниров, пружин, двигателей — всё работает на физике Source.</p></div>
+        <div class="card"><i class="fas fa-code"></i><h3>Wiremod</h3><p>Популярный мод, добавляющий логические элементы, процессоры и экраны. Позволяет строить компьютеры и роботов прямо в игре.</p></div>
+        <div class="card"><i class="fas fa-vr-cardboard"></i><h3>Поддержка VR</h3><p>Экспериментальный режим, позволяющий управлять камерой через шлем и строить в виртуальном пространстве.</p></div>
+        <div class="card"><i class="fas fa-film"></i><h3>Анимация и кино-инструменты</h3><p>Режим Pose Tool, захват поз, покадровая анимация — именно в GMod создавались тысячи YouTube-маппетов и анимаций.</p></div>
+    </div>
+
+    <!-- Главные режимы -->
+    <h2 class="section-title">⚙️ ОСНОВНЫЕ РЕЖИМЫ ИГРЫ</h2>
+    <div class="grid">
+        <div class="card"><i class="fas fa-building"></i><h3>Sandbox (Песочница)</h3><p>Классический режим: неограниченное творчество, строительство, эксперименты с физикой и NPC.</p></div>
+        <div class="card"><i class="fas fa-gavel"></i><h3>DarkRP</h3><p>Ролевой режим с экономикой, работой и законами. Игроки становятся гражданами города, мафиози или полицией.</p></div>
+        <div class="card"><i class="fas fa-user-secret"></i><h3>Trouble in Terrorist Town (TTT)</h3><p>Режим, где среди игроков скрываются предатели. Нужно вычислить врагов до того, как они уничтожат команду.</p></div>
+        <div class="card"><i class="fas fa-box"></i><h3>Prop Hunt</h3><p>Охотники против предметов: одна команда превращается в объекты (ящики, бочки, лампы) и прячется на карте.</p></div>
+        <div class="card"><i class="fas fa-skull"></i><h3>Murder</h3><p>Один игрок — убийца, остальные — невинные. Нужно обнаружить убийцу и пережить раунд.</p></div>
+        <div class="card"><i class="fas fa-space-shuttle"></i><h3>StarWars RP / HL2 RP</h3><p>Серверы с глубокой ролевой системой по вселенной Half-Life, Star Wars или Fallout.</p></div>
+    </div>
+
+    <!-- Влияние и наследие -->
+    <h2 class="section-title">🌟 ВЛИЯНИЕ И НАСЛЕДИЕ</h2>
+    <div class="quote">
+        <i class="fas fa-quote-left" style="margin-right: 8px;"></i>
+        Garry's Mod стал фундаментом для тысяч YouTube-анимаций, мультсериалов и интернет-мемов. Студии вроде Valve использовали его для демонстрации Source Engine, а сообщество создало более миллиона аддонов в Steam Workshop.
+    </div>
+    <div class="grid">
+        <div class="card"><i class="fab fa-youtube"></i><h3>YouTube культура</h3><p>Такие каналы как VenturianTale, VanossGaming, IHE и множество аниматоров (GMod Idiot Box, Skitzo) прославились благодаря Гаррис Моду.</p></div>
+        <div class="card"><i class="fas fa-gamepad"></i><h3>Влияние на игры</h3><p>Режимы Prop Hunt, Murder, TTT были позже адаптированы в отдельные игры (например, Deceit, Among Us черпали идеи).</p></div>
+        <div class="card"><i class="fas fa-microchip"></i><h3>Сообщество</h3><p>Facepunch форум, мастерская Steam и тысячи серверов по сей день поддерживают игру. GMod остаётся в топе Steam по онлайну даже спустя 18 лет после выхода.</p></div>
+    </div>
+
+    <div class="quote">
+        <i class="fas fa-crown"></i> Garry Newman о GMod: <em>«Я никогда не ожидал, что моя маленькая утилита станет платформой для целого поколения игроков. Но самое классное — это то, что делают люди сами. Игра стала их холстом».</em>
+    </div>
+
+    <footer>
+        <i class="fas fa-database"></i> Неофициальный архив истории Garry's Mod | Основано на интервью, публикациях и данных Steam | 2026
+    </footer>
+</div>
+</body>
+</html>
