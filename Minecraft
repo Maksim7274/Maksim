@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Minecraft — Полная история создания и все версии</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Arial, sans-serif;
+}
+
+body{
+    background:#0a0f0a;
+    color:#e0e0e0;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background: linear-gradient(135deg, #0a2a0a, #051005);
+    z-index:-2;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.05"><rect width="100" height="100" fill="none"/><path fill="none" stroke="%2355ff55" stroke-width="0.5" d="M10 10 L90 10 M10 20 L90 20 M10 30 L90 30 M10 40 L90 40 M10 50 L90 50 M10 60 L90 60 M10 70 L90 70 M10 80 L90 80 M10 90 L90 90 M20 10 L20 90 M30 10 L30 90 M40 10 L40 90 M50 10 L50 90 M60 10 L60 90 M70 10 L70 90 M80 10 L80 90 M90 10 L90 90"/></svg>');
+    background-repeat:repeat;
+    background-size:30px;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.container{
+    max-width:1300px;
+    margin:0 auto;
+    padding:2rem;
+}
+
+header{
+    text-align:center;
+    padding:3rem 1rem;
+    border-bottom:2px solid #55ff55;
+    margin-bottom:2rem;
+}
+
+header h1{
+    font-size:4rem;
+    color:#55ff55;
+    text-shadow:0 0 20px #2a8a2a;
+    letter-spacing:2px;
+}
+
+header .sub{
+    font-size:1.2rem;
+    color:#aaffaa;
+    margin-top:0.5rem;
+}
+
+.section-title{
+    font-size:2rem;
+    font-weight:700;
+    border-left:5px solid #55ff55;
+    padding-left:1.2rem;
+    margin:2.5rem 0 1.5rem 0;
+    color:#aaffaa;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:1.5rem;
+    margin-bottom:2rem;
+}
+
+.card{
+    background:rgba(20,30,20,0.7);
+    backdrop-filter:blur(4px);
+    border:1px solid #55ff55;
+    border-radius:24px;
+    padding:1.5rem;
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(85,255,85,0.3);
+}
+
+.card h3{
+    color:#55ff55;
+    margin-bottom:0.8rem;
+    font-size:1.4rem;
+}
+
+.timeline{
+    background:rgba(0,0,0,0.4);
+    border-radius:28px;
+    padding:1.5rem;
+}
+
+.timeline-item{
+    border-left:2px solid #55ff55;
+    padding-left:1.2rem;
+    margin-bottom:1.2rem;
+}
+
+.version-badge{
+    display:inline-block;
+    background:#1a3a1a;
+    border:1px solid #55ff55;
+    border-radius:20px;
+    padding:0.2rem 0.8rem;
+    font-size:0.8rem;
+    margin-right:0.5rem;
+}
+
+.mob-card{
+    background:#0f1f0f;
+    border-radius:20px;
+    padding:1rem;
+    text-align:center;
+    border:1px solid #55ff55;
+}
+
+.mob-card i{
+    font-size:3rem;
+    color:#55ff55;
+    margin-bottom:0.5rem;
+}
+
+.mob-card h4{
+    font-size:1.2rem;
+    margin-bottom:0.5rem;
+}
+
+.sale-block{
+    background:linear-gradient(135deg, #1a3a1a, #0a1a0a);
+    border:2px solid #ffaa33;
+    border-radius:28px;
+    padding:1.5rem;
+    margin:2rem 0;
+    text-align:center;
+}
+
+footer{
+    text-align:center;
+    padding:2rem;
+    border-top:1px solid #55ff55;
+    margin-top:3rem;
+    color:#88aa88;
+}
+
+@media (max-width:700px){
+    .container{padding:1rem;}
+    header h1{font-size:2.5rem;}
+    .section-title{font-size:1.5rem;}
+}
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>MINECRAFT</h1>
+        <div class="sub">История создания, эволюция мобов и все версии</div>
+    </header>
+
+    <!-- Основатели и продажа -->
+    <div class="sale-block">
+        <i class="fas fa-chart-line" style="font-size:2rem; color:#ffaa33;"></i>
+        <h2 style="margin:0.5rem 0;">Кто создал Minecraft?</h2>
+        <p><strong>Маркус Перссон (Notch)</strong> — основатель и создатель Minecraft. 18 ноября 2011 года игра официально вышла из бета-тестирования. <strong>15 сентября 2014 года</strong> Microsoft объявила о покупке Mojang (студии-разработчика) вместе с правами на Minecraft за <strong>2,5 миллиарда долларов</strong>. Notch покинул компанию, но игра продолжила развиваться под руководством Йенса Бергенстена (Jeb).</p>
+    </div>
+
+    <!-- История создания -->
+    <h2 class="section-title"><i class="fas fa-history"></i> Как появился Minecraft?</h2>
+    <div class="grid">
+        <div class="card">
+            <i class="fas fa-cube" style="font-size:2rem; color:#55ff55;"></i>
+            <h3>Идея</h3>
+            <p>В 2009 году Notch вдохновился играми Infiniminer и Dwarf Fortress. Он хотел создать песочницу, где игроки сами решают, что делать — строить, исследовать или выживать.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-code" style="font-size:2rem; color:#55ff55;"></i>
+            <h3>Первая версия</h3>
+            <p>17 мая 2009 года вышла первая публичная версия — "Cave Game". Игра называлась просто "Minecraft". В ней можно было ставить и ломать блоки.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-globe" style="font-size:2rem; color:#55ff55;"></i>
+            <h3>Этапы разработки</h3>
+            <p>Pre-Classic → Classic → Indev → Infdev → Alpha → Beta → Official Release (1.0). Каждый этап добавлял новые механики: бесконечные миры, выживание, крафтинг.</p>
+        </div>
+    </div>
+
+    <!-- Как создавались мобы -->
+    <h2 class="section-title"><i class="fas fa-paw"></i> Как создавались мобы?</h2>
+    <div class="grid">
+        <div class="mob-card">
+            <i class="fas fa-bomb"></i>
+            <h4>Крипер</h4>
+            <p>Самый знаменитый моб появился из-за ошибки Notch при создании модели свиньи. Он хотел сделать свинью, но перепутал пропорции, и получилось длинное зелёное существо. Notch решил оставить его как врага.</p>
+        </div>
+        <div class="mob-card">
+            <i class="fas fa-ghost"></i>
+            <h4>Эндермен</h4>
+            <p>Вдохновлён «Тенью» из классического Doctor Who. Notch хотел создать таинственного агрессивного моба, который телепортируется и реагирует на взгляд.</p>
+        </div>
+        <div class="mob-card">
+            <i class="fas fa-dragon"></i>
+            <h4>Кристалл Края</h4>
+            <p>Появился вместе с Краем в версии 1.0. Эндер-дракон стал первым боссом в игре. Его кристаллы лечат дракона — уникальная механика.</p>
+        </div>
+        <div class="mob-card">
+            <i class="fas fa-piggy-bank"></i>
+            <h4>Свинья</h4>
+            <p>Первый моб, добавленный в игру (Classic). На свиньях можно было ездить до появления лошадей.</p>
+        </div>
+        <div class="mob-card">
+            <i class="fas fa-spider"></i>
+            <h4>Паук</h4>
+            <p>Изначально должен был быть мирным, но Notch сделал его агрессивным. Пауки могут лазить по стенам — уникальная способность.</p>
+        </div>
+        <div class="mob-card">
+            <i class="fas fa-water"></i>
+            <h4>Страж (Guardian)</h4>
+            <p>Добавлен в обновлении 1.8 (2014) вместе с океанскими монументами. Умеет стрелять лазером и наносит урон шипами.</p>
+        </div>
+    </div>
+
+    <!-- Хронология версий (от Pre-Classic до 1.21) -->
+    <h2 class="section-title"><i class="fas fa-code-branch"></i> Полная история версий (Java Edition)</h2>
+    
+    <div class="timeline">
+        <div class="timeline-item">
+            <span class="version-badge">Pre-Classic (2009)</span> Первые прототипы: Cave Game. Только блоки травы, земли и камня.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">Classic (2009)</span> Добавлен мультиплеер, новые блоки (дерево, кирпичи). Только творческий режим.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">Indev (2009-2010)</span> Появились: выживание, здоровье, инвентарь, крафтинг, огонь, TNT, сундуки. Первые мобы: свинья, крипер, скелет, зомби.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">Infdev (2010)</span> Бесконечные миры (раньше мир был ограничен). Пещеры, железо, золото, алмазы, редстоун.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">Alpha (2010)</span> Биомы, Незер (ад), лодки, рыбалка, музыка, сброс яиц, часы. Игра стала коммерческой.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">Beta (2010-2011)</span> Приручение волков, кровати, творческий режим, деревни, порталы в Край, пистоны, торговля, наковальни, храмы. Рост ценника игры.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.0 (ноябрь 2011)</span> Официальный релиз. Добавлен Край, Эндер-дракон, зелья, зачарование, грибные поля, крепости Незера.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.2 (2012)</span> Джунгли, кошки, железные големы, заснеженные биомы.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.3 (2012)</span> Храмы в джунглях и пустыне, изумруды, сундуки Края.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.4 (2012) — Pretty Scary Update</span> Скелеты-иссушители, ведьмы, пирожки с тыквой.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.5 (2013) — Redstone Update</span> Кварц, датчики, компараторы, воронки, активирующие рельсы.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.6 (2013) — Horse Update</span> Лошади, ослы, мулы, свиньи с сёдлами.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.7 (2013) — The Update That Changed The World</span> Биомы, новые виды цветов, рыба фугу.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.8 (2014) — Bountiful Update</span> Подводные памятники, стражи, кролики, гранит, андезит, диорит, кнопки из дерева.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.9 (2016) — Combat Update</span> Двуручное оружие, стрелы с эффектами, города Края, элитры, иглу.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.10 (2016) — Frostburn Update</span> Полярные медведи, страйдеры, хуски.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.11 (2016) — Exploration Update</span> Особняки, шалкеры, лам, тотемы бессмертия, наблюдатель.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.12 (2017) — World of Color Update</span> Попугаи, бетон, глазурованная керамика.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.13 (2018) — Update Aquatic</span> Переработаны океаны: дельфины, черепахи, коралловые рифы, утонувшие зомби, морские огурцы.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.14 (2019) — Village & Pillage</span> Новые деревенские жители, разбойники, панды, кошки, фейерверки.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.15 (2019) — Buzzy Bees</span> Пчёлы, соты, мёд, роение.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.16 (2020) — Nether Update</span> Полное обновление ада: новые биомы, свинолюбы, хоглины, незеритовая броня (лучшая в игре).
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.17-1.18 (2021) — Caves & Cliffs</span> Огромные пещеры, аксолотли, светящийся спрут, медная руда, сталактиты, изменилась генерация мира.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.19 (2022) — The Wild Update</span> Мангровые болота, лягушки, хранитель (Warden), Древний город.
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.20 (2023) — Trails & Tales</span> Археология, горшки, библиотека, новые брони (сращение).
+        </div>
+        <div class="timeline-item">
+            <span class="version-badge">1.21 (2024) — Tricky Trials</span> Залесье, испытательные палаты, ветки (mace), новый моб — breeze.
+        </div>
+    </div>
+
+    <!-- Снапшоты и текущее состояние -->
+    <h2 class="section-title"><i class="fas fa-flask"></i> Снапшоты и будущее</h2>
+    <div class="grid">
+        <div class="card">
+            <i class="fas fa-code-branch"></i>
+            <h3>Снапшоты</h3>
+            <p>Начиная с Beta 1.8, Mojang выпускает снапшоты — экспериментальные сборки для тестирования грядущих обновлений. Игроки могут опробовать новые функции за несколько месяцев до официального релиза.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Текущая версия</h3>
+            <p>Актуальная версия Java Edition — 1.21.4 (Tricky Trials). Активную разработку ведет команда Mojang под руководством Йенса «Jeb» Бергенстена.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-mobile-alt"></i>
+            <h3>Bedrock Edition</h3>
+            <p>Параллельно с Java Edition развивается Bedrock Edition (C++), которая объединяет мобильные устройства, консоли и Windows 10. Кроссплатформенная игра.</p>
+        </div>
+    </div>
+
+    <!-- Почему Minecraft стал легендой -->
+    <h2 class="section-title"><i class="fas fa-crown"></i> Почему Minecraft стал легендой?</h2>
+    <div class="grid">
+        <div class="card">
+            <i class="fas fa-infinity"></i>
+            <h3>Свобода</h3>
+            <p>Никаких ограничений: строй, разрушай, исследуй, выживай. Игрок сам выбирает стиль игры.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-users"></i>
+            <h3>Сообщество</h3>
+            <p>Миллионы игроков создают моды, карты, текстурпаки, сервера и YouTube-контент. Игра жива благодаря им.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-school"></i>
+            <h3>Образование</h3>
+            <p>Minecraft Education Edition используется в школах для обучения программированию, истории и командной работе.</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-chart-simple"></i>
+            <h3>Рекорды</h3>
+            <p>Продано более 300 миллионов копий — это самая продаваемая игра в истории.</p>
+        </div>
+    </div>
+
+    <footer>
+        <i class="fas fa-database"></i> Неофициальный архив Minecraft | Данные собраны на основе истории обновлений<br>
+        © Mojang Studios / Microsoft | 2009-2026
+    </footer>
+</div>
+
+<script>
+    // Эффект плавного появления карточек
+    const cards = document.querySelectorAll('.card, .mob-card, .timeline-item');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+</script>
+
+</body>
+</html>
