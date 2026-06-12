@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MrLololoshka — История канала и мультивселенная</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Arial, sans-serif;
+}
+
+body{
+    background:#0a0a0a;
+    color:#e0e0e0;
+    overflow-x:hidden;
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    background: radial-gradient(ellipse at 30% 20%, #2a1a0a, #050505);
+    z-index:-2;
+}
+
+body::after{
+    content:"";
+    position:fixed;
+    inset:0;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.04"><path fill="none" stroke="%23ff5555" stroke-width="0.5" d="M10 10 L90 10 M10 20 L90 20 M10 30 L90 30 M10 40 L90 40 M10 50 L90 50 M10 60 L90 60 M10 70 L90 70 M10 80 L90 80 M10 90 L90 90 M20 10 L20 90 M30 10 L30 90 M40 10 L40 90 M50 10 L50 90 M60 10 L60 90 M70 10 L70 90 M80 10 L80 90 M90 10 L90 90"/></svg>');
+    background-repeat:repeat;
+    background-size:40px;
+    pointer-events:none;
+    z-index:-1;
+}
+
+.container{
+    max-width:1300px;
+    margin:0 auto;
+    padding:2rem;
+}
+
+header{
+    text-align:center;
+    padding:3rem 1rem;
+    border-bottom:2px solid #ff5555;
+    margin-bottom:2rem;
+}
+
+header h1{
+    font-size:4rem;
+    background:linear-gradient(135deg, #ff5555, #ffaa55);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    text-shadow:0 0 30px rgba(255,85,85,0.3);
+}
+
+.sub{
+    font-size:1.2rem;
+    color:#ffaa88;
+    margin-top:0.5rem;
+}
+
+.section-title{
+    font-size:2rem;
+    font-weight:700;
+    border-left:5px solid #ff5555;
+    padding-left:1.2rem;
+    margin:2.5rem 0 1.5rem 0;
+    color:#ffaa88;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));
+    gap:1.5rem;
+    margin-bottom:2rem;
+}
+
+.card{
+    background:rgba(25,20,20,0.7);
+    backdrop-filter:blur(4px);
+    border:1px solid #ff5555;
+    border-radius:24px;
+    padding:1.5rem;
+    transition:0.2s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(255,85,85,0.3);
+}
+
+.card h3{
+    color:#ff5555;
+    margin-bottom:0.8rem;
+    font-size:1.4rem;
+}
+
+.stat-badge{
+    display:inline-block;
+    background:#2a1a1a;
+    border:1px solid #ff5555;
+    border-radius:20px;
+    padding:0.2rem 0.8rem;
+    font-size:0.8rem;
+    margin-right:0.5rem;
+}
+
+.timeline{
+    background:rgba(0,0,0,0.4);
+    border-radius:28px;
+    padding:1.5rem;
+}
+
+.timeline-item{
+    border-left:2px solid #ff5555;
+    padding-left:1.2rem;
+    margin-bottom:1.2rem;
+}
+
+.season-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:1rem;
+    margin-bottom:1.5rem;
+}
+
+.season-card{
+    background:rgba(20,15,15,0.8);
+    border-left:3px solid #ff5555;
+    border-radius:16px;
+    padding:1rem;
+    transition:0.2s;
+}
+
+.season-card:hover{
+    background:#2a1a1a;
+    transform:translateX(5px);
+}
+
+.season-card h4{
+    color:#ffaa77;
+    margin-bottom:0.3rem;
+}
+
+footer{
+    text-align:center;
+    padding:2rem;
+    border-top:1px solid #ff5555;
+    margin-top:3rem;
+    color:#aa8888;
+}
+
+@media (max-width:700px){
+    .container{padding:1rem;}
+    header h1{font-size:2.5rem;}
+    .section-title{font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>MrLololoshka</h1>
+        <div class="sub">Роман Фильченков — история канала, сезоны и мультивселенная</div>
+    </header>
+
+    <!-- Основа -->
+    <div class="card" style="background:linear-gradient(135deg, #2a1515, #150a0a); border:2px solid #ff5555; text-align:center;">
+        <i class="fas fa-crown" style="font-size:3rem; color:#ffaa55;"></i>
+        <h2 style="color:#ffaa55; margin:0.5rem 0;">Роман Александрович Фильченков</h2>
+        <p>Родился 17 апреля 1998 года в Барнауле, Алтайский край. Проживает в Санкт-Петербурге [citation:3][citation:5]. <br>
+        Основатель YouTube-канала «MrLololoshka» — один из первых русскоязычных майнкрафт-блогеров [citation:1].</p>
+    </div>
+
+    <!-- История создания канала -->
+    <h2 class="section-title"><i class="fas fa-history"></i> Как создавался канал?</h2>
+    <div class="grid">
+        <div class="card">
+            <i class="fas fa-calendar-alt" style="font-size:2rem; color:#ff5555;"></i>
+            <h3>Дата создания</h3>
+            <p>Канал MrLololoshka был создан <strong>28 мая 2012 года</strong> [citation:3]. Первое видео вышло 29 мая 2012 года [citation:8]. В 14 лет Роман начал публиковать обзоры на моды для Minecraft [citation:3].</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-chart-line" style="font-size:2rem; color:#ff5555;"></i>
+            <h3>Рост популярности</h3>
+            <p>За несколько месяцев — <strong>100 тыс. подписчиков</strong> (Серебряная кнопка).<br>
+            В сентябре 2013 года — <strong>1 млн подписчиков</strong> (Золотая кнопка) [citation:3][citation:5].<br>
+            2014 год — 2 млн → 2015 — 3,5 млн → 2016 — 4 млн → 2017 — 5 млн → 2019 — 6 млн [citation:5].<br>
+            На июнь 2025 года — <strong>более 11,1 млн подписчиков</strong> [citation:3].</p>
+        </div>
+        <div class="card">
+            <i class="fas fa-eye" style="font-size:2rem; color:#ff5555;"></i>
+            <h3>Просмотры</h3>
+            <p>К 2017 году видео набрали <strong>900 млн просмотров</strong>. На начало 2019 года — <strong>2 миллиарда просмотров</strong> [citation:5].</p>
+        </div>
+    </div>
+
+    <!-- Основные вехи -->
+    <h2 class="section-title"><i class="fas fa-trophy"></i> Ключевые события</h2>
+    <div class="timeline">
+        <div class="timeline-item"><span class="stat-badge">2012</span> Запуск канала, первые обзоры модов (Global Mod и др.) [citation:8]</div>
+        <div class="timeline-item"><span class="stat-badge">2013</span> Первый миллион подписчиков, удаление канала по жалобам на авторские права и быстрое восстановление [citation:5]</div>
+        <div class="timeline-item"><span class="stat-badge">2014</span> Начало сюжетных сезонов? — Нет, первый полноценный сюжет стартовал в 2021 году с «Нового Поколения» [citation:7]</div>
+        <div class="timeline-item"><span class="stat-badge">2021</span> Начало сюжетной линии — сезон «Новое Поколение» (127 серий) [citation:7]</div>
+        <div class="timeline-item"><span class="stat-badge">2024</span> Выход 12-минутного видео «"Майнкрафт", я увидел всю историю своего канала (12 Лет Спустя) + Фиксплей» [citation:3]</div>
+    </div>
+
+    <!-- Все сезоны (каталог) -->
+    <h2 class="section-title"><i class="fas fa-list-ol"></i> Все сезоны (прохождения)</h2>
+    <div class="timeline">
+        <div class="timeline-item"><strong>Сезон 1</strong> — Незабываемые испытания (2012, 17 серий) — отменён [citation:4]</div>
+        <div class="timeline-item"><strong>Сезон 2</strong> — Невероятные испытания (2012, 48 серий)</div>
+        <div class="timeline-item"><strong>Сезон 3</strong> — Лесные похождения (2012-2013, 44 серии)</div>
+        <div class="timeline-item"><strong>Сезон 4</strong> — Зимнелетние похождения (2013, 66 серий)</div>
+        <div class="timeline-item"><strong>Сезон 5-8</strong> — Райские похождения, Классические приключения, Новые зимнелетние похождения (отменены), Магические приключения (33 серии) [citation:4]</div>
+        <div class="timeline-item"><strong>Сезон 9-12</strong> — Магические приключения, Летние приключения, Те самые похождения (123 серии), От Зимы До Зимы (101 серия) [citation:4]</div>
+        <div class="timeline-item"><strong>Сезон 13-20</strong> — Дюжина Приключений (100 серий), Кровавая История (79), Эпоха Приключений (107), Шесть Похождений (69), Искажение Миров (126), Магический Майнкрафт (88), Рандомные приключения (85) [citation:4]</div>
+        <div class="timeline-item"><strong>Сезон 21-25</strong> — Реальный Майнкрафт (отменён), Эволюция Майнкрафт (92), Пробуждение Майнкрафт (105) [citation:4]</div>
+    </div>
+
+    <!-- Сюжетные сезоны (основные) -->
+    <h2 class="section-title"><i class="fas fa-film"></i> Сюжетные сезоны (Мультивселенная)</h2>
+    <div class="season-grid">
+        <div class="season-card"><h4>🌍 Новое Поколение (2021)</h4><p>127 серий. Первый сюжетный сезон, знакомство с Междумирцем [citation:7]</p></div>
+        <div class="season-card"><h4>🎭 Игра Бога (2021-2022)</h4><p>89 серий. Появление Люциуса, Джодаха и Смотрящего [citation:7]</p></div>
+        <div class="season-card"><h4>⚙️ Идеальный МИР (2022)</h4><p>135 серий. Феномен сообщества, Алотерра, Кейт и Радан [citation:7]</p></div>
+        <div class="season-card"><h4>⏳ Голос Времени (2023)</h4><p>100 серий. Перепутье двух миров [citation:7]</p></div>
+        <div class="season-card"><h4>🔥 Тринадцать Огней (2023)</h4><p>85 серий. Египетский мир, раскрытие лора мультивселенной [citation:7]</p></div>
+        <div class="season-card"><h4>🏫 Последняя Реальность (2024)</h4><p>107 серий. Lucky Charms University, Дилан [citation:7]</p></div>
+        <div class="season-card"><h4>💫 Сердце Вселенной (2024)</h4><p>60 серий. Глубины космоса, тайна Искры [citation:7]</p></div>
+        <div class="season-card"><h4>🌑 Точка Невозврата (2025)</h4><p>101 серия (+4 бонусных). Постапокалипсис, путешествие во времени [citation:7]</p></div>
+        <div class="season-card"><h4>🛠️ Мастерская (2025— н.в.)</h4><p>Завершён? Сезон заморожен на версии 1.21.4 [citation:4]</p></div>
+    </div>
+
+    <!-- Статистика канала (подписчики) -->
+    <h2 class="section-title"><i class="fas fa-users"></i> Статистика аудитории (на 2025 г.)</h2>
+    <div class="grid">
+        <div class="card"><i class="fab fa-youtube" style="font-size:2rem; color:#ff5555;"></i><h3>YouTube</h3><p><strong>11,1 млн подписчиков</strong> [citation:3]</p></div>
+        <div class="card"><i class="fab fa-vk" style="font-size:2rem; color:#ff5555;"></i><h3>ВКонтакте</h3><p>749 тыс. подписчиков [citation:3]</p></div>
+        <div class="card"><i class="fab fa-telegram" style="font-size:2rem; color:#ff5555;"></i><h3>Telegram</h3><p>15 тыс. подписчиков [citation:3]</p></div>
+        <div class="card"><i class="fab fa-twitch" style="font-size:2rem; color:#ff5555;"></i><h3>Rutube / Дзен</h3><p>44 тыс. / 39,8 тыс. [citation:3]</p></div>
+    </div>
+
+    <!-- Почему его смотрят? -->
+    <h2 class="section-title"><i class="fas fa-heart"></i> Почему это легенда?</h2>
+    <div class="grid">
+        <div class="card"><i class="fas fa-crown" style="font-size:2rem;"></i><h3>Пионер жанра</h3><p>Один из первых русскоязычных Minecraft-блогеров. Экспертное знание модов (BuildCraft, DivineRPG, IC2) [citation:1].</p></div>
+        <div class="card"><i class="fas fa-film" style="font-size:2rem;"></i><h3>Киновселенная</h3><p>С 2021 года — сюжетные сезоны с персонажами, лором и развитием, связанные в единую «мультивселенную» [citation:7][citation:10].</p></div>
+        <div class="card"><i class="fas fa-tachometer-alt" style="font-size:2rem;"></i><h3>Актуальность спустя 14 лет</h3><p>Канал продолжает выпускать новые сюжеты, собирая миллионы просмотров [citation:3][citation:4].</p></div>
+        <div class="card"><i class="fas fa-users" style="font-size:2rem;"></i><h3>Сообщество</h3><p>Активные фан-сообщества, фанфики, канон. Лололошка стал частью интернет-культуры [citation:9].</p></div>
+    </div>
+
+    <!-- Блок о создателе (итог) -->
+    <div class="card" style="background:rgba(30,15,15,0.8); margin-top:1rem;">
+        <i class="fas fa-quote-left" style="font-size:2rem; color:#ffaa55;"></i>
+        <p style="margin-top:1rem;">MrLololoshka — это не просто игровой канал, а целая вселенная, которую Роман создавал более 12 лет. От первых модов до сложных сюжетных арок. 11 миллионов человек следят за его мирами, и история продолжается [citation:3].</p>
+    </div>
+
+    <footer>
+        <i class="fas fa-database"></i> Неофициальный архив истории MrLololoshka<br>
+        Данные собраны на основе открытых источников, вики-проектов и интервью
+    </footer>
+</div>
+
+<script>
+    const cards = document.querySelectorAll('.card, .season-card, .timeline-item');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if(entry.isIntersecting){
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    cards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+    });
+</script>
+</body>
+</html>
