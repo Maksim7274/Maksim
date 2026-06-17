@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>AsErPC — Игровые компьютеры</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+        }
+
+        body {
+            background: #070707;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        /* фон для шапки с затемнением */
+        header {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(#0009, #0009), url('https://images.unsplash.com/photo-1593640408182-31c70c8268f5') center/cover;
+            position: relative;
+        }
+
+        .hero {
+            background: #000b;
+            padding: 50px;
+            border-radius: 25px;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 70px;
+            color: #00eaff;
+            text-shadow: 0 0 30px cyan, 0 0 60px #0088ff;
+            letter-spacing: 4px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-top: 10px;
+            color: #aaddff;
+        }
+
+        .btn-hero {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #00eaff, #0088ff);
+            color: black;
+            border-radius: 30px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: 0.3s;
+        }
+
+        .btn-hero:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px cyan;
+        }
+
+        /* общие отступы для секций */
+        section {
+            padding: 60px 10%;
+        }
+
+        h2 {
+            text-align: center;
+            color: #00eaff;
+            font-size: 45px;
+            margin-bottom: 40px;
+            text-shadow: 0 0 15px cyan;
+        }
+
+        /* сетка товаров */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: #151515;
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid cyan;
+            transition: 0.3s;
+            text-align: center;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 0 30px cyan;
+        }
+
+        .badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ff8800;
+            color: black;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .price {
+            font-size: 30px;
+            color: #00ff88;
+            margin: 20px 0;
+        }
+
+        .btn-buy {
+            width: 100%;
+            padding: 15px;
+            border: 0;
+            border-radius: 10px;
+            cursor: pointer;
+            background: linear-gradient(135deg, #00ff88, #00cc66);
+            font-weight: bold;
+            font-size: 1rem;
+            transition: 0.2s;
+        }
+
+        .btn-buy:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        /* корзина (фиксированная панель) */
+        #cart {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            background: #111;
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid cyan;
+            max-width: 280px;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        #cart h2 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        #items {
+            margin: 15px 0;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        #items::-webkit-scrollbar {
+            width: 4px;
+        }
+        #items::-webkit-scrollbar-thumb {
+            background: cyan;
+            border-radius: 10px;
+        }
+
+        .cart-total {
+            font-size: 1.2rem;
+            border-top: 1px solid #333;
+            padding-top: 10px;
+        }
+
+        #cart input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            border: 0;
+            background: #222;
+            color: white;
+        }
+
+        #cart input::placeholder {
+            color: #888;
+        }
+
+        .btn-order {
+            width: 100%;
+            padding: 14px;
+            border: 0;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ff8800, #ff5500);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-order:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px #ff8800;
+        }
+
+        /* отзывы — сетка из трёх колонок */
+        .reviews {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .review-card {
+            background: #151515;
+            border-radius: 20px;
+            padding: 20px;
+            border-left: 4px solid #00eaff;
+        }
+
+        .review-card .stars {
+            color: #ffcc00;
+            font-size: 1.2rem;
+        }
+
+        /* футер с соцсетями */
+        footer {
+            padding: 30px;
+            text-align: center;
+            background: black;
+            border-top: 1px solid #222;
+            color: #888;
+        }
+
+        footer .social {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 15px;
+        }
+
+        footer .social a {
+            color: #00eaff;
+            font-size: 1.8rem;
+            transition: 0.2s;
+        }
+
+        footer .social a:hover {
+            transform: scale(1.1);
+            text-shadow: 0 0 15px cyan;
+        }
+
+        /* адаптив под телефоны */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+            #cart {
+                right: 10px;
+                top: 10px;
+                max-width: 240px;
+                padding: 15px;
+            }
+            section {
+                padding: 40px 5%;
+            }
+            h2 {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #cart {
+                position: relative;
+                right: auto;
+                top: auto;
+                max-width: 100%;
+                margin: 20px 0;
+                border-radius: 20px;
+            }
+            .products {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- корзина — всегда на виду -->
+    <div id="cart">
+        <h2>🛒 Корзина</h2>
+        <div id="items">Пусто</div>
+        <div class="cart-total">Сумма: <span id="total">0</span> ₽</div>
+        <input id="name" placeholder="Ваше имя">
+        <input id="phone" placeholder="Телефон">
+        <input id="address" placeholder="Адрес доставки">
+        <button class="btn-order" onclick="buy()">Оформить заказ</button>
+    </div>
+
+    <!-- главный экран с логотипом -->
+    <header>
+        <div class="hero">
+            <h1>⚡ AsErPC ⚡</h1>
+            <p>Игровые монстры, созданные для побед</p>
+            <button class="btn-hero" onclick="scrollToShop()">🔥 Смотреть ПК</button>
+        </div>
+    </header>
+
+    <!-- каталог товаров -->
+    <section id="shop">
+        <h2>🚀 Наши сборки</h2>
+        <div class="products">
+            <div class="card">
+                <span class="badge">🔥 ХИТ</span>
+                <h2>START</h2>
+                <p>RTX 4060<br>Ryzen 5 7600<br>16GB DDR5</p>
+                <div class="price">89 990 ₽</div>
+                <button class="btn-buy" onclick="add('START', 89990)">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="badge">⭐ ТОП</span>
+                <h2>PRO</h2>
+                <p>RTX 4070 Ti<br>Ryzen 7 7800X3D<br>32GB DDR5</p>
+                <div class="price">159 990 ₽</div>
+                <button class="btn-buy" onclick="add('PRO', 159990)">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="badge">💎 ФЛАГМАН</span>
+                <h2>ULTRA</h2>
+                <p>RTX 4090<br>Ryzen 9 7950X<br>64GB DDR5</p>
+                <div class="price">299 990 ₽</div>
+                <button class="btn-buy" onclick="add('ULTRA', 299990)">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="badge">🎮 НОВИНКА</span>
+                <h2>STREAMER</h2>
+                <p>RTX 4080 Super<br>Ryzen 7 7800X3D<br>64GB DDR5</p>
+                <div class="price">219 990 ₽</div>
+                <button class="btn-buy" onclick="add('STREAMER', 219990)">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="badge">⚡ ЭКОНОМ</span>
+                <h2>LITE</h2>
+                <p>RTX 3050<br>Ryzen 5 5600<br>16GB DDR4</p>
+                <div class="price">59 990 ₽</div>
+                <button class="btn-buy" onclick="add('LITE', 59990)">Купить</button>
+            </div>
+
+            <div class="card">
+                <span class="badge">🏆 ПРЕМИУМ</span>
+                <h2>FUSION</h2>
+                <p>RTX 5090 (заказ)<br>Ryzen 9 9950X<br>128GB DDR5</p>
+                <div class="price">499 990 ₽</div>
+                <button class="btn-buy" onclick="add('FUSION', 499990)">Купить</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- блок с отзывами реальных покупателей -->
+    <section>
+        <h2>💬 Отзывы клиентов</h2>
+        <div class="reviews">
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"Компьютер START просто бомба! Летит в любых играх. AsErPC — лучшие!"</p>
+                <p style="color: #888; margin-top: 10px;">— Алексей, г. Москва</p>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★★</div>
+                <p>"Заказал PRO для стримов — доволен как слон. Собрали быстро, доставили чётко."</p>
+                <p style="color: #888; margin-top: 10px;">— Екатерина, г. Санкт-Петербург</p>
+            </div>
+            <div class="review-card">
+                <div class="stars">★★★★☆</div>
+                <p>"Машина мощная, но пришлось подождать доставку. В целом — отлично."</p>
+                <p style="color: #888; margin-top: 10px;">— Игорь, г. Казань</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- подвал с соцсетями и контактами -->
+    <footer>
+        <div class="social">
+            <a href="#"><i class="fab fa-vk"></i></a>
+            <a href="#"><i class="fab fa-telegram"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="#"><i class="fab fa-discord"></i></a>
+        </div>
+        <p>© 2026 AsErPC — Игровые компьютеры для настоящих героев</p>
+        <p style="font-size: 0.8rem; margin-top: 8px;">г. Москва, ул. Техническая, 7 | ☎ +7 (999) 777-66-55</p>
+    </footer>
+
+    <script>
+        // Массив корзины — хранит выбранные товары
+        let cart = [];
+
+        // Добавление товара
+        function add(name, price) {
+            cart.push({ name, price });
+            updateCart();
+            alert(name + " добавлен в корзину!");
+        }
+
+        // Обновление отображения корзины
+        function updateCart() {
+            const itemsDiv = document.getElementById('items');
+            const totalSpan = document.getElementById('total');
+            let sum = 0;
+
+            if (cart.length === 0) {
+                itemsDiv.innerHTML = 'Пусто';
+                totalSpan.textContent = '0';
+                return;
+            }
+
+            itemsDiv.innerHTML = '';
+            cart.forEach(item => {
+                itemsDiv.innerHTML += `${item.name} — ${item.price} ₽<br>`;
+                sum += item.price;
+            });
+
+            totalSpan.textContent = sum.toLocaleString('ru-RU');
+        }
+
+        // Оформление заказа
+        function buy() {
+            const name = document.getElementById('name').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+
+            if (cart.length === 0) {
+                alert('🛑 Корзина пустая! Добавьте товары.');
+                return;
+            }
+
+            if (!name || !phone || !address) {
+                alert('❌ Заполните все поля: имя, телефон и адрес доставки!');
+                return;
+            }
+
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            const itemsList = cart.map(i => `${i.name} (${i.price} ₽)`).join(', ');
+
+            alert(
+                `✅ ЗАКАЗ ОФОРМЛЕН!\n\n` +
+                `👤 Имя: ${name}\n` +
+                `📞 Телефон: ${phone}\n` +
+                `🏠 Адрес: ${address}\n\n` +
+                `📦 Товары: ${itemsList}\n` +
+                `💰 Итого: ${total.toLocaleString('ru-RU')} ₽\n\n` +
+                `🚚 Менеджер свяжется с вами в ближайшее время!`
+            );
+
+            // Очистка корзины и полей после заказа
+            cart = [];
+            document.getElementById('name').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('address').value = '';
+            updateCart();
+        }
+
+        // Плавная прокрутка к каталогу
+        function scrollToShop() {
+            document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
