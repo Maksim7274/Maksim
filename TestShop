@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* фон для шапки с затемнением */
         header {
             height: 100vh;
             display: flex;
@@ -70,7 +69,6 @@
             box-shadow: 0 0 30px cyan;
         }
 
-        /* общие отступы для секций */
         section {
             padding: 60px 10%;
         }
@@ -83,7 +81,6 @@
             text-shadow: 0 0 15px cyan;
         }
 
-        /* сетка товаров */
         .products {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -140,7 +137,6 @@
             box-shadow: 0 0 20px #00ff88;
         }
 
-        /* корзина (фиксированная панель) */
         #cart {
             position: fixed;
             right: 20px;
@@ -216,7 +212,6 @@
             box-shadow: 0 0 20px #ff8800;
         }
 
-        /* отзывы — сетка из трёх колонок */
         .reviews {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -236,7 +231,6 @@
             font-size: 1.2rem;
         }
 
-        /* футер с соцсетями */
         footer {
             padding: 30px;
             text-align: center;
@@ -263,7 +257,6 @@
             text-shadow: 0 0 15px cyan;
         }
 
-        /* адаптив под телефоны */
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 40px;
@@ -299,7 +292,6 @@
 </head>
 <body>
 
-    <!-- корзина — всегда на виду -->
     <div id="cart">
         <h2>🛒 Корзина</h2>
         <div id="items">Пусто</div>
@@ -310,7 +302,6 @@
         <button class="btn-order" onclick="buy()">Оформить заказ</button>
     </div>
 
-    <!-- главный экран с логотипом -->
     <header>
         <div class="hero">
             <h1>⚡ AsErPC ⚡</h1>
@@ -319,7 +310,6 @@
         </div>
     </header>
 
-    <!-- каталог товаров -->
     <section id="shop">
         <h2>🚀 Наши сборки</h2>
         <div class="products">
@@ -373,7 +363,6 @@
         </div>
     </section>
 
-    <!-- блок с отзывами реальных покупателей -->
     <section>
         <h2>💬 Отзывы клиентов</h2>
         <div class="reviews">
@@ -395,7 +384,6 @@
         </div>
     </section>
 
-    <!-- подвал с соцсетями и контактами -->
     <footer>
         <div class="social">
             <a href="#"><i class="fab fa-vk"></i></a>
@@ -408,17 +396,14 @@
     </footer>
 
     <script>
-        // Массив корзины — хранит выбранные товары
         let cart = [];
 
-        // Добавление товара
         function add(name, price) {
             cart.push({ name, price });
             updateCart();
             alert(name + " добавлен в корзину!");
         }
 
-        // Обновление отображения корзины
         function updateCart() {
             const itemsDiv = document.getElementById('items');
             const totalSpan = document.getElementById('total');
@@ -439,7 +424,6 @@
             totalSpan.textContent = sum.toLocaleString('ru-RU');
         }
 
-        // Оформление заказа
         function buy() {
             const name = document.getElementById('name').value.trim();
             const phone = document.getElementById('phone').value.trim();
@@ -468,7 +452,6 @@
                 `🚚 Менеджер свяжется с вами в ближайшее время!`
             );
 
-            // Очистка корзины и полей после заказа
             cart = [];
             document.getElementById('name').value = '';
             document.getElementById('phone').value = '';
@@ -476,7 +459,6 @@
             updateCart();
         }
 
-        // Плавная прокрутка к каталогу
         function scrollToShop() {
             document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
         }
