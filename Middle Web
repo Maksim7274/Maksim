@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Портфолио | Максим</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* ===== ПРЕЛОАДЕР ===== */
+        #preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        #preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top: 4px solid #6c5ce7;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .loader-text {
+            color: white;
+            margin-top: 20px;
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== ТЁМНАЯ ТЕМА ===== */
+        body.dark-theme {
+            --light: #1a1a2e;
+            --dark: #f8f9fa;
+            --text: #f0f0f0;
+            --text-light: #b0b0b0;
+            background: #12121e;
+        }
+        body.dark-theme .section-alt {
+            background: #1a1a2e;
+        }
+        body.dark-theme .card,
+        body.dark-theme .work-card,
+        body.dark-theme .hobby-card,
+        body.dark-theme .mentor-card,
+        body.dark-theme .github-card,
+        body.dark-theme .tech-card,
+        body.dark-theme .achievement-card {
+            background: #222244;
+        }
+        body.dark-theme .step,
+        body.dark-theme .progress-point {
+            background: #222244;
+        }
+        body.dark-theme .fact-item {
+            background: #222244;
+            color: #f0f0f0;
+        }
+        body.dark-theme .mentor-quote {
+            background: #2a2a4a;
+        }
+
+        /* ===== КНОПКА ТЕМЫ ===== */
+        .theme-toggle {
+            position: fixed;
+            bottom: 90px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+            transition: var(--transition);
+            z-index: 999;
+        }
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(108, 92, 231, 0.6);
+        }
+
+        /* ===== КНОПКА "НАВЕРХ" ===== */
+        .scroll-top {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+        }
+        .scroll-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .scroll-top:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(108, 92, 231, 0.6);
+        }
+
+        /* ===== 3D-ЭФФЕКТ ДЛЯ КАРТОЧЕК РАБОТ ===== */
+        .work-card {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .work-card:hover {
+            transform: rotateY(5deg) rotateX(5deg) scale(1.02);
+            box-shadow: 0 15px 40px rgba(108, 92, 231, 0.25);
+        }
+
+        /* ===== КРУГОВЫЕ ДИАГРАММЫ ===== */
+        .circle-chart {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 15px;
+        }
+        .circle-chart svg {
+            transform: rotate(-90deg);
+        }
+        .circle-chart .bg {
+            fill: none;
+            stroke: #e0e0e0;
+            stroke-width: 8;
+        }
+        .circle-chart .progress {
+            fill: none;
+            stroke: var(--primary);
+            stroke-width: 8;
+            stroke-linecap: round;
+            transition: stroke-dasharray 1s ease;
+        }
+        .circle-chart .label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ===== ТЕХНОЛОГИИ ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+        }
+        .tech-card {
+            background: var(--light);
+            padding: 20px 10px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid #ddd;
+            transition: var(--transition);
+            cursor: default;
+        }
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .tech-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .tech-card span {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        /* ===== ДОСТИЖЕНИЯ ===== */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .achievement-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .achievement-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .achievement-card h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .achievement-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== ОБЩИЙ СТИЛЬ ===== */
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #4834d4;
+            --secondary: #fd79a8;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --text: #2d3436;
+            --text-light: #636e72;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+            --border-radius: 20px;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* ===== НАВИГАЦИЯ ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s ease;
+        }
+        body.dark-theme .navbar {
+            background: rgba(18, 18, 30, 0.95);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-menu a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: var(--transition);
+            padding: 5px 0;
+            border-bottom: 2px solid transparent;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: white;
+            border-bottom-color: var(--primary);
+        }
+
+        .burger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .burger span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            transition: var(--transition);
+        }
+
+        .burger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+        .burger.active span:nth-child(2) {
+            opacity: 0;
+        }
+        .burger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ===== СЕКЦИИ ===== */
+        .section {
+            padding: 100px 0 80px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-alt {
+            background: white;
+            transition: background 0.3s ease;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 40px;
+            position: relative;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+        }
+
+        /* ===== 1 БЛОК: О СЕБЕ ===== */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        .about-avatar {
+            text-align: center;
+        }
+
+        .avatar-placeholder {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: var(--dark);
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        .about-text h3 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--dark);
+            transition: color 0.3s ease;
+        }
+
+        .about-text p {
+            margin-bottom: 10px;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        .facts-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .fact-item {
+            background: var(--light);
+            padding: 12px 18px;
+            border-radius: 12px;
+            border-left: 3px solid var(--primary);
+            font-size: 0.95rem;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* ===== 2 БЛОК: ЦЕЛИ ===== */
+        .goal-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .goal-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .goal-content p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .goal-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .step {
+            background: var(--light);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .step-num {
+            display: inline-block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            opacity: 0.3;
+            margin-bottom: 10px;
+        }
+
+        .step p {
+            font-size: 1rem;
+            color: var(--text);
+            transition: color 0.3s ease;
+        }
+
+        /* ===== 3 БЛОК: ИСТОРИЯ ===== */
+        .story-timeline {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .story-item {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 30px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        .story-item:last-child {
+            border-bottom: none;
+        }
+
+        .story-year {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        .story-text h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .story-text p {
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        /* ===== 4 БЛОК: МЕНТОР ===== */
+        .mentor-card {
+            display: grid;
+            grid-template-columns: 100px 1fr;
+            gap: 40px;
+            background: var(--light);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease;
+        }
+
+        .mentor-avatar {
+            font-size: 4rem;
+            text-align: center;
+        }
+
+        .mentor-info h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+            transition: color 0.3s ease;
+        }
+
+        .mentor-role {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .mentor-info p {
+            color: var(--text-light);
+            line-height: 1.8;
+            transition: color 0.3s ease;
+        }
+
+        .mentor-quote {
+            background: var(--dark);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            font-style: italic;
+            position: relative;
+        }
+
+        .mentor-quote::before {
+            content: '"';
+            font-size: 3rem;
+            color: var(--primary);
+            position: absolute;
+            top: -10px;
+            left: 15px;
+        }
+
+        /* ===== 5 БЛОК: ПРОГРЕСС ===== */
+        .progress-wrapper {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 30px;
+            align-items: stretch;
+            margin-bottom: 40px;
+        }
+
+        .progress-point {
+            background: var(--light);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease;
+        }
+
+        .point-label {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .point-date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .point-desc {
+            color: var(--text);
+            line-height: 1.6;
+            transition: color 0.3s ease;
+        }
+
+        .point-b {
+            border: 2px solid var(--primary);
+        }
+
+        .progress-line {
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+            position: relative;
+        }
+
+        .progress-line::after {
+            content: '⬇';
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .progress-skills {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .progress-skills h4 {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            transition: color 0.3s ease;
+        }
+
+        .skill-circle-grid {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .skill-item {
+            text-align: center;
+        }
+
+        .skill-item span {
+            display: block;
+            margin-top: 5px;
+            font-weight: 500;
+        }
+
+        /* ===== 6 БЛОК: ХОББИ ===== */
+        .hobbies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+        }
+
+        .hobby-card {
+            background: var(--light);
+            padding: 30px 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .hobby-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+        }
+
+        .hobby-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .hobby-card h4 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .hobby-card p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            transition: color 0.3s ease;
+        }
+
+        /* ===== 7 БЛОК: МОИ РАБОТЫ ===== */
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .work-card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+            cursor: pointer;
+        }
+
+        .work-card:hover {
+            transform: rotateY(5deg) rotateX(5deg) scale(1.02);
+            box-shadow: 0 15px 40px rgba(108, 92, 231, 0.25);
+        }
+
+        .work-img {
+            height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+        }
+
+        .work-info {
+            padding: 20px;
+        }
+
+        .work-info h4 {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+            transition: color 0.3s ease;
+        }
+
+        .work-info p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .work-link {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .work-link:hover {
+            color: var(--primary-dark);
+            gap: 12px;
+        }
+
+        /* ===== 8 БЛОК: GITHUB ===== */
+        .github-card {
+            max-width: 500px;
+            margin: 0 auto;
+            text-align: center;
+            background: var(--light);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            transition: background 0.3s ease;
+        }
+
+        .github-icon {
+            font-size: 4rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .github-card h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            transition: color 0.3s ease;
+        }
+
+        .github-card p {
+            color: var(--text-light);
+            margin-bottom: 25px;
+            transition: color 0.3s ease;
+        }
+
+        .github-btn {
+            display: inline-block;
+            background: var(--dark);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .github-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(108, 92, 231, 0.3);
+        }
+
+        .github-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .github-stats .stat {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .github-stats .stat span {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        /* ===== НОВЫЙ БЛОК: ТЕХНОЛОГИИ ===== */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 20px;
+        }
+        .tech-card {
+            background: var(--light);
+            padding: 20px 10px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid #ddd;
+            transition: var(--transition);
+            cursor: default;
+        }
+        .tech-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .tech-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .tech-card span {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+        }
+        .tech-card small {
+            display: block;
+            color: var(--text-light);
+            font-size: 0.7rem;
+        }
+
+        /* ===== НОВЫЙ БЛОК: ДОСТИЖЕНИЯ ===== */
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .achievement-card {
+            background: var(--light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-left: 4px solid var(--primary);
+            transition: var(--transition);
+        }
+        .achievement-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .achievement-card i {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        .achievement-card h4 {
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        .achievement-card p {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* ===== КОНТАКТЫ ===== */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .contact-info h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        .contact-info p {
+            color: var(--text-light);
+            margin-bottom: 10px;
+        }
+        .contact-info i {
+            color: var(--primary);
+            width: 24px;
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 12px 16px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-size: 1rem;
+            background: var(--light);
+            color: var(--text);
+            transition: border 0.3s;
+        }
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        .contact-form textarea {
+            height: 120px;
+            resize: vertical;
+        }
+        .contact-form .btn-submit {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .contact-form .btn-submit:hover {
+            background: var(--primary-dark);
+            transform: scale(1.02);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: rgba(255,255,255,0.6);
+            padding: 30px 0;
+            text-align: center;
+        }
+
+        footer .container p {
+            margin-bottom: 5px;
+        }
+
+        footer .footer-small {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* ===== АДАПТИВНОСТЬ ===== */
+        @media (max-width: 992px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .about-avatar {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .facts-list {
+                grid-template-columns: 1fr;
+            }
+            .mentor-card {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .goal-steps {
+                grid-template-columns: 1fr;
+            }
+            .story-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .skill-circle-grid {
+                gap: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: rgba(26, 26, 46, 0.98);
+                flex-direction: column;
+                padding: 20px;
+                gap: 10px;
+            }
+            .nav-menu.open {
+                display: flex;
+            }
+            .burger {
+                display: flex;
+            }
+            .section {
+                padding: 80px 0 60px;
+            }
+            .section-title {
+                font-size: 2rem;
+            }
+            .progress-wrapper {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .progress-line {
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, var(--primary), var(--secondary));
+            }
+            .progress-line::after {
+                content: '➡';
+                bottom: auto;
+                right: -20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .github-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .works-grid {
+                grid-template-columns: 1fr;
+            }
+            .theme-toggle {
+                bottom: 80px;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                right: 15px;
+            }
+            .scroll-top {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                right: 15px;
+                bottom: 25px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+            .tech-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .avatar-placeholder {
+                width: 150px;
+                height: 150px;
+                font-size: 3.5rem;
+            }
+            .section-title {
+                font-size: 1.6rem;
+            }
+            .mentor-quote {
+                font-size: 0.9rem;
+            }
+            .nav-brand {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== ПРЕЛОАДЕР ===== -->
+    <div id="preloader">
+        <div class="loader-spinner"></div>
+        <div class="loader-text">Загрузка портфолио...</div>
+    </div>
+
+    <!-- ===== КНОПКИ ===== -->
+    <button class="theme-toggle" id="themeToggle" title="Переключить тему">🌙</button>
+    <button class="scroll-top" id="scrollTop" title="Наверх">↑</button>
+
+    <!-- ===== НАВИГАЦИЯ ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <span class="logo">👨‍💻</span>
+                <span class="brand-name">Максим</span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#about" class="active">О себе</a></li>
+                <li><a href="#goal">Цель</a></li>
+                <li><a href="#story">История</a></li>
+                <li><a href="#mentor">Ментор</a></li>
+                <li><a href="#progress">Прогресс</a></li>
+                <li><a href="#hobbies">Хобби</a></li>
+                <li><a href="#works">Работы</a></li>
+                <li><a href="#technologies">Технологии</a></li>
+                <li><a href="#achievements">Достижения</a></li>
+                <li><a href="#github">GitHub</a></li>
+                <li><a href="#contact">Контакты</a></li>
+            </ul>
+            <button class="burger" id="burgerBtn">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ===== БЛОК 1: О СЕБЕ ===== -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">О себе</h2>
+            <div class="about-grid">
+                <div class="about-avatar">
+                    <div class="avatar-placeholder">👤</div>
+                    <div class="social-links">
+                        <a href="https://github.com/Maksim7274/Maksim" target="_blank"><i class="fab fa-github"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                    </div>
+                </div>
+                <div class="about-text">
+                    <h3>Привет! Я Максим</h3>
+                    <p><strong>Возраст:</strong> Мне 15 Лет</p>
+                    <p><strong>Город:</strong> Тараз</p>
+                    <p>Я учусь в <strong>CapEducation</strong> на курсе веб-разработки. Создаю сайты, изучаю HTML, CSS и JavaScript.</p>
+                    <div class="facts-list">
+                        <div class="fact-item">🚀 Люблю изучать новое</div>
+                        <div class="fact-item">💻 Мечтаю стать fullstack-разработчиком</div>
+                        <div class="fact-item">🎯 Учусь каждый день</div>
+                        <div class="fact-item">📚 Читаю книги по IT</div>
+                        <div class="fact-item">🏆 6 проектов в портфолио</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 2: ЦЕЛИ ===== -->
+    <section id="goal" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Я мечтаю стать айти Разработчиком по сайтам а также Вступить в ряды КиберБезопасности</h2>
+            <div class="goal-content">
+                <div class="goal-icon">🎯</div>
+                <p>Моя цель — стать востребованным <strong>frontend-разработчиком</strong> и создавать крутые проекты, которые помогают людям. Я пришёл в программирование, потому что хочу строить цифровое будущее и делать мир удобнее через технологии.</p>
+                <div class="goal-steps">
+                    <div class="step">
+                        <span class="step-num">01</span>
+                        <p>Изучить HTML, CSS, JS</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">02</span>
+                        <p>Освоить React и Node.js</p>
+                    </div>
+                    <div class="step">
+                        <span class="step-num">03</span>
+                        <p>Работать в IT-компании</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 3: ИСТОРИЯ ===== -->
+    <section id="story" class="section">
+        <div class="container">
+            <h2 class="section-title">Мой путь становление</h2>
+            <div class="story-timeline">
+                <div class="story-item">
+                    <div class="story-year">2025</div>
+                    <div class="story-text">
+                        <h4>Начало моего пути С школы Ниша нас туда приглосили рассказали что за школа capeducation Чем они занимаются</h4>
+                        <p>Заинтересовался тем, как работают сайты, и решил попробовать создать свой первый HTML-файл.</p>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-year">2025</div>
+                    <div class="story-text">
+                        <h4>Обучение в CapEducation</h4>
+                        <p>Поступил на курс веб-разработки, начал изучать HTML, CSS, JavaScript и создавать свои первые проекты.</p>
+                    </div>
+                </div>
+                <div class="story-item">
+                    <div class="story-year">Сейчас</div>
+                    <div class="story-text">
+                        <h4>Активная разработка</h4>
+                        <p>Создаю сайты, пишу код, верстаю макеты и планирую дальнейшее развитие в IT.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 4: МЕНТОР ===== -->
+    <section id="mentor" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Мой ментор</h2>
+            <div class="mentor-card">
+                <div class="mentor-avatar">👨🏻‍💼💻</div>
+                <div class="mentor-info">
+                    <h3>Аскар Тичер</h3>
+                    <p class="mentor-role">Преподаватель в CapEducation</p>
+                    <p>Мой ментор — профессиональный разработчик, который помогает мне разбираться в сложных темах, даёт советы по коду и вдохновляет на новые свершения. Благодаря ему я научился писать чистый код, работать с Git и верстать адаптивные сайты.</p>                
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 5: ПРОГРЕСС ===== -->
+    <section id="progress" class="section">
+        <div class="container">
+            <h2 class="section-title">Точка А → Точка Б</h2>
+            <div class="progress-wrapper">
+                <div class="progress-point">
+                    <div class="point-label">Точка А</div>
+                    <div class="point-date">Начало обучения</div>
+                    <div class="point-desc">Не знал HTML, CSS, JS. Думал, что программирование — это сложно и не для меня.</div>
+                </div>
+                <div class="progress-line"></div>
+                <div class="progress-point point-b">
+                    <div class="point-label">Точка Б</div>
+                    <div class="point-date">Сейчас</div>
+                    <div class="point-desc">Верстаю сайты, пишу скрипты, понимаю логику программирования и готовлюсь к изучению React.</div>
+                </div>
+            </div>
+            <div class="progress-skills">
+                <h4>Мои навыки</h4>
+                <div class="skill-circle-grid">
+                    <div class="skill-item">
+                        <div class="circle-chart" data-percent="85">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg" cx="50" cy="50" r="40" />
+                                <circle class="progress" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="calc(251.2 - 85/100 * 251.2)" />
+                            </svg>
+                            <div class="label">85%</div>
+                        </div>
+                        <span>HTML</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="circle-chart" data-percent="75">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg" cx="50" cy="50" r="40" />
+                                <circle class="progress" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="calc(251.2 - 75/100 * 251.2)" />
+                            </svg>
+                            <div class="label">75%</div>
+                        </div>
+                        <span>CSS</span>
+                    </div>
+                    <div class="skill-item">
+                        <div class="circle-chart" data-percent="50">
+                            <svg viewBox="0 0 100 100">
+                                <circle class="bg" cx="50" cy="50" r="40" />
+                                <circle class="progress" cx="50" cy="50" r="40" stroke-dasharray="251.2" stroke-dashoffset="calc(251.2 - 50/100 * 251.2)" />
+                            </svg>
+                            <div class="label">50%</div>
+                        </div>
+                        <span>JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 6: ХОББИ ===== -->
+    <section id="hobbies" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Хобби и интересы</h2>
+            <div class="hobbies-grid">
+                <div class="hobby-card">
+                    <div class="hobby-icon">🎮</div>
+                    <h4>Игры</h4>
+                    <p>Люблю играть в стратегии и RPG, изучаю игровой дизайн и механики.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">📚</div>
+                    <h4>Чтение (AI)</h4>
+                    <p>Читаю книги по искусственному интеллекту, машинному обучению и нейросетям. Интересуюсь тем, как AI меняет мир.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🔒</div>
+                    <h4>Кибербезопасность</h4>
+                    <p>Изучаю основы защиты данных, этичный хакинг, безопасность веб-приложений и современные угрозы в сети.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🏊</div>
+                    <h4>Плавание</h4>
+                    <p>Обожаю плавать — это помогает держать тело в тонусе и очищает мысли. Люблю бассейн и открытую воду.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🧠</div>
+                    <h4>Саморазвитие</h4>
+                    <p>Постоянно учусь новому: смотрю лекции, слушаю подкасты, прохожу онлайн-курсы по IT и психологии.</p>
+                </div>
+                <div class="hobby-card">
+                    <div class="hobby-icon">🌍</div>
+                    <h4>Путешествия</h4>
+                    <p>Люблю исследовать новые места, знакомиться с культурами и находить вдохновение в поездках.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 7: МОИ ЛУЧШИЕ РАБОТЫ ===== -->
+    <section id="works" class="section">
+        <div class="container">
+            <h2 class="section-title">Мои лучшие работы</h2>
+            <div class="works-grid">
+                <!-- РАБОТА 1: Atomic Heart -->
+                <div class="work-card" onclick="window.open('https://github.com/Maksim7274/Maksim/blob/main/atomic', '_blank')">
+                    <div class="work-img">☢️</div>
+                    <div class="work-info">
+                        <h4>Atomic Heart — Сайт по мотивам игры</h4>
+                        <p>Сайт, посвящённый вселенной Atomic Heart. Стилизован под ретро-футуризм с элементами советской эстетики. Реализован в виде терминала с атмосферными эффектами.</p>
+                        <span class="work-link">Открыть работу →</span>
+                    </div>
+                </div>
+
+                <!-- РАБОТА 2: Fazbear Hunt (с предупреждением о матах) -->
+                <div class="work-card" onclick="openFazbear()">
+                    <div class="work-img">🐻</div>
+                    <div class="work-info">
+                        <h4>Fazbear Hunt — Хоррор-режим по FNAF</h4>
+                        <p>Фанатский сайт по режиму Fazbear Hunt в Garry's Mod. Содержит описание всех аниматроников, механик и лора. Внимание: на сайте присутствует нецензурная лексика (мат) — открывайте на свой страх и риск.</p>
+                        <span class="work-link">⚠️ Открыть (с матами) →</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== НОВЫЙ БЛОК: ТЕХНОЛОГИИ ===== -->
+    <section id="technologies" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Мои технологии</h2>
+            <div class="tech-grid">
+                <div class="tech-card"><i class="fab fa-html5"></i><span>HTML5</span><small>Семантическая вёрстка</small></div>
+                <div class="tech-card"><i class="fab fa-css3-alt"></i><span>CSS3</span><small>Flexbox, Grid, Адаптив</small></div>
+                <div class="tech-card"><i class="fab fa-js"></i><span>JavaScript</span><small>ES6+, DOM, Fetch</small></div>
+                <div class="tech-card"><i class="fab fa-react"></i><span>React (учусь)</span><small>Компоненты, хуки</small></div>
+                <div class="tech-card"><i class="fab fa-node"></i><span>Node.js</span><small>Express, сервер</small></div>
+                <div class="tech-card"><i class="fab fa-git-alt"></i><span>Git</span><small>GitHub, ветвление</small></div>
+                <div class="tech-card"><i class="fab fa-figma"></i><span>Figma</span><small>Макеты, дизайн</small></div>
+                <div class="tech-card"><i class="fas fa-code"></i><span>VS Code</span><small>Среда разработки</small></div>
+                <div class="tech-card"><i class="fas fa-database"></i><span>SQL</span><small>Запросы, базы данных</small></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== НОВЫЙ БЛОК: ДОСТИЖЕНИЯ ===== -->
+    <section id="achievements" class="section">
+        <div class="container">
+            <h2 class="section-title">Мои достижения</h2>
+            <div class="achievement-grid">
+                <div class="achievement-card">
+                    <i class="fas fa-certificate"></i>
+                    <h4>Курс «Веб-разработка»</h4>
+                    <p>Успешно завершил курс в CapEducation, создал 5+ проектов.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-code"></i>
+                    <h4>Сайт Atomic Heart</h4>
+                    <p>Разработал полноценный сайт-терминал по мотивам игры Atomic Heart.</p>
+                </div>
+                <div class="achievement-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h4>Основы кибербезопасности</h4>
+                    <p>Изучил базовые принципы защиты данных и этичного хакинга.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== БЛОК 8: GITHUB ===== -->
+    <section id="github" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">GitHub</h2>
+            <div class="github-card">
+                <div class="github-icon"><i class="fab fa-github"></i></div>
+                <h3>Мой профиль</h3>
+                <p>Все мои проекты, включая эти работы, доступны в моём репозитории.</p>
+                <a href="https://github.com/Maksim7274/Maksim" target="_blank" class="github-btn">
+                    <i class="fab fa-github"></i> Перейти на GitHub
+                </a>
+                <div class="github-stats">
+                    <div class="stat"><span id="repoCount">6</span> репозиториев</div>
+                    <div class="stat"><span id="commitCount">47</span> коммитов</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== КОНТАКТЫ ===== -->
+    <section id="contact" class="section">
+        <div class="container">
+            <h2 class="section-title">Контакты</h2>
+            <div class="contact-grid">
+                <div class="contact-info">
+                    <h3>Свяжитесь со мной</h3>
+                    <p><i class="fas fa-envelope"></i> noplmaksim@gmail.com</p>
+                    <p><i class="fas fa-phone"></i> +7 (700) 123-45-67</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Казахстан</p>
+                    <p style="margin-top: 15px;"><i class="fab fa-telegram"></i> @zebra399</p>
+                </div>
+                <div class="contact-form">
+                    <input type="text" placeholder="Ваше имя">
+                    <input type="email" placeholder="Ваш Email">
+                    <textarea placeholder="Ваше сообщение"></textarea>
+                    <button class="btn-submit" onclick="alert('Сообщение отправлено (демо)')">Отправить</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="container">
+            <p>© <span id="currentYear">2026</span> Максим · Портфолио</p>
+            <p class="footer-small">Сделано с ❤️ в CapEducation</p>
+        </div>
+    </footer>
+
+    <!-- ===== МУЗЫКА ===== -->
+    <audio id="bgMusic" loop preload="auto" volume="0.15">
+        <source src="https://cdn.pixabay.com/download/audio/2022/02/16/audio_b71c5f4a2a.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        // ===== МУЗЫКА =====
+        const audio = document.getElementById('bgMusic');
+        let musicStarted = false;
+        function startMusic() {
+            if (!musicStarted) {
+                audio.play().catch(() => {});
+                musicStarted = true;
+                document.removeEventListener('click', startMusic);
+                document.removeEventListener('keydown', startMusic);
+            }
+        }
+        document.addEventListener('click', startMusic);
+        document.addEventListener('keydown', startMusic);
+
+        // ===== ПРЕЛОАДЕР =====
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 1500);
+        });
+
+        // ===== БУРГЕР-МЕНЮ =====
+        const burgerBtn = document.getElementById('burgerBtn');
+        const navMenu = document.getElementById('navMenu');
+        burgerBtn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            navMenu.classList.toggle('open');
+        });
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                burgerBtn.classList.remove('active');
+                navMenu.classList.remove('open');
+            });
+        });
+
+        // ===== АКТИВНАЯ ССЫЛКА =====
+        const sections = document.querySelectorAll('.section');
+        const navLinks = document.querySelectorAll('.nav-menu a');
+        window.addEventListener('scroll', function() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // ===== КНОПКА НАВЕРХ =====
+        const scrollTopBtn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== ТЁМНАЯ ТЕМА =====
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-theme');
+            if (document.body.classList.contains('dark-theme')) {
+                this.textContent = '☀️';
+            } else {
+                this.textContent = '🌙';
+            }
+        });
+
+        // ===== ПРЕДУПРЕЖДЕНИЕ ДЛЯ FAZBEAR HUNT =====
+        function openFazbear() {
+            if (confirm('⚠️ ВНИМАНИЕ!\n\nНа этом сайте присутствует нецензурная лексика (мат).\nВы уверены, что хотите открыть его?')) {
+                window.open('https://github.com/Maksim7274/Maksim/blob/main/Фазбер%20хант', '_blank');
+            }
+        }
+
+        // ===== ДИНАМИЧЕСКИЙ ГОД В ФУТЕРЕ =====
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        // ===== АНИМАЦИЯ КРУГОВЫХ ДИАГРАММ =====
+        function animateCircles() {
+            const charts = document.querySelectorAll('.circle-chart');
+            charts.forEach(chart => {
+                const percent = parseFloat(chart.dataset.percent);
+                const progress = chart.querySelector('.progress');
+                const circumference = 2 * Math.PI * 40;
+                progress.style.strokeDasharray = circumference;
+                progress.style.strokeDashoffset = circumference - (percent / 100) * circumference;
+            });
+        }
+        setTimeout(animateCircles, 500);
+
+        console.log('🚀 Портфолио обновлено!');
+        console.log('📁 Добавлены разделы: Технологии и Достижения');
+        console.log('🔗 GitHub: https://github.com/Maksim7274/Maksim');
+    </script>
+</body>
+</html>
