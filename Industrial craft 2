@@ -871,6 +871,12 @@ on=true;
     console.log('⚡ IndustrialCraft 2 — Энциклопедия мода');
     console.log('🔧 Добро пожаловать в мир передовых технологий!');
     console.log('📦 Все данные актуальны для версии IC2 2.8+');
+<audio id="bgMusic" loop>
+    <source src="audio1 (1).mp3" type="audio/mpeg">
+</audio>
+    document.addEventListener('click', function() {
+        document.getElementById('bgMusic').play();
+    }, { once: true });
 </script>
 
 </body>
