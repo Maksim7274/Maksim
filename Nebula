@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nebula Creative — Агентство цифрового превосходства</title>
+  <style>
+    /* ===== БАЗОВЫЕ ПЕРЕМЕННЫЕ ===== */
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --glass: rgba(18, 18, 30, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.06);
+      --text: #e8e8f0;
+      --text-secondary: #a0a0b8;
+      --accent: #a855f7;
+      --accent2: #6366f1;
+      --accent-glow: rgba(168, 85, 247, 0.5);
+      --gradient-1: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
+      --gradient-2: linear-gradient(135deg, #f59e0b, #ef4444, #ec4899);
+      --radius: 20px;
+      --radius-sm: 12px;
+      --transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.6);
+      --shadow-glow: 0 0 80px rgba(168, 85, 247, 0.25);
+    }
+
+    .light-mode {
+      --bg: #f5f5fa;
+      --surface: #ffffff;
+      --glass: rgba(255, 255, 255, 0.75);
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --text: #1a1a2e;
+      --text-secondary: #5a5a70;
+      --accent: #7c3aed;
+      --accent2: #4f46e5;
+      --accent-glow: rgba(124, 58, 237, 0.3);
+      --shadow-lg: 0 30px 60px rgba(0, 0, 0, 0.12);
+      --shadow-glow: 0 0 60px rgba(124, 58, 237, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent) var(--bg);
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--accent);
+      border-radius: 10px;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background var(--transition), color var(--transition);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      /* убираем дефолтный курсор, если кастомный не отключён */
+      cursor: default;
+    }
+
+    /* ============ ОТКЛЮЧЕНИЕ АНИМАЦИЙ ДЛЯ ПОЛЬЗОВАТЕЛЕЙ ============ */
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      #particlesCanvas {
+        display: none !important;
+      }
+    }
+
+    /* ============ КАСТОМНЫЙ КУРСОР (только для десктопов) ============ */
+    .cursor {
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99999;
+      mix-blend-mode: difference;
+      transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease, background 0.3s ease;
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 25px var(--accent-glow);
+      display: none; /* показываем только если инициализирован */
+    }
+    .cursor-follower {
+      width: 40px;
+      height: 40px;
+      border: 2px solid rgba(168, 85, 247, 0.5);
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 99998;
+      transform: translate(-50%, -50%);
+      transition: all 0.08s ease-out;
+      backdrop-filter: blur(2px);
+      display: none;
+    }
+    .cursor.hover {
+      width: 50px;
+      height: 50px;
+      background: #fff;
+      mix-blend-mode: normal;
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+    }
+    .cursor-follower.hover {
+      width: 70px;
+      height: 70px;
+      border-color: #fff;
+      backdrop-filter: blur(6px);
+    }
+
+    /* когда курсор активен, скрываем системный */
+    body.custom-cursor-active {
+      cursor: none;
+    }
+    body.custom-cursor-active a,
+    body.custom-cursor-active button,
+    body.custom-cursor-active input,
+    body.custom-cursor-active textarea,
+    body.custom-cursor-active .service-card,
+    body.custom-cursor-active .portfolio-item,
+    body.custom-cursor-active .testimonial-card,
+    body.custom-cursor-active .hamburger {
+      cursor: none;
+    }
+
+    /* ============ ПРЕЛОАДЕР ============ */
+    .preloader {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 100000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
+    }
+    .preloader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .preloader-ring {
+      width: 50px;
+      height: 50px;
+      border: 3px solid transparent;
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      position: relative;
+    }
+    .preloader-ring::before {
+      content: '';
+      position: absolute;
+      inset: 6px;
+      border: 3px solid transparent;
+      border-top-color: var(--accent2);
+      border-radius: 50%;
+      animation: spin 1.4s linear infinite reverse;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* ============ НАВИГАЦИЯ ============ */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 14px 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.3s, box-shadow 0.3s, padding 0.3s;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: var(--glass);
+      border-bottom: 1px solid var(--glass-border);
+      will-change: background, padding;
+    }
+    nav.scrolled {
+      padding: 10px 30px;
+      box-shadow: var(--shadow-lg);
+      background: var(--glass);
+    }
+    .nav-logo {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 24px;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+      position: relative;
+      padding: 4px 0;
+      white-space: nowrap;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--gradient-1);
+      border-radius: 2px;
+      transition: width 0.25s;
+    }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+    .theme-toggle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      flex-shrink: 0;
+    }
+    .theme-toggle-btn:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 25px var(--accent-glow);
+      transform: rotate(30deg);
+    }
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 8px;
+    }
+    .hamburger span {
+      width: 26px;
+      height: 3px;
+      background: var(--text);
+      border-radius: 3px;
+      transition: all 0.3s;
+    }
+    .hamburger.active span:nth-child(1) {
+      transform: rotate(45deg) translate(5px, 6px);
+    }
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+      transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* ============ ГЕРОЙ ============ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      padding: 100px 24px 70px;
+      overflow: hidden;
+    }
+    #particlesCanvas {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 8px 20px;
+      border-radius: 50px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(15px);
+      font-size: 0.8rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 540px;
+      margin: 0 auto 32px;
+      line-height: 1.6;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      border: none;
+      transition: all 0.25s;
+      letter-spacing: 0.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--gradient-1);
+      color: #fff;
+      box-shadow: 0 8px 24px rgba(168, 85, 247, 0.4);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    /* ============ СЕКЦИИ ============ */
+    section {
+      padding: 80px 24px;
+      position: relative;
+    }
+    .section-label {
+      text-align: center;
+      font-size: 0.8rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 3.8vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 50px;
+      line-height: 1.2;
+    }
+    .section-title span {
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* ============ СЕТКИ ============ */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .service-card {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      backdrop-filter: blur(12px);
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+    .service-card:hover::before {
+      opacity: 0.5;
+    }
+    .service-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(168, 85, 247, 0.4);
+      box-shadow: var(--shadow-glow), var(--shadow-lg);
+    }
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--gradient-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+    .service-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+    .service-card p {
+      color: var(--text-secondary);
+      position: relative;
+      z-index: 1;
+      font-size: 0.9rem;
+    }
+
+    .stats-container {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+    .stat-label {
+      color: var(--text-secondary);
+      margin-top: 6px;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .portfolio-item {
+      border-radius: var(--radius);
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4/3;
+      border: 1px solid var(--glass-border);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .portfolio-item:hover {
+      transform: scale(1.02);
+      box-shadow: var(--shadow-glow), var(--shadow-lg);
+      border-color: rgba(168, 85, 247, 0.5);
+    }
+    .img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      background: linear-gradient(135deg, #1e1b4b, #312e81);
+    }
+    .portfolio-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(3px);
+    }
+    .portfolio-item:hover .portfolio-overlay {
+      opacity: 1;
+    }
+
+    .testimonials-track {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 15px 0;
+      max-width: 1100px;
+      margin: 0 auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      cursor: grab;
+    }
+    .testimonials-track::-webkit-scrollbar {
+      display: none;
+    }
+    .testimonial-card {
+      min-width: 300px;
+      scroll-snap-align: start;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      backdrop-filter: blur(12px);
+      flex-shrink: 0;
+    }
+    .stars {
+      color: #f59e0b;
+      margin-bottom: 10px;
+    }
+
+    .contact-wrapper {
+      max-width: 620px;
+      margin: 0 auto;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 40px 30px;
+      backdrop-filter: blur(15px);
+    }
+    .form-group {
+      margin-bottom: 16px;
+    }
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--glass-border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+      font-family: inherit;
+      outline: none;
+      resize: vertical;
+    }
+    .submit-btn {
+      width: 100%;
+      padding: 15px;
+      border-radius: 50px;
+      background: var(--gradient-1);
+      color: #fff;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      letter-spacing: 1px;
+      transition: all 0.3s;
+    }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--gradient-1);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      z-index: 999;
+      box-shadow: 0 8px 22px rgba(168, 85, 247, 0.5);
+      transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+      opacity: 0;
+      visibility: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    footer {
+      text-align: center;
+      padding: 32px;
+      border-top: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* ============ МЕДИА-ЗАПРОСЫ ============ */
+    @media (max-width: 768px) {
+      nav {
+        padding: 12px 16px;
+      }
+      .nav-links {
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s;
+        z-index: 999;
+      }
+      .nav-links.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .nav-links a {
+        font-size: 1.4rem;
+      }
+      .hamburger {
+        display: flex;
+      }
+      .hero {
+        padding: 90px 16px 50px;
+      }
+      section {
+        padding: 60px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 2.2rem;
+      }
+      .btn {
+        padding: 12px 22px;
+        font-size: 0.9rem;
+      }
+      .stat-number {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Прелоадер -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-ring"></div>
+  </div>
+
+  <!-- Кастомный курсор (будет скрыт на тач-устройствах) -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+
+  <!-- Навигация -->
+  <nav id="navbar">
+    <a href="#" class="nav-logo">NEBULA</a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero" onclick="closeMenu()">Главная</a></li>
+      <li><a href="#services" onclick="closeMenu()">Услуги</a></li>
+      <li><a href="#about" onclick="closeMenu()">О нас</a></li>
+      <li><a href="#portfolio" onclick="closeMenu()">Работы</a></li>
+      <li><a href="#testimonials" onclick="closeMenu()">Отзывы</a></li>
+      <li><a href="#contact" onclick="closeMenu()">Контакты</a></li>
+    </ul>
+    <button class="theme-toggle-btn" id="themeToggle" aria-label="Переключить тему">🌙</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </nav>
+
+  <!-- Герой -->
+  <section class="hero" id="hero">
+    <canvas id="particlesCanvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-badge">🚀 Цифровое агентство №1</div>
+      <h1>Создаём будущее уже сегодня</h1>
+      <p>Мы превращаем смелые идеи в цифровые продукты, которые захватывают воображение и приносят реальные результаты.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn btn-primary">✨ Начать проект</a>
+        <a href="#portfolio" class="btn btn-outline">📂 Смотреть работы</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Услуги -->
+  <section id="services">
+    <div class="section-label">Что мы предлагаем</div>
+    <h2 class="section-title">Наши <span>услуги</span></h2>
+    <div class="services-grid">
+      <div class="service-card"><div class="service-icon">🎨</div><h3>UI/UX Дизайн</h3><p>Интерфейсы, в которые влюбляются. Исследования, прототипы, визуал.</p></div>
+      <div class="service-card"><div class="service-icon">⚡</div><h3>Веб-разработка</h3><p>Молниеносные сайты на React, Next.js, Node.js.</p></div>
+      <div class="service-card"><div class="service-icon">📱</div><h3>Мобильные приложения</h3><p>Нативные и кроссплатформенные приложения для iOS и Android.</p></div>
+      <div class="service-card"><div class="service-icon">🚀</div><h3>SEO & Маркетинг</h3><p>Продвижение в топ поиска и соцсетей. Контент, реклама.</p></div>
+      <div class="service-card"><div class="service-icon">🤖</div><h3>AI Решения</h3><p>Чат-боты, рекомендации, автоматизация на базе ИИ.</p></div>
+      <div class="service-card"><div class="service-icon">🛡️</div><h3>Кибербезопасность</h3><p>Аудит, пентестинг, защита данных.</p></div>
+    </div>
+  </section>
+
+  <!-- Статистика -->
+  <section id="about">
+    <div class="section-label">Кто мы</div>
+    <h2 class="section-title">О нашем <span>агентстве</span></h2>
+    <div class="stats-container" id="statsContainer">
+      <div class="stat-item"><div class="stat-number" data-target="250">0</div><div class="stat-label">Проектов</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="50">0</div><div class="stat-label">Сотрудников</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="8">0</div><div class="stat-label">Лет опыта</div></div>
+      <div class="stat-item"><div class="stat-number" data-target="99">0</div><div class="stat-label">% довольных</div></div>
+    </div>
+  </section>
+
+  <!-- Портфолио -->
+  <section id="portfolio">
+    <div class="section-label">Наши работы</div>
+    <h2 class="section-title">Избранное <span>портфолио</span></h2>
+    <div class="portfolio-grid">
+      <div class="portfolio-item"><div class="img-placeholder">🌌</div><div class="portfolio-overlay"><h4>Cosmic Dashboard</h4><span>Аналитика</span></div></div>
+      <div class="portfolio-item"><div class="img-placeholder">🛒</div><div class="portfolio-overlay"><h4>Luxe Commerce</h4><span>E-Commerce</span></div></div>
+      <div class="portfolio-item"><div class="img-placeholder">📊</div><div class="portfolio-overlay"><h4>FinFlow App</h4><span>Финтех</span></div></div>
+    </div>
+  </section>
+
+  <!-- Отзывы -->
+  <section id="testimonials">
+    <div class="section-label">Что говорят</div>
+    <h2 class="section-title">Отзывы <span>клиентов</span></h2>
+    <div class="testimonials-track" id="testimonialsTrack">
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p>Потрясающая работа! Сайт летает, дизайн – восторг.</p><div class="testimonial-author">Алексей М.</div></div>
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p>Приложение скачали 100k+ за месяц. Магия!</p><div class="testimonial-author">Екатерина В.</div></div>
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p>ROI вырос на 340%. Лучшее агентство.</p><div class="testimonial-author">Дмитрий С.</div></div>
+      <div class="testimonial-card"><div class="stars">★★★★★</div><p>AI-решение сократило расходы на 60%.</p><div class="testimonial-author">Ольга С.</div></div>
+    </div>
+  </section>
+
+  <!-- Контакты -->
+  <section id="contact">
+    <div class="section-label">Свяжитесь с нами</div>
+    <h2 class="section-title">Готовы к <span>сотрудничеству?</span></h2>
+    <div class="contact-wrapper">
+      <form id="contactForm">
+        <div class="form-group"><label>Имя</label><input type="text" placeholder="Иван Петров" required></div>
+        <div class="form-group"><label>Email</label><input type="email" placeholder="hello@example.com" required></div>
+        <div class="form-group"><label>Сообщение</label><textarea placeholder="Расскажите о проекте..." required></textarea></div>
+        <button type="submit" class="submit-btn">🚀 Отправить заявку</button>
+      </form>
+    </div>
+  </section>
+
+  <footer>© 2026 Nebula Creative. Сделано с 💜</footer>
+  <button class="back-to-top" id="backToTop" aria-label="Наверх">↑</button>
+
+  <script>
+    (function() {
+      // ============ ПРОИЗВОДИТЕЛЬНОСТЬ: ОПРЕДЕЛЕНИЕ УСТРОЙСТВА ============
+      const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isLowPower = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4; // меньше 4 ядер
+      const isSmallScreen = window.innerWidth < 768;
+
+      // ============ ПРЕЛОАДЕР ============
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          document.getElementById('preloader').classList.add('hidden');
+        }, 500);
+      });
+
+      // ============ КАСТОМНЫЙ КУРСОР (только десктоп) ============
+      const cursor = document.getElementById('cursor');
+      const cursorFollower = document.getElementById('cursorFollower');
+      let mouseX = 0, mouseY = 0, followerX = 0, followerY = 0;
+      let cursorActive = false;
+
+      if (!isTouchDevice && !prefersReducedMotion) {
+        cursor.style.display = 'block';
+        cursorFollower.style.display = 'block';
+        document.body.classList.add('custom-cursor-active');
+        cursorActive = true;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          cursor.style.left = mouseX + 'px';
+          cursor.style.top = mouseY + 'px';
+        });
+
+        function animateFollower() {
+          if (!cursorActive) return;
+          followerX += (mouseX - followerX) * 0.12;
+          followerY += (mouseY - followerY) * 0.12;
+          cursorFollower.style.left = followerX + 'px';
+          cursorFollower.style.top = followerY + 'px';
+          requestAnimationFrame(animateFollower);
+        }
+        animateFollower();
+
+        const hoverElements = document.querySelectorAll('a, button, .btn, .service-card, .portfolio-item, .testimonial-card, input, textarea, .hamburger');
+        hoverElements.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            cursor.classList.add('hover');
+            cursorFollower.classList.add('hover');
+          });
+          el.addEventListener('mouseleave', () => {
+            cursor.classList.remove('hover');
+            cursorFollower.classList.remove('hover');
+          });
+        });
+      } else {
+        // На тач-устройствах просто не показываем курсор
+        cursor.style.display = 'none';
+        cursorFollower.style.display = 'none';
+      }
+
+      // ============ ЧАСТИЦЫ CANVAS (оптимизировано) ============
+      const canvas = document.getElementById('particlesCanvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+      let animationId;
+      let particlesActive = !prefersReducedMotion && !isLowPower; // на слабых устройствах можно отключить
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      class Particle {
+        constructor() { this.reset(); }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = Math.random() * canvas.height;
+          this.size = Math.random() * 2 + 0.6;
+          this.speedX = (Math.random() - 0.5) * 0.4;
+          this.speedY = (Math.random() - 0.5) * 0.4;
+          this.opacity = Math.random() * 0.6 + 0.2;
+        }
+        update() {
+          this.x += this.speedX;
+          this.y += this.speedY;
+          if (this.x < -10) this.x = canvas.width + 10;
+          if (this.x > canvas.width + 10) this.x = -10;
+          if (this.y < -10) this.y = canvas.height + 10;
+          if (this.y > canvas.height + 10) this.y = -10;
+        }
+        draw() {
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fillStyle = `hsla(270, 80%, 65%, ${this.opacity})`;
+          ctx.fill();
+        }
+      }
+
+      function initParticles() {
+        if (!particlesActive) return;
+        const count = isSmallScreen ? 50 : Math.min(Math.floor(window.innerWidth * 0.08), 140);
+        particles = Array.from({ length: count }, () => new Particle());
+      }
+
+      function animateParticles() {
+        if (!particlesActive || document.hidden) {
+          animationId = requestAnimationFrame(animateParticles);
+          return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // линии только если экран не слишком маленький и не слабое устройство
+        if (!isSmallScreen && !isLowPower) {
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const dx = particles[i].x - particles[j].x;
+              const dy = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 100) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(168,85,247,${0.12 * (1 - dist/100)})`;
+                ctx.lineWidth = 0.5;
+                ctx.stroke();
+              }
+            }
+          }
+        }
+        particles.forEach(p => { p.update(); p.draw(); });
+        animationId = requestAnimationFrame(animateParticles);
+      }
+
+      if (particlesActive) {
+        initParticles();
+        animateParticles();
+        window.addEventListener('resize', () => {
+          resizeCanvas();
+          initParticles();
+        });
+        // пауза при неактивной вкладке
+        document.addEventListener('visibilitychange', () => {
+          if (!document.hidden && particlesActive) {
+            // возобновляем без пересоздания
+          }
+        });
+      } else {
+        canvas.style.display = 'none';
+      }
+
+      // ============ НАВИГАЦИЯ (throttle через rAF) ============
+      const navbar = document.getElementById('navbar');
+      let ticking = false;
+      window.addEventListener('scroll', () => {
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            if (window.scrollY > 40) {
+              navbar.classList.add('scrolled');
+            } else {
+              navbar.classList.remove('scrolled');
+            }
+            const backBtn = document.getElementById('backToTop');
+            if (window.scrollY > 500) {
+              backBtn.classList.add('visible');
+            } else {
+              backBtn.classList.remove('visible');
+            }
+            ticking = false;
+          });
+          ticking = true;
+        }
+      });
+
+      // ============ МОБИЛЬНОЕ МЕНЮ ============
+      window.toggleMenu = function() {
+        document.getElementById('navLinks').classList.toggle('active');
+        document.getElementById('hamburger').classList.toggle('active');
+      };
+      window.closeMenu = function() {
+        document.getElementById('navLinks').classList.remove('active');
+        document.getElementById('hamburger').classList.remove('active');
+      };
+
+      // ============ ТЕМА ============
+      const themeToggle = document.getElementById('themeToggle');
+      let isDark = true;
+      themeToggle.addEventListener('click', () => {
+        isDark = !isDark;
+        document.body.classList.toggle('light-mode', !isDark);
+        themeToggle.textContent = isDark ? '🌙' : '☀️';
+        localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      });
+      if (localStorage.getItem('theme') === 'light') {
+        document.body.classList.add('light-mode');
+        themeToggle.textContent = '☀️';
+        isDark = false;
+      }
+
+      // ============ СЧЁТЧИКИ (Intersection Observer) ============
+      const statsContainer = document.getElementById('statsContainer');
+      const statNumbers = document.querySelectorAll('.stat-number[data-target]');
+      let countersAnimated = false;
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !countersAnimated) {
+            countersAnimated = true;
+            statNumbers.forEach(el => {
+              const target = parseInt(el.getAttribute('data-target'));
+              const duration = 1800;
+              const startTime = performance.now();
+              function update(now) {
+                const progress = Math.min((now - startTime) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                el.textContent = Math.floor(eased * target) + (target === 99 ? '%' : '+');
+                if (progress < 1) requestAnimationFrame(update);
+              }
+              requestAnimationFrame(update);
+            });
+          }
+        });
+      }, { threshold: 0.2 });
+      if (statsContainer) observer.observe(statsContainer);
+
+      // ============ КНОПКА НАВЕРХ ============
+      document.getElementById('backToTop').addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      // ============ ФОРМА ============
+      document.getElementById('contactForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const btn = this.querySelector('.submit-btn');
+        btn.textContent = '✅ Отправлено!';
+        btn.style.background = 'linear-gradient(135deg, #22c55e, #10b981)';
+        setTimeout(() => {
+          btn.textContent = '🚀 Отправить заявку';
+          btn.style.background = '';
+          this.reset();
+        }, 2200);
+      });
+
+      // ============ ПЕРЕТАСКИВАНИЕ ОТЗЫВОВ ============
+      const track = document.getElementById('testimonialsTrack');
+      let isDown = false, startX, scrollLeft;
+      track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        track.style.cursor = 'grabbing';
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+      track.addEventListener('mouseleave', () => { isDown = false; track.style.cursor = 'grab'; });
+      track.addEventListener('mouseup', () => { isDown = false; track.style.cursor = 'grab'; });
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        track.scrollLeft = scrollLeft - (x - startX) * 1.5;
+      });
+
+      console.log('🚀 Nebula Creative — оптимизировано для любых устройств!');
+    })();
+  </script>
+</body>
+</html>
